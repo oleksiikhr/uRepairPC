@@ -12,7 +12,7 @@ import axios from 'axios'
 
 /*
  * In dev mode, all requests are sent to the server via
- * proxy target in webpack (env.PROXY_TARGET), to bypass CORS.
+ * proxy target in webpack to bypass CORS.
  */
 axios.defaults.baseURL = '/api'
 

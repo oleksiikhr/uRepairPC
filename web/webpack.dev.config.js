@@ -33,7 +33,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api/*': {
-        target: process.env.PROXY_TARGET || 'http://localhost/',
+        target: process.env.PROXY_SERVER || 'http://localhost/',
         changeOrigin: true
       }
     }

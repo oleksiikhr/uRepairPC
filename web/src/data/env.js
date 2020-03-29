@@ -22,10 +22,13 @@ const withoutLastSlash = (input) => {
 export const isDev = ['dev', 'development'].includes(process.env.NODE_ENV)
 
 /** @return {string} */
-export const proxyTarget = withoutLastSlash(process.env.PROXY_TARGET) || 'http://localhost'
+export const proxyServer = withoutLastSlash(process.env.PROXY_SERVER) || 'http://localhost'
 
 /** @return {string} */
-export const server = isDev ? proxyTarget : location.origin
+export const proxyWebsocket = withoutLastSlash(process.env.PROXY_WEBSOCKET) || 'http://localhost:3000'
 
 /** @return {string} */
-export const serverSocket = window.WS_URL || `${isDev ? proxyTarget : location.hostname}:3000`
+export const server = isDev ? proxyServer : location.origin
+
+/** @return {string} */
+export const websocket = isDev ? proxyWebsocket : `${location.hostname}:3000`
