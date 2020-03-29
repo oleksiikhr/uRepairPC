@@ -1,0 +1,29 @@
+.global-settings {
+  max-width: 600px;
+  margin: 20px auto;
+  .title {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+  .el-timeline-item__timestamp {
+    font-size: .9rem;
+  }
+  .el-card__body {
+    background: #fff;
+    line-height: 1.5;
+    img {
+      max-width: 100px;
+      max-height: 100px;
+    }
+  }
+  .btn-block {
+    margin-top: 15px;
+    text-align: center;
+    button {
+      max-width: 300px;
+      width: 100%;
+    }
+  }
+}

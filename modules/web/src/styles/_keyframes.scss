@@ -1,0 +1,16 @@
+@mixin contentLoader() {
+  animation: contentLoader 1.25s forwards linear infinite;
+  background: #f6f6f6;
+  background: linear-gradient(to right, #f6f6f6 8%, #f0f0f0 18%, #f6f6f6 33%);
+  background-size: 800px 104px;
+  position: relative;
+}
+
+@-webkit-keyframes contentLoader {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}

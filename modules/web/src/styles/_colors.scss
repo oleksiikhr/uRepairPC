@@ -1,0 +1,64 @@
+/* https://element.eleme.io/#/en-US/component/color */
+
+// Variables
+$primary: #409eff;
+$success: #67c23a;
+$warning: #e6a23c;
+$danger: #f56c6c;
+$info: #909399;
+
+$primaryText: #303133;
+$regularText: #606266;
+$secondaryText: #909399;
+$placeholderText: #c0c4cc;
+
+$defaultBorder: #e6e6e6;
+$baseBorder: #dcdfe6;
+$lightBorder: #e4e7ed;
+$lighterBorder: #ebeef5;
+$extraLightBorder: #f2f6fc;
+
+$basicShadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+$lightShadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+
+// Colors
+.primary {
+  color: $primary !important;
+}
+
+.success {
+  color: $success !important;
+}
+
+.warning {
+  color: $warning !important;
+}
+
+.danger {
+  color: $danger !important;
+}
+
+.info {
+  color: $info !important;
+}
+
+// Background
+.primary--background {
+  background: $primary !important;
+}
+
+.success--background {
+  background: $success !important;
+}
+
+.warning--background {
+  background: $warning !important;
+}
+
+.danger--background {
+  background: $danger !important;
+}
+
+.info--background {
+  background: $info !important;
+}

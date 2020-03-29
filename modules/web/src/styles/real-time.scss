@@ -1,0 +1,22 @@
+@import "colors";
+
+.rt--create {
+  .el-notification__title,
+  i {
+    color: $primary;
+  }
+}
+
+.rt--update {
+  .el-notification__title,
+  i {
+    color: $warning;
+  }
+}
+
+.rt--delete {
+  .el-notification__title,
+  i {
+    color: $danger;
+  }
+}

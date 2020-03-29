@@ -1,0 +1,174 @@
+@import "~scss/_variables";
+@import "~scss/_colors";
+
+/*
+ * Core
+ */
+
+.filters-core {
+  display: flex;
+  flex-direction: column;
+}
+
+/*
+ * Basic
+ */
+
+.filter {
+  padding: 10px;
+  .el-alert {
+    margin-bottom: 15px;
+  }
+}
+
+.filter-title {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0 5px 0 15px;
+  margin-bottom: 15px;
+  border-left: 5px solid $primary;
+}
+
+.filter__content {
+  .el-select {
+    width: 100%;
+  }
+}
+
+/*
+ * Columns
+ */
+
+.filter-columns {
+  .el-checkbox-group {
+    margin-bottom: 10px;
+  }
+  .el-checkbox.is-bordered {
+    display: flex;
+    align-items: center;
+  }
+  .support-search {
+    color: $success;
+    text-transform: uppercase;
+    font-size: .5rem;
+    vertical-align: super;
+  }
+}
+
+/*
+ * Search
+ */
+
+//
+
+/*
+ * TableButtons
+ */
+
+.filter-table-buttons {
+  background: #fff;
+  border-bottom: 1px solid $defaultBorder;
+  margin-bottom: 10px;
+  .filter__content {
+    display: flex;
+  }
+  .filter-title {
+    display: none;
+  }
+}
+
+/*
+ * Pagination
+ */
+
+.filter-pagination__circles {
+  display: flex;
+}
+
+/*
+ * Fixed
+ */
+
+.filter-fixed {
+  .el-select {
+    width: 100%;
+  }
+}
+
+/*
+ * Action
+ */
+
+.filter-action {
+  .el-button {
+    width: 100%;
+    margin-bottom: 10px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    > span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      > i {
+        margin-right: 5px;
+      }
+    }
+    + .el-button {
+      margin-left: 0;
+    }
+  }
+}
+
+/*
+ * Responsive design
+ */
+
+@media only screen and (min-width: $laptop + 1px) {
+  .filters-core {
+    .el-collapse {
+      border: 0;
+    }
+    div[role="tab"] {
+      display: none !important;
+    }
+    .el-collapse-item__wrap {
+      display: block !important;
+    }
+  }
+}
+
+@media only screen and (max-width: $laptop) {
+  .el-collapse {
+    border: 1px solid $lightBorder;
+  }
+  .el-collapse-item__header {
+    padding: 0 10px 0 15px;
+  }
+  .el-collapse-item__wrap {
+    padding: 5px 10px;
+  }
+  .filters-core__content {
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 0;
+  }
+  .filter {
+    width: 250px;
+    padding: 15px;
+  }
+  .filter-table-buttons {
+    background: none;
+    border-bottom: 0;
+    margin-bottom: 0;
+    .filter-title {
+      display: block;
+    }
+  }
+}
+
+@media only screen and (max-width: $mobileL) {
+  .filter {
+    width: 100%;
+  }
+}
