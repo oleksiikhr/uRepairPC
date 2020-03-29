@@ -1,0 +1,38 @@
+version: '3'
+
+networks:
+  backend:
+    driver: ${NETWORK_DRIVER}
+  websocket:
+    driver: ${NETWORK_DRIVER}
+  frontend:
+    driver: ${NETWORK_DRIVER}
+
+services:
+  mysql:
+    build: ./mysql
+    container_name: urepairpc_web
+    restart: always
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - ${PROJECT_DATA}/mysql:/var/lib/mysql
+    networks:
+      - backend
+      - websocket
+
+  redis:
+    build: ./redis
+    container_name: urepairpc_redis
+    volumes:
+      - ${PROJECT_DATA}/redis:/data
+    ports:
+      - "${REDIS_PORT}:6379"
+    networks:
+      - backend
+      - websocket
