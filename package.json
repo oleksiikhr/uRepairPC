@@ -1,0 +1,17 @@
+{
+  "name": "@urepairpc/server",
+  "version": "3.0.0",
+  "scripts": {
+    "release": "standard-version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uRepairPC/server.git"
+  },
+  "author": "Alexey Khrushch <alexeykhr@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/uRepairPC/server/issues"
+  },
+  "homepage": "https://github.com/uRepairPC/server#readme"
+}
