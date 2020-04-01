@@ -21,6 +21,9 @@ services:
     restart: always
     volumes:
       - ${APP_PATH}:/var/www
+    networks:
+      - backend
+      - websocket
 
   nginx:
     build: ./nginx
@@ -30,6 +33,7 @@ services:
       - ${APP_PATH}:/var/www
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/sites/:/etc/nginx/sites-available
+      - ./nginx/conf.d/:/etc/nginx/conf.d
     ports:
       - "${NGINX_HOST_HTTP_PORT}:80"
       - "${NGINX_HOST_HTTPS_PORT}:443"

@@ -1,10 +1,11 @@
-FROM php:fpm-alpine
+FROM php:7.4-fpm
 
-RUN apk update
+USER root
 
-RUN apk add curl mcrypt
+RUN groupmod -o -g 1000 www-data && \
+    usermod -o -u 1000 -g www-data www-data
 
-RUN usermod -u 1000 www-data
+WORKDIR /var/www
 
 CMD ["php-fpm"]
 
