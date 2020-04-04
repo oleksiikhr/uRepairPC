@@ -1,29 +1,29 @@
 version: '3'
 
-networks:
-  backend:
-    driver: ${NETWORKS_DRIVER}
-  websocket:
-    driver: ${NETWORKS_DRIVER}
-  frontend:
-    driver: ${NETWORKS_DRIVER}
-
-volumes:
-  mysql:
-    driver: ${VOLUMES_DRIVER}
-  redis:
-    driver: ${VOLUMES_DRIVER}
-
 services:
+  traefik:
+    image: traefik:v2.2
+    container_name: urepairpc_traefik
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command:
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+    ports:
+      - "80:80"
+      - "8080:8080"
+
   php-fpm:
     build: ./php-fpm
     container_name: urepairpc_php_fpm
     restart: always
     volumes:
       - ${APP_PATH}:/var/www
-    networks:
-      - backend
-      - websocket
+    labels:
+      - traefik.enable=true
 
   nginx:
     build: ./nginx
@@ -34,15 +34,12 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/sites/:/etc/nginx/sites-available
       - ./nginx/conf.d/:/etc/nginx/conf.d
-    ports:
-      - "${NGINX_HOST_HTTP_PORT}:80"
-      - "${NGINX_HOST_HTTPS_PORT}:443"
-    networks:
-      - frontend
-      - backend
-      - websocket
     depends_on:
       - php-fpm
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nginx.rule=Host(`urepairpc.localhost`)
+      - traefik.http.routers.nginx.entrypoints=web
 
   mysql:
     build: ./mysql
@@ -54,12 +51,11 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     ports:
-      - "${MYSQL_PORT}:3306"
+      - 3306:3306
     volumes:
       - ${DATA_PATH}/mysql:/var/lib/mysql
-    networks:
-      - backend
-      - websocket
+    labels:
+      - traefik.enable=true
 
   redis:
     build: ./redis
@@ -68,7 +64,6 @@ services:
     volumes:
       - ${DATA_PATH}/redis:/data
     ports:
-      - "${REDIS_PORT}:6379"
-    networks:
-      - backend
-      - websocket
+      - 6379:6379
+    labels:
+      - traefik.enable=true
