@@ -3,7 +3,7 @@ version: '3'
 services:
   traefik:
     image: traefik:v2.2
-    container_name: urepairpc_traefik
+    container_name: u_traefik
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -12,19 +12,19 @@ services:
       - --providers.docker=true
       - --entrypoints.web.address=:80
     ports:
-      - "80:80"
-      - "8080:8080"
+      - 80:80
+      - 8080:8080
 
   php-fpm:
     build: ./php-fpm
-    container_name: urepairpc_php_fpm
+    container_name: u_php_fpm
     restart: always
     volumes:
       - ${APP_PATH}:/var/www
 
   nginx:
     build: ./nginx
-    container_name: urepairpc_nginx
+    container_name: u_nginx
     restart: always
     volumes:
       - ${APP_PATH}:/var/www
@@ -39,7 +39,7 @@ services:
 
   mysql:
     build: ./mysql
-    container_name: urepairpc_mysql
+    container_name: u_mysql
     restart: always
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -53,7 +53,7 @@ services:
 
   redis:
     build: ./redis
-    container_name: urepairpc_redis
+    container_name: u_redis
     restart: always
     volumes:
       - ${DATA_PATH}/redis:/data
