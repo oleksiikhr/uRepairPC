@@ -10,7 +10,6 @@ services:
     command:
       - --api.insecure=true
       - --providers.docker=true
-      - --providers.docker.exposedbydefault=false
       - --entrypoints.web.address=:80
     ports:
       - "80:80"
@@ -22,8 +21,6 @@ services:
     restart: always
     volumes:
       - ${APP_PATH}:/var/www
-    labels:
-      - traefik.enable=true
 
   nginx:
     build: ./nginx
@@ -37,7 +34,6 @@ services:
     depends_on:
       - php-fpm
     labels:
-      - traefik.enable=true
       - traefik.http.routers.nginx.rule=Host(`urepairpc.localhost`)
       - traefik.http.routers.nginx.entrypoints=web
 
@@ -54,8 +50,6 @@ services:
       - 3306:3306
     volumes:
       - ${DATA_PATH}/mysql:/var/lib/mysql
-    labels:
-      - traefik.enable=true
 
   redis:
     build: ./redis
@@ -65,5 +59,3 @@ services:
       - ${DATA_PATH}/redis:/data
     ports:
       - 6379:6379
-    labels:
-      - traefik.enable=true
