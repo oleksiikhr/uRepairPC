@@ -46,6 +46,15 @@ services:
       - traefik.http.routers.web.rule=Host(`urepairpc.localhost`)
       - traefik.http.routers.web.entrypoints=web
 
+  websocket:
+    build: ./websocket
+    container_name: u_websocket
+    volumes:
+      - ${APP_PATH}websocket:/usr/app
+    labels:
+      - traefik.http.routers.websocket.rule=Host(`ws.urepairpc.localhost`)
+      - traefik.http.routers.websocket.entrypoints=web
+
   mysql:
     build: ./mysql
     container_name: u_mysql

@@ -31,4 +31,5 @@ export const proxyWebsocket = withoutLastSlash(process.env.PROXY_WEBSOCKET) || '
 export const server = isDev ? proxyServer : location.origin
 
 /** @return {string} */
-export const websocket = isDev ? proxyWebsocket : `${location.hostname}:3000`
+// TODO Env path
+export const websocket = 'http://ws.urepairpc.localhost/' // isDev ? proxyWebsocket : `${location.hostname}:3000`

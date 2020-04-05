@@ -12,7 +12,10 @@ export default class Redis {
   public socket: Socket;
 
   constructor (socket: Socket) {
-    this.redis = new IoRedis();
+    // TODO Redis to .env
+    this.redis = new IoRedis({
+      host: 'redis'
+    });
     this.socket = socket;
   }
 
