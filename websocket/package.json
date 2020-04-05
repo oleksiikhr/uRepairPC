@@ -1,6 +1,5 @@
 {
   "name": "@urepairpc/websocket",
-  "version": "2.0.4",
   "main": "dist/app",
   "scripts": {
     "start": "pm2 start app.js",
