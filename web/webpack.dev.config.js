@@ -27,16 +27,11 @@ module.exports = {
   devServer: {
     publicPath: '/',
     contentBase: './dist',
-    host: process.env.WEBPACK_HOST_DEV || 'localhost',
+    host: '0.0.0.0',
+    port: 80,
     hot: true,
     clientLogLevel: 'error',
-    disableHostCheck: true,
-    proxy: {
-      '/api/*': {
-        target: process.env.PROXY_SERVER || 'http://localhost/',
-        changeOrigin: true
-      }
-    }
+    disableHostCheck: true
   },
   module: {
     rules: [

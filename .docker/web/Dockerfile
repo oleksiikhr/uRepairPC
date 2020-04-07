@@ -4,6 +4,6 @@ WORKDIR /usr/app
 
 RUN yarn global add cross-env
 
-EXPOSE 8080
+EXPOSE 80
 
 CMD yarn && npm run dev
