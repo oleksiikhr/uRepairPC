@@ -65,10 +65,10 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-    ports:
-      - 3306:3306
     volumes:
       - ${DATA_PATH}/mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
 
   redis:
     build: ./redis
@@ -78,3 +78,11 @@ services:
       - ${DATA_PATH}/redis:/data
     ports:
       - 6379:6379
+
+  grafana:
+    image: grafana/grafana:latest
+    user: "0"
+    volumes:
+      - ${DATA_PATH}/grafana:/var/lib/grafana
+    ports:
+      - 3000:3000
