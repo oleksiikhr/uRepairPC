@@ -20,14 +20,14 @@ services:
     container_name: u_php_fpm
     restart: always
     volumes:
-      - ${APP_PATH}:/var/www
+      - ../:/var/www
 
   nginx:
     build: ./nginx
     container_name: u_nginx
     restart: always
     volumes:
-      - ${APP_PATH}:/var/www
+      - ../:/var/www
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/sites/:/etc/nginx/sites-available
       - ./nginx/conf.d/:/etc/nginx/conf.d
@@ -40,8 +40,9 @@ services:
   web:
     build: ./web
     container_name: u_web
+    restart: always
     volumes:
-      - ${APP_PATH}web:/usr/app
+      - ../web:/usr/app
     labels:
       - traefik.http.routers.web.rule=Host(`urepairpc.localhost`)
       - traefik.http.routers.web.entrypoints=web
@@ -50,7 +51,7 @@ services:
     build: ./websocket
     container_name: u_websocket
     volumes:
-      - ${APP_PATH}websocket:/usr/app
+      - ../websocket:/usr/app
     labels:
       - traefik.http.routers.websocket.rule=Host(`ws.urepairpc.localhost`)
       - traefik.http.routers.websocket.entrypoints=web
