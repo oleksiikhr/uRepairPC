@@ -81,8 +81,18 @@ services:
 
   grafana:
     image: grafana/grafana:latest
+    container_name: u_grafana
+    restart: always
     user: "0"
     volumes:
       - ${DATA_PATH}/grafana:/var/lib/grafana
     ports:
       - 3000:3000
+
+  maildev:
+    image: djfarrelly/maildev
+    container_name: u_maildev
+    restart: always
+    ports:
+      - 1080:80
+      - 25:25
