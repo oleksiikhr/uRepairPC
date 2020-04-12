@@ -6,7 +6,9 @@ export default class Socket {
   public io: socketIO.Server;
 
   constructor (server: http.Server|https.Server) {
-    this.io = socketIO(server);
+    this.io = socketIO(server, {
+      path: '/ws'
+    });
   }
 
   public init (): void {

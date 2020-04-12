@@ -59,7 +59,6 @@
 
 <script>
 import * as rules from '@/data/rules'
-import { isDev } from '@/data/env'
 
 export default {
   components: {
@@ -72,8 +71,8 @@ export default {
   data() {
     return {
       form: {
-        email: isDev ? 'admin@example.com' : '',
-        password: isDev ? 'admin123' : ''
+        email: process.env.NODE_ENV === 'development' ? 'admin@example.com' : '',
+        password: process.env.NODE_ENV === 'development' ? 'admin123' : ''
       },
       rules: {
         email: rules.email,

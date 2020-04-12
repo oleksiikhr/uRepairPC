@@ -34,7 +34,7 @@ services:
     depends_on:
       - php-fpm
     labels:
-      - traefik.http.routers.nginx.rule=Host(`urepairpc.localhost`) && PathPrefix(`/api`)
+      - traefik.http.routers.nginx.rule=Host(`urepairpc.localhost`) && PathPrefix(`/api/`)
       - traefik.http.routers.nginx.entrypoints=web
 
   web:
@@ -53,7 +53,7 @@ services:
     volumes:
       - ../websocket:/usr/app
     labels:
-      - traefik.http.routers.websocket.rule=Host(`ws.urepairpc.localhost`)
+      - traefik.http.routers.websocket.rule=Host(`urepairpc.localhost`) && Path(`/ws/`)
       - traefik.http.routers.websocket.entrypoints=web
 
   mysql:

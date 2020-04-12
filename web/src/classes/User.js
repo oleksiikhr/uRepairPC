@@ -3,7 +3,6 @@
 import ApiHasHistory from '@/common/classes/ApiHasHistory'
 import StorageData from '@/classes/StorageData'
 import sections from '@/enum/sections'
-import { server } from '@/data/env'
 import store from '@/store'
 import axios from 'axios'
 
@@ -134,7 +133,7 @@ export default class User extends ApiHasHistory {
     if (this.user.image_id) {
       const token = StorageData.token
       const time = new Date(this.user.updated_at).getTime()
-      return `background-image: url(${server}/api/users/${this.user.id}/image?time=${time}&token=${token})`
+      return `background-image: url(/api/users/${this.user.id}/image?time=${time}&token=${token})`
     }
 
     return null

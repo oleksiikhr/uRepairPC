@@ -2,7 +2,6 @@
 
 import { isArray, isObject } from '@/scripts/helpers'
 import StorageData from '@/classes/StorageData'
-import { server } from '@/data/env'
 import store from '@/store'
 
 /**
@@ -10,7 +9,7 @@ import store from '@/store'
  * @returns {string}
  */
 export function getApiAuth(path) {
-  return server + '/api/' + path + '?token=' + StorageData.token
+  return '/api/' + path + '?token=' + StorageData.token
 }
 
 /**
