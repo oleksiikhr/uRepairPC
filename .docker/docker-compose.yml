@@ -91,15 +91,14 @@ services:
       - MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
 
-  grafana:
-    image: grafana/grafana:latest
-    container_name: u_grafana
+  netdata:
+    image: titpetric/netdata:latest
+    container_name: u_netdata
     restart: always
-    user: "0"
-    volumes:
-      - ${DATA_PATH}/grafana:/var/lib/grafana
+    cap_add:
+      - SYS_PTRACE
     ports:
-      - 3000:3000
+      - 19999:19999
 
   maildev:
     image: djfarrelly/maildev
