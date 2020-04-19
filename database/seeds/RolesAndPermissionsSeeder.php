@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use App\Role;
 use App\Enums\Perm;
@@ -12,7 +12,7 @@ class RolesAndPermissionsSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         /*
          * ADMIN

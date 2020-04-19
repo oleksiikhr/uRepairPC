@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -11,9 +11,9 @@ class CreateEquipmentFileTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('equipment_file', function (Blueprint $table) {
+        Schema::create('equipment_file', static function (Blueprint $table) {
             $table->unsignedBigInteger('equipment_id');
             $table->unsignedBigInteger('file_id');
 
@@ -31,7 +31,7 @@ class CreateEquipmentFileTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('equipment_file');
     }

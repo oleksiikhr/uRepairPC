@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Illuminate\Database\Seeder;
 use App\Request as RequestModel;
@@ -10,7 +10,7 @@ class RequestsTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $arr = [
             [

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -11,9 +11,9 @@ class CreateRolePermissionsTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('role_permissions', function (Blueprint $table) {
+        Schema::create('role_permissions', static function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('role_id');
             $table->string('name');
@@ -31,7 +31,7 @@ class CreateRolePermissionsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('role_permissions');
     }

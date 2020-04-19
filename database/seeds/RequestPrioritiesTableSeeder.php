@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use App\RequestPriority;
 use Illuminate\Database\Seeder;
@@ -10,7 +10,7 @@ class RequestPrioritiesTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $items = [
             ['name' => 'Низький', 'color' => '#8e9eb3', 'default' => false, 'value' => 1, 'user_id' => 1],

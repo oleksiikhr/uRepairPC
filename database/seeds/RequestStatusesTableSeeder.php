@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use App\RequestStatus;
 use Illuminate\Database\Seeder;
@@ -10,7 +10,7 @@ class RequestStatusesTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $items = [
             ['name' => 'Відкрита', 'color' => '#ff8522', 'default' => true, 'user_id' => 1],

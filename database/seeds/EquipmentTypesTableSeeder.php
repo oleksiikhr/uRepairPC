@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use App\EquipmentType;
 use Illuminate\Database\Seeder;
@@ -10,7 +10,7 @@ class EquipmentTypesTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $names = ['Ноутбуки', 'Планшети', 'Монітори'];
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use App\User;
 use Illuminate\Database\Seeder;
@@ -10,7 +10,7 @@ class UsersTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $user = User::create([
             'first_name' => 'Oliver',

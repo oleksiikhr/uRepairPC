@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use App\EquipmentManufacturer;
 use Illuminate\Database\Seeder;
@@ -10,7 +10,7 @@ class EquipmentManufacturersTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $names = ['Acer', 'Apple', 'Asus', 'Dell', 'HP', 'Lenovo', 'Samsung'];
 
