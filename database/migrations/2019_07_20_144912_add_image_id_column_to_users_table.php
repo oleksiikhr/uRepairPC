@@ -27,7 +27,7 @@ class AddImageIdColumnToUsersTable extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('users', static function (Blueprint $table) {
             $table->dropForeign(['image_id']);
             $table->dropColumn('image_id');
         });

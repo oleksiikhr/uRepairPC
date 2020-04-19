@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 
@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\File;
 
 Route::get('manifest.json', 'Stat\ManifestController@index');
 
-Route::get('{any}', function () {
+Route::get('{any}', static function () {
     $path = public_path('index.html');
 
     if (file_exists($path)) {

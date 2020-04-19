@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 /*
  * Section: Settings
  */
-Route::group(['prefix' => 'settings', 'namespace' => 'Stat'], function () {
+Route::group(['prefix' => 'settings', 'namespace' => 'Stat'], static function () {
     Route::get('global', 'GlobalController@index');
     Route::get('manifest', 'ManifestController@index');
 });
@@ -24,27 +24,27 @@ Route::group(['prefix' => 'settings', 'namespace' => 'Stat'], function () {
 /*
  * Section: Auth
  */
-Route::group(['prefix' => 'auth'], function () {
-    Route::group(['middleware' => 'guest'], function () {
+Route::group(['prefix' => 'auth'], static function () {
+    Route::group(['middleware' => 'guest'], static function () {
         Route::post('login', 'AuthController@login');
         Route::post('refresh', 'AuthController@refresh');
     });
 
-    Route::group(['middleware' => ['jwt.auth']], function () {
+    Route::group(['middleware' => ['jwt.auth']], static function () {
         Route::get('profile', 'AuthController@profile');
         Route::post('logout', 'AuthController@logout');
     });
 });
 
-Route::group(['middleware' => ['jwt.auth']], function () {
-    Route::group(['prefix' => 'listeners'], function () {
+Route::group(['middleware' => ['jwt.auth']], static function () {
+    Route::group(['prefix' => 'listeners'], static function () {
         Route::post('sync', 'ListenerController@sync');
     });
 
     /*
      * Section: Settings
      */
-    Route::group(['prefix' => 'settings', 'namespace' => 'Stat'], function () {
+    Route::group(['prefix' => 'settings', 'namespace' => 'Stat'], static function () {
         Route::post('global', 'GlobalController@store');
         Route::post('manifest', 'ManifestController@store');
     });
@@ -53,7 +53,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
      * Section: Users
      */
     Route::apiResource('users', 'UserController');
-    Route::group(['prefix' => 'users'], function () {
+    Route::group(['prefix' => 'users'], static function () {
         Route::put('{user}/email', 'UserController@updateEmail');
         Route::put('{user}/password', 'UserController@updatePassword');
         Route::put('{user}/roles', 'UserController@updateRoles');
@@ -66,7 +66,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
      * Section: Equipments
      */
     Route::apiResource('equipments', 'EquipmentController');
-    Route::group(['prefix' => 'equipments'], function () {
+    Route::group(['prefix' => 'equipments'], static function () {
         Route::apiResource('types', 'EquipmentTypeController');
         Route::apiResource('manufacturers', 'EquipmentManufacturerController');
         Route::apiResource('models', 'EquipmentModelController');
@@ -77,7 +77,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
      * Section: Roles
      */
     Route::apiResource('roles', 'RoleController');
-    Route::group(['prefix' => 'roles'], function () {
+    Route::group(['prefix' => 'roles'], static function () {
         Route::put('{role}/permissions', 'RoleController@updatePermissions');
     });
 
@@ -90,7 +90,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
      * Section: Requests
      */
     Route::apiResource('requests', 'RequestController');
-    Route::group(['prefix' => 'requests'], function () {
+    Route::group(['prefix' => 'requests'], static function () {
         Route::apiResource('statuses', 'RequestStatusController');
         Route::apiResource('priorities', 'RequestPriorityController');
         Route::apiResource('types', 'RequestTypeController');

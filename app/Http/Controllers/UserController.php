@@ -98,7 +98,7 @@ class UserController extends Controller
 
         // Filter
         if ($request->request_access && $this->user->perm(Perm::REQUESTS_EDIT_ALL)) {
-            $query->whereHas('roles.permissions', function ($query) {
+            $query->whereHas('roles.permissions', static function ($query) {
                 $query->where('name', Perm::REQUESTS_EDIT_ALL);
                 $query->orWhere('name', Perm::REQUESTS_EDIT_ASSIGN);
             });
