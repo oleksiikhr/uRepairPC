@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Providers;
 
@@ -13,7 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        //
     ];
 
     /**
@@ -21,13 +21,14 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->registerPolicies();
 
         Gate::define('owner', function ($user, $model) {
             return $user->id === $model->user_id;
         });
+
         Gate::define('assign', function ($user, $model) {
             return $user->id === $model->assign_id;
         });

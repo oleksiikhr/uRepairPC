@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Providers;
 
@@ -16,6 +16,7 @@ class BroadcastServiceProvider extends ServiceProvider
     {
         Broadcast::routes();
 
+        /** @noinspection PhpIncludeInspection */
         require base_path('routes/channels.php');
     }
 }

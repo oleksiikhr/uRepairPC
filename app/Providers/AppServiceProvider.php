@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Providers;
 
@@ -6,7 +6,6 @@ use App\Role;
 use App\User;
 use App\Request;
 use App\Equipment;
-use App\Http\Kernel;
 use App\RequestType;
 use App\EquipmentType;
 use App\RequestStatus;
@@ -18,7 +17,6 @@ use App\Observers\UserObserver;
 use App\Observers\RequestObserver;
 use App\Observers\EquipmentObserver;
 use App\Observers\RequestTypeObserver;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use App\Observers\EquipmentTypeObserver;
 use App\Observers\RequestStatusObserver;
@@ -35,16 +33,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        Schema::defaultStringLength(191);
+        //
     }
 
     /**
      * Bootstrap any application services.
      *
-     * @param  Kernel  $kernel
      * @return void
      */
-    public function boot(Kernel $kernel)
+    public function boot()
     {
         User::observe(UserObserver::class);
         Role::observe(RoleObserver::class);
@@ -56,9 +53,5 @@ class AppServiceProvider extends ServiceProvider
         RequestType::observe(RequestTypeObserver::class);
         RequestPriority::observe(RequestPriorityObserver::class);
         RequestStatus::observe(RequestStatusObserver::class);
-
-//        \Illuminate\Support\Facades\DB::listen(function ($query) {
-//            var_dump($query->sql);
-//        });
     }
 }
