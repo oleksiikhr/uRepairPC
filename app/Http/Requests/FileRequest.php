@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Requests;
 
@@ -12,9 +12,9 @@ class FileRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -23,7 +23,7 @@ class FileRequest extends FormRequest
      * @param  Request  $request
      * @return array
      */
-    public function rules(Request $request)
+    public function rules(Request $request): array
     {
         switch ($request->method) {
             case Request::METHOD_POST:

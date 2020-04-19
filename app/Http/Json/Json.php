@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Json;
 
@@ -35,9 +35,7 @@ abstract class Json implements IJson
     }
 
     /**
-     * Get data from file or uses default.
-     *
-     * @return array
+     * @inheritDoc
      */
     public function getData()
     {
@@ -53,9 +51,10 @@ abstract class Json implements IJson
     }
 
     /**
-     * @param array $data - from $request->validate() or other data
+     * @param  array  $data - from $request->validate() or other data
+     * @return void
      */
-    public function transformDataAndRequestFiles(array &$data)
+    public function transformDataAndRequestFiles(array &$data): void
     {
         $attributes = $this->getAttributes();
         $json = $this->getData();
@@ -93,12 +92,9 @@ abstract class Json implements IJson
     }
 
     /**
-     * Save data to file.
-     *
-     * @param  array  $arr
-     * @return void
+     * @inheritDoc
      */
-    public function mergeAndSaveToFile($arr)
+    public function mergeAndSaveToFile($arr): void
     {
         $mergeData = array_merge($this->getDefaultData(), $arr);
         $json = json_encode($mergeData, JSON_PRETTY_PRINT);

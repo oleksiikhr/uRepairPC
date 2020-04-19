@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Requests;
 
@@ -13,9 +13,9 @@ class RoleRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -24,7 +24,7 @@ class RoleRequest extends FormRequest
      * @param  Request  $request
      * @return array
      */
-    public function rules(Request $request)
+    public function rules(Request $request): array
     {
         // List of all users
         if ($request->route()->getName() === 'roles.index') {
@@ -40,7 +40,7 @@ class RoleRequest extends FormRequest
         }
 
         $rules = [
-            'name' => 'string|between:1,191',
+            'name' => 'string|between:1,255',
             'color' => 'nullable|string|regex:/^#([a-zA-Z0-9]{6})$/i',
             'default' => 'boolean',
         ];

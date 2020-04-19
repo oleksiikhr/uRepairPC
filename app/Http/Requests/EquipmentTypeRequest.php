@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Requests;
 
@@ -12,9 +12,9 @@ class EquipmentTypeRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -23,10 +23,10 @@ class EquipmentTypeRequest extends FormRequest
      * @param  Request  $request
      * @return array
      */
-    public function rules(Request $request)
+    public function rules(Request $request): array
     {
         $rules = [
-            'name' => 'string|between:1,191|unique:equipment_types,name',
+            'name' => 'string|between:1,255|unique:equipment_types,name',
             'description' => 'nullable|string|max:600',
         ];
 

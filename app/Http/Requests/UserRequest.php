@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Requests;
 
@@ -13,9 +13,9 @@ class UserRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -24,10 +24,8 @@ class UserRequest extends FormRequest
      * @param  Request  $request
      * @return array
      */
-    public function rules(Request $request)
+    public function rules(Request $request): array
     {
-        $method = $request->method;
-
         // List of all users
         if ($request->route()->getName() === 'users.index') {
             return [
@@ -40,20 +38,20 @@ class UserRequest extends FormRequest
             ];
         }
 
-        if ($method === Request::METHOD_DELETE) {
+        if ($request->method === Request::METHOD_DELETE) {
             return [];
         }
 
         $rules = [
-            'first_name' => 'string|between:1,191',
-            'middle_name' => 'nullable|string|max:191',
-            'last_name' => 'string|between:1,191',
-            'phone' => 'nullable|string|max:191',
+            'first_name' => 'string|between:1,255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'string|between:1,255',
+            'phone' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:600',
         ];
 
         // Store
-        if ($method === Request::METHOD_POST) {
+        if ($request->method === Request::METHOD_POST) {
             $rules['email'] = 'required|email|unique:users,email';
             $rules['first_name'] = 'required|'.$rules['first_name'];
             $rules['last_name'] = 'required|'.$rules['last_name'];

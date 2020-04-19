@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Requests;
 
@@ -11,9 +11,9 @@ class AuthRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -21,11 +21,11 @@ class AuthRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'email' => 'required|email|max:191',
-            'password' => 'required|between:6,191',
+            'email' => 'required|email|max:255',
+            'password' => 'required|between:6,40',
         ];
     }
 }
