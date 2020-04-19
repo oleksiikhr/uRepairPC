@@ -7,7 +7,7 @@ import Vue from 'vue'
 Vue.use(VueRouter)
 
 export default new VueRouter({
-  mode: 'hash',
+  mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
   routes
 })
