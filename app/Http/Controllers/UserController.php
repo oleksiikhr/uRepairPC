@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -9,6 +9,7 @@ use App\Enums\Perm;
 use App\Mail\EmailChange;
 use App\Mail\UserCreated;
 use App\Events\Users\EJoin;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Events\Users\EUpdate;
 use App\Http\Helpers\FileHelper;
@@ -25,7 +26,7 @@ class UserController extends Controller
     /**
      * @var User
      */
-    private $_user;
+    private $user;
 
     /**
      * Add middleware depends on user permissions.
@@ -35,16 +36,16 @@ class UserController extends Controller
      */
     public function permissions(Request $request): array
     {
-        $this->_user = auth()->user();
+        $this->user = auth()->user();
 
-        if (! $this->_user) {
+        if (! $this->user) {
             $this->middleware('jwt.auth');
 
             return [];
         }
 
         $requestId = (int) $request->route('user');
-        $isOwnProfile = $requestId === $this->_user->id;
+        $isOwnProfile = $requestId === $this->user->id;
         $editPermissionProfile = $isOwnProfile
             ? [Perm::PROFILE_EDIT, Perm::USERS_EDIT_ALL]
             : Perm::USERS_EDIT_ALL;
@@ -73,13 +74,13 @@ class UserController extends Controller
      * Display a listing of the resource.
      *
      * @param  UserRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index(UserRequest $request)
+    public function index(UserRequest $request): JsonResponse
     {
         $query = User::query();
 
-        if ($this->_user->perm(Perm::ROLES_VIEW_ALL)) {
+        if ($this->user->perm(Perm::ROLES_VIEW_ALL)) {
             $query->with('roles');
         }
 
@@ -96,7 +97,7 @@ class UserController extends Controller
         }
 
         // Filter
-        if ($request->request_access && $this->_user->perm(Perm::REQUESTS_EDIT_ALL)) {
+        if ($request->request_access && $this->user->perm(Perm::REQUESTS_EDIT_ALL)) {
             $query->whereHas('roles.permissions', function ($query) {
                 $query->where('name', Perm::REQUESTS_EDIT_ALL);
                 $query->orWhere('name', Perm::REQUESTS_EDIT_ASSIGN);
@@ -113,9 +114,9 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  UserRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(UserRequest $request)
+    public function store(UserRequest $request): JsonResponse
     {
         $password = User::generateRandomStrPassword();
 
@@ -143,9 +144,9 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         $user = User::with('roles')->findOrFail($id);
         $user->permissions = $user->getAllPermNames();
@@ -163,9 +164,9 @@ class UserController extends Controller
      *
      * @param  UserRequest  $request
      * @param  int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(UserRequest $request, int $id)
+    public function update(UserRequest $request, int $id): JsonResponse
     {
         $user = User::findOrFail($id);
         $user->fill($request->all());
@@ -185,9 +186,9 @@ class UserController extends Controller
      *
      * @param  UserRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function destroy(UserRequest $request, int $id)
+    public function destroy(UserRequest $request, int $id): JsonResponse
     {
         $user = User::findOrFail($id);
 
@@ -228,9 +229,9 @@ class UserController extends Controller
      *
      * @param  Request  $request
      * @param  int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function updateRoles(Request $request, int $id)
+    public function updateRoles(Request $request, int $id): JsonResponse
     {
         $request->validate([
             'roles' => 'array',
@@ -257,9 +258,9 @@ class UserController extends Controller
      *
      * @param  Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function updateEmail(Request $request, int $id)
+    public function updateEmail(Request $request, int $id): JsonResponse
     {
         $request->validate([
             'email' => 'required|email|unique:users,email',
@@ -285,14 +286,14 @@ class UserController extends Controller
      *
      * @param   Request  $request
      * @param   int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function updatePassword(Request $request, int $id)
+    public function updatePassword(Request $request, int $id): JsonResponse
     {
         $user = User::findOrFail($id);
 
         // We can change only for own profile.
-        if ($this->_user->id === $id) {
+        if ($this->user->id === $id) {
             return $this->setPasswordProfile($request, $user);
         }
 
@@ -304,10 +305,10 @@ class UserController extends Controller
      *
      * @param  ImageRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
-    public function updateImage(ImageRequest $request, int $id)
+    public function updateImage(ImageRequest $request, int $id): JsonResponse
     {
         $user = User::with('image')->findOrFail($id);
 
@@ -347,9 +348,9 @@ class UserController extends Controller
      * Delete avatar for user.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function destroyImage(int $id)
+    public function destroyImage(int $id): JsonResponse
     {
         $user = User::with('image')->findOrFail($id);
 
@@ -379,9 +380,9 @@ class UserController extends Controller
      * Generate a new random password and send to email.
      *
      * @param  User  $user
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    private function setPasswordEmail(User $user)
+    private function setPasswordEmail(User $user): JsonResponse
     {
         $password = User::generateRandomStrPassword();
 
@@ -404,9 +405,9 @@ class UserController extends Controller
      *
      * @param  Request  $request
      * @param  User  $user
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    private function setPasswordProfile(Request $request, User $user)
+    private function setPasswordProfile(Request $request, User $user): JsonResponse
     {
         $request->validate(['password' => 'required|string']);
         $user->password = bcrypt($request->password);

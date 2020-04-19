@@ -8,7 +8,10 @@ use App\Traits\ModelHelperTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Traits\ModelHasPermissionsTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -119,27 +122,22 @@ class User extends Authenticatable implements JWTSubject
         return Str::random(self::RANDOM_PASSWORD_LEN);
     }
 
-    /* | -----------------------------------------------------------------------------------
-     * | Relationships
-     * | -----------------------------------------------------------------------------------
-     */
-
-    public function request()
+    public function request(): HasMany
     {
         return $this->hasMany(Request::class);
     }
 
-    public function requestComments()
+    public function requestComments(): HasMany
     {
         return $this->hasMany(RequestComment::class);
     }
 
-    public function roles()
+    public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);
     }
 
-    public function image()
+    public function image(): HasOne
     {
         return $this->hasOne(File::class);
     }

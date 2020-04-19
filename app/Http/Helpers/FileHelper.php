@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Helpers;
 
@@ -13,29 +13,29 @@ class FileHelper
     /**
      * @var UploadedFile
      */
-    private $_file;
+    private $file;
 
     /**
      * @var string
      */
-    private $_name;
+    private $name;
 
     /**
      * @var string
      */
-    private $_ext;
+    private $ext;
 
     /**
      * @var int
      */
-    private $_size;
+    private $size;
 
     public function __construct(UploadedFile $file)
     {
-        $this->_file = $file;
-        $this->_name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $this->_ext = $file->extension();
-        $this->_size = $file->getSize();
+        $this->file = $file;
+        $this->name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $this->ext = $file->extension();
+        $this->size = $file->getSize();
     }
 
     /**
@@ -45,9 +45,9 @@ class FileHelper
     {
         $file = new File;
         $file->user_id = Auth::id();
-        $file->name = $this->_name;
-        $file->ext = $this->_ext;
-        $file->size = $this->_size;
+        $file->name = $this->name;
+        $file->ext = $this->ext;
+        $file->size = $this->size;
 
         return $file;
     }
@@ -61,13 +61,13 @@ class FileHelper
      */
     public function store(string $folder, string $disk = 'local')
     {
-        $md5 = md5($this->_name);
+        $md5 = md5($this->name);
         $f = substr($md5, 0, 3);
         $s = substr($md5, 3, 3);
 
-        return $this->_file->storeAs(
+        return $this->file->storeAs(
             $folder.'/'.$f.'/'.$s,
-            str_replace('.', '_', uniqid('', true)).'.'.$this->_ext,
+            str_replace('.', '_', uniqid('', true)).'.'.$this->ext,
             $disk
         );
     }

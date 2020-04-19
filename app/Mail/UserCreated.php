@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Mail;
 
@@ -13,7 +13,7 @@ class UserCreated extends Mailable
     /**
      * @var string
      */
-    private $_password;
+    private $password;
 
     /**
      * Create a new message instance.
@@ -22,7 +22,7 @@ class UserCreated extends Mailable
      */
     public function __construct(string $password)
     {
-        $this->_password = $password;
+        $this->password = $password;
     }
 
     /**
@@ -30,12 +30,13 @@ class UserCreated extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): self
     {
+        // TODO Translate
         return $this->markdown('emails.users.password')
             ->subject(config('app.name').' - Вас додали в систему')
             ->with([
-                'password' => $this->_password,
+                'password' => $this->password,
             ]);
     }
 }

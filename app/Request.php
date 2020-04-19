@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App;
 
@@ -6,7 +6,11 @@ use App\Enums\Perm;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Request extends Model
 {
@@ -70,11 +74,11 @@ class Request extends Model
     ];
 
     /**
-     * @return mixed
+     * @return Builder
      */
-    public static function querySelectJoins()
+    public static function querySelectJoins(): Builder
     {
-        return self::select(
+        return self::query()->select(
             'requests.*',
             DB::raw("CONCAT(users.last_name,' ',users.first_name) AS user_name"),
             DB::raw("CONCAT(users_assign.last_name,' ',users_assign.first_name) AS assign_name"),
@@ -144,37 +148,32 @@ class Request extends Model
         }
     }
 
-    /* | -----------------------------------------------------------------------------------
-     * | Relationships
-     * | -----------------------------------------------------------------------------------
-     */
-
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function equipment()
+    public function equipment(): BelongsTo
     {
         return $this->belongsTo(Equipment::class);
     }
 
-    public function priority()
+    public function priority(): BelongsTo
     {
         return $this->belongsTo(RequestPriority::class);
     }
 
-    public function status()
+    public function status(): BelongsTo
     {
         return $this->belongsTo(RequestStatus::class);
     }
 
-    public function type()
+    public function type(): BelongsTo
     {
         return $this->belongsTo(RequestType::class);
     }
 
-    public function comments()
+    public function comments(): HasMany
     {
         return $this->hasMany(RequestComment::class)
             ->select(
@@ -185,7 +184,7 @@ class Request extends Model
             ->leftJoin('users', 'users.id', '=', 'request_comments.user_id');
     }
 
-    public function files()
+    public function files(): BelongsToMany
     {
         return $this->belongsToMany(File::class, 'request_file')
             ->select(

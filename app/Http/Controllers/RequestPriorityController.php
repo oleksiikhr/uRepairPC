@@ -1,10 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use App\User;
 use App\Enums\Perm;
 use App\RequestPriority;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Events\RequestPriorities\EJoin;
@@ -17,7 +18,7 @@ class RequestPriorityController extends Controller
     /**
      * @var User
      */
-    private $_user;
+    private $user;
 
     /**
      * Add middleware depends on user permissions.
@@ -27,7 +28,7 @@ class RequestPriorityController extends Controller
      */
     public function permissions(Request $request): array
     {
-        $this->_user = auth()->user();
+        $this->user = auth()->user();
 
         return [
             'index' => Perm::REQUESTS_CONFIG_VIEW_ALL,
@@ -41,9 +42,9 @@ class RequestPriorityController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         $list = RequestPriority::all();
 
@@ -56,13 +57,13 @@ class RequestPriorityController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  RequestPriorityRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(RequestPriorityRequest $request)
+    public function store(RequestPriorityRequest $request): JsonResponse
     {
         $requestPriority = new RequestPriority;
         $requestPriority->fill($request->all());
-        $requestPriority->user_id = $this->_user->id;
+        $requestPriority->user_id = $this->user->id;
 
         if ($request->default) {
             RequestPriority::clearDefaultValues();
@@ -84,9 +85,9 @@ class RequestPriorityController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         $requestPriority = RequestPriority::findOrFail($id);
 
@@ -103,14 +104,14 @@ class RequestPriorityController extends Controller
      *
      * @param  RequestPriorityRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(RequestPriorityRequest $request, int $id)
+    public function update(RequestPriorityRequest $request, int $id): JsonResponse
     {
         $requestPriority = RequestPriority::findOrFail($id);
 
         // Edit only own requests config
-        if (! $this->_user->perm(Perm::REQUESTS_CONFIG_EDIT_ALL) &&
+        if (! $this->user->perm(Perm::REQUESTS_CONFIG_EDIT_ALL) &&
             Gate::denies('owner', $requestPriority)
         ) {
             return $this->responseNoPermission();
@@ -142,14 +143,14 @@ class RequestPriorityController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $requestPriority = RequestPriority::findOrFail($id);
 
         // Delete only own requests config
-        if (! $this->_user->perm(Perm::REQUESTS_CONFIG_DELETE_ALL) &&
+        if (! $this->user->perm(Perm::REQUESTS_CONFIG_DELETE_ALL) &&
             Gate::denies('owner', $requestPriority)
         ) {
             return $this->responseNoPermission();

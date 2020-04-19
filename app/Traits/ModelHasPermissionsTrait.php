@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Traits;
 
@@ -22,7 +22,7 @@ trait ModelHasPermissionsTrait
     /**
      * @var Collection
      */
-    private $_permissionNames;
+    private $permissionNames;
 
     /**
      * @param  {string|array}  $name
@@ -82,13 +82,13 @@ trait ModelHasPermissionsTrait
      */
     public function getAllPermNames(): array
     {
-        if (! $this->_permissionNames) {
-            $this->_permissionNames = $this->getAllPerm()
+        if (! $this->permissionNames) {
+            $this->permissionNames = $this->getAllPerm()
                 ->pluck('name')
                 ->toArray();
         }
 
-        return $this->_permissionNames;
+        return $this->permissionNames;
     }
 
     /**

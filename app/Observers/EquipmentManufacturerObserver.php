@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Observers;
 
@@ -10,10 +10,10 @@ class EquipmentManufacturerObserver
     /**
      * Handle the equipment manufacturer "deleted" event.
      *
-     * @param  \App\EquipmentManufacturer  $equipmentManufacturer
+     * @param  EquipmentManufacturer  $equipmentManufacturer
      * @return void
      */
-    public function deleted(EquipmentManufacturer $equipmentManufacturer)
+    public function deleted(EquipmentManufacturer $equipmentManufacturer): void
     {
         event(new EDelete($equipmentManufacturer));
     }

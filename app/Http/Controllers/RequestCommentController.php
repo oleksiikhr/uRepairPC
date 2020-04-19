@@ -1,10 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use App\User;
 use App\Enums\Perm;
 use App\RequestComment;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Request as RequestModel;
 use Illuminate\Support\Facades\Gate;
@@ -19,12 +20,12 @@ class RequestCommentController extends Controller
     /**
      * @var RequestModel
      */
-    private $_request;
+    private $request;
 
     /**
      * @var User
      */
-    private $_user;
+    private $user;
 
     /**
      * Add middleware depends on user permissions.
@@ -34,19 +35,19 @@ class RequestCommentController extends Controller
      */
     public function permissions(Request $request): array
     {
-        $this->_user = auth()->user();
+        $this->user = auth()->user();
 
-        if (! $this->_user) {
+        if (! $this->user) {
             $this->middleware('jwt.auth');
 
             return [];
         }
 
         $requestId = (int) $request->route('request');
-        $this->_request = RequestModel::findOrFail($requestId);
+        $this->request = RequestModel::findOrFail($requestId);
 
         // Permissions on request before get a comments
-        if (! RequestModel::hasAccessByPerm($this->_request, $this->_user)) {
+        if (! RequestModel::hasAccessByPerm($this->request, $this->user)) {
             $this->middleware('permission:disable');
 
             return [];
@@ -65,11 +66,11 @@ class RequestCommentController extends Controller
      * Display a listing of the resource.
      *
      * @param  int  $requestId
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index(int $requestId)
+    public function index(int $requestId): JsonResponse
     {
-        $requestComments = $this->_request->comments()->get();
+        $requestComments = $this->request->comments()->get();
         event(new EJoin($requestId, ...$requestComments));
 
         return response()->json([
@@ -83,20 +84,20 @@ class RequestCommentController extends Controller
      *
      * @param  RequestCommentRequest  $request
      * @param  int  $requestId
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(RequestCommentRequest $request, int $requestId)
+    public function store(RequestCommentRequest $request, int $requestId): JsonResponse
     {
         $requestComment = new RequestComment;
         $requestComment->fill($request->all());
         $requestComment->request_id = $requestId;
-        $requestComment->user_id = $this->_user->id;
+        $requestComment->user_id = $this->user->id;
 
         if (! $requestComment->save()) {
             return $this->responseDatabaseSaveError();
         }
 
-        $requestComment = $this->_request->comments()->findOrFail($requestComment->id);
+        $requestComment = $this->request->comments()->findOrFail($requestComment->id);
         event(new ECreate($requestId, $requestComment));
 
         return response()->json([
@@ -110,11 +111,11 @@ class RequestCommentController extends Controller
      *
      * @param  int  $requestId
      * @param  int  $commentId
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function show(int $requestId, int $commentId)
+    public function show(int $requestId, int $commentId): JsonResponse
     {
-        $requestComment = $this->_request->comments()->findOrFail($commentId);
+        $requestComment = $this->request->comments()->findOrFail($commentId);
 
         event(new EJoin($requestId, $requestComment));
 
@@ -130,14 +131,14 @@ class RequestCommentController extends Controller
      * @param  RequestCommentRequest  $request
      * @param  int  $requestId
      * @param  int  $commentId
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(RequestCommentRequest $request, int $requestId, int $commentId)
+    public function update(RequestCommentRequest $request, int $requestId, int $commentId): JsonResponse
     {
-        $requestComment = $this->_request->comments()->findOrFail($commentId);
+        $requestComment = $this->request->comments()->findOrFail($commentId);
 
         // Show only own comment
-        if (! $this->_user->perm(Perm::REQUESTS_COMMENTS_EDIT_ALL) &&
+        if (! $this->user->perm(Perm::REQUESTS_COMMENTS_EDIT_ALL) &&
             Gate::denies('owner', $requestComment)
         ) {
             return $this->responseNoPermission();
@@ -149,7 +150,7 @@ class RequestCommentController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        $requestComment = $this->_request->comments()->findOrFail($requestComment->id);
+        $requestComment = $this->request->comments()->findOrFail($requestComment->id);
         event(new EUpdate($requestId, $commentId, $requestComment));
 
         return response()->json([
@@ -163,15 +164,15 @@ class RequestCommentController extends Controller
      *
      * @param  int  $requestId
      * @param  int  $commentId
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
-    public function destroy(int $requestId, int $commentId)
+    public function destroy(int $requestId, int $commentId): JsonResponse
     {
-        $requestComment = $this->_request->comments()->findOrFail($commentId);
+        $requestComment = $this->request->comments()->findOrFail($commentId);
 
         // Delete only own file
-        if (! $this->_user->perm(Perm::REQUESTS_COMMENTS_DELETE_ALL) &&
+        if (! $this->user->perm(Perm::REQUESTS_COMMENTS_DELETE_ALL) &&
             Gate::denies('owner', $requestComment)
         ) {
             return $this->responseNoPermission();

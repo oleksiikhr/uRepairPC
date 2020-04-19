@@ -3,8 +3,6 @@
 namespace App\Exceptions;
 
 use Throwable;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -19,9 +17,7 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * A list of the inputs that are never flashed for validation exceptions.
-     *
-     * @var array
+     * @inheritDoc
      */
     protected $dontFlash = [
         'password',
@@ -29,25 +25,15 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Report or log an exception.
-     *
-     * @param  \Throwable  $exception
-     * @return void
-     *
-     * @throws \Exception
+     * @inheritDoc
      */
-    public function report(Throwable $exception)
+    public function report(Throwable $exception): void
     {
         parent::report($exception);
     }
 
     /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  Request  $request
-     * @param  Throwable  $exception
-     * @return Response
-     * @throws Throwable
+     * @inheritDoc
      */
     public function render($request, Throwable $exception)
     {

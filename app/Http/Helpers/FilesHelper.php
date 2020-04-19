@@ -1,30 +1,31 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Helpers;
 
 use App\File;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 
 class FilesHelper
 {
     /**
      * @var UploadedFile[]
      */
-    private $_files;
+    private $files;
 
     /**
      * @var File[]
      */
-    private $_filesUploaded;
+    private $filesUploaded;
 
     /**
      * @var array
      */
-    private $_errors;
+    private $errors;
 
     public function __construct($files)
     {
-        $this->_files = $files;
+        $this->files = $files;
     }
 
     /**
@@ -35,34 +36,34 @@ class FilesHelper
     {
         $this->clear();
 
-        foreach ($this->_files as $file) {
+        foreach ($this->files as $file) {
             $fileHelper = new FileHelper($file);
             $fileModel = $fileHelper->fill();
             $uploadedUri = $fileHelper->store($storeFolder);
 
             if (! $uploadedUri) {
-                $this->_errors[$file->getClientOriginalName()] = [__('app.files.file_not_saved')];
+                $this->errors[$file->getClientOriginalName()] = [__('app.files.file_not_saved')];
                 continue;
             }
 
             $fileModel->path = $uploadedUri;
 
             if (! $fileModel->save()) {
-                $this->_errors[$file->getClientOriginalName()] = [__('app.database.save_error')];
+                $this->errors[$file->getClientOriginalName()] = [__('app.database.save_error')];
                 FileHelper::delete($fileModel->path, $fileModel->disk);
                 continue;
             }
 
-            $this->_filesUploaded[] = $fileModel;
+            $this->filesUploaded[] = $fileModel;
         }
     }
 
     /**
-     * @return array
+     * @return Collection
      */
-    public function getUploadedIds()
+    public function getUploadedIds(): Collection
     {
-        return collect($this->_filesUploaded)->pluck('id');
+        return collect($this->filesUploaded)->pluck('id');
     }
 
     /**
@@ -70,7 +71,7 @@ class FilesHelper
      */
     public function getErrors()
     {
-        return $this->_errors;
+        return $this->errors;
     }
 
     /**
@@ -78,7 +79,7 @@ class FilesHelper
      */
     public function getFilesUploaded()
     {
-        return $this->_filesUploaded;
+        return $this->filesUploaded;
     }
 
     /**
@@ -86,7 +87,7 @@ class FilesHelper
      */
     public function hasErrors()
     {
-        return ! empty($this->_errors);
+        return ! empty($this->errors);
     }
 
     /**
@@ -121,7 +122,7 @@ class FilesHelper
      */
     private function clear()
     {
-        $this->_filesUploaded = [];
-        $this->_errors = [];
+        $this->filesUploaded = [];
+        $this->errors = [];
     }
 }

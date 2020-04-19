@@ -12,12 +12,12 @@ class ECreate extends ECreateBroadcast
     /**
      * @var int
      */
-    private $_equipmentId;
+    private $equipmentId;
 
     /**
      * @var int
      */
-    private $_userIdUpload;
+    private $userIdUpload;
 
     /**
      * Create a new event instance.
@@ -30,8 +30,8 @@ class ECreate extends ECreateBroadcast
     public function __construct(int $equipmentId, Collection $data, int $userIdUpload)
     {
         parent::__construct($data);
-        $this->_equipmentId = $equipmentId;
-        $this->_userIdUpload = $userIdUpload;
+        $this->equipmentId = $equipmentId;
+        $this->userIdUpload = $userIdUpload;
     }
 
     /**
@@ -40,8 +40,8 @@ class ECreate extends ECreateBroadcast
     public function rooms()
     {
         return [
-            self::$roomName.".{$this->_equipmentId}",
-            self::$roomName.".{$this->_equipmentId} [user_id.{$this->_userIdUpload}]",
+            self::$roomName.".{$this->equipmentId}",
+            self::$roomName.".{$this->equipmentId} [user_id.{$this->userIdUpload}]",
         ];
     }
 
@@ -51,7 +51,7 @@ class ECreate extends ECreateBroadcast
     public function params(): ?array
     {
         return [
-            'equipment_id' => $this->_equipmentId,
+            'equipment_id' => $this->equipmentId,
         ];
     }
 
@@ -64,10 +64,10 @@ class ECreate extends ECreateBroadcast
 
         if (is_array($this->data)) {
             foreach ($this->data as $file) {
-                $rooms[] = self::$roomName.".{$this->_equipmentId}.{$file['id']}";
+                $rooms[] = self::$roomName.".{$this->equipmentId}.{$file['id']}";
             }
         } else {
-            $rooms[] = self::$roomName.".{$this->_equipmentId}.{$this->data['id']}";
+            $rooms[] = self::$roomName.".{$this->equipmentId}.{$this->data['id']}";
         }
 
         return $rooms;

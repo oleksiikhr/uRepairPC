@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Tests\Feature;
 
@@ -11,10 +11,10 @@ class ExampleTest extends TestCase
      *
      * @return void
      */
-    public function testBasicTest()
+    public function testBasicTest(): void
     {
         $response = $this->get('/');
 
-        $response->assertStatus(422);
+        $response->assertStatus(200);
     }
 }

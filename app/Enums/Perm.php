@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Enums;
 
@@ -114,11 +114,11 @@ abstract class Perm
     }
 
     /**
-     * @return object
+     * @return array
      */
-    public static function getStructure()
+    public static function getStructure(): array
     {
-        return (object) [
+        return [
             __('perm.sections.profile') => [
                 self::PROFILE_EDIT => __('perm.actions.edit'),
             ],

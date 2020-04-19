@@ -11,7 +11,7 @@ class ECreate extends ECreateBroadcast
     /**
      * @var int
      */
-    private $_requestId;
+    private $requestId;
 
     /**
      * Create a new event instance.
@@ -23,7 +23,7 @@ class ECreate extends ECreateBroadcast
     public function __construct(int $requestId, $data)
     {
         parent::__construct($data);
-        $this->_requestId = $requestId;
+        $this->requestId = $requestId;
     }
 
     /**
@@ -31,7 +31,7 @@ class ECreate extends ECreateBroadcast
      */
     public function rooms()
     {
-        return self::$roomName.".{$this->_requestId}";
+        return self::$roomName.".{$this->requestId}";
     }
 
     /**
@@ -40,7 +40,7 @@ class ECreate extends ECreateBroadcast
     public function params(): ?array
     {
         return [
-            'request_id' => $this->_requestId,
+            'request_id' => $this->requestId,
         ];
     }
 
@@ -49,6 +49,6 @@ class ECreate extends ECreateBroadcast
      */
     protected function join()
     {
-        return self::$roomName.".{$this->_requestId}.{$this->data['id']}";
+        return self::$roomName.".{$this->requestId}.{$this->data['id']}";
     }
 }

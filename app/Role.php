@@ -1,10 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App;
 
 use App\Enums\Perm;
 use App\Traits\ModelHasDefaultTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model
 {
@@ -53,15 +55,16 @@ class Role extends Model
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         $permissionsList = (object) [];
         $permissionsActive = [];
 
         if (! empty($this->permissions)) {
             $permissions = $this->permissions->pluck('name')->toArray();
+            $structure = Perm::getStructure();
 
-            foreach (Perm::getStructure() as $key => $arr) {
+            foreach ($structure as $key => $arr) {
                 $temp = [];
                 foreach ($arr as $permission => $action) {
                     $active = in_array($permission, $permissions);
@@ -91,7 +94,7 @@ class Role extends Model
      * @param  array  $changePermissionNames
      * @return void
      */
-    public function syncPermissions(array $changePermissionNames)
+    public function syncPermissions(array $changePermissionNames): void
     {
         $permissions = $this->permissions()->get();
         $deleteIds = [];
@@ -116,17 +119,12 @@ class Role extends Model
         $this->permissions()->createMany($insertValues->toArray());
     }
 
-    /* | -----------------------------------------------------------------------------------
-     * | Relationships
-     * | -----------------------------------------------------------------------------------
-     */
-
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
     }
 
-    public function permissions()
+    public function permissions(): HasMany
     {
         return $this->hasMany(RolePermission::class);
     }

@@ -11,7 +11,7 @@ class EUpdate extends EUpdateBroadcast
     /**
      * @var int
      */
-    private $_equipmentId;
+    private $equipmentId;
 
     /**
      * Create a new event instance.
@@ -24,7 +24,7 @@ class EUpdate extends EUpdateBroadcast
     public function __construct(int $equipmentId, int $id, $data)
     {
         parent::__construct($id, $data);
-        $this->_equipmentId = $equipmentId;
+        $this->equipmentId = $equipmentId;
     }
 
     /**
@@ -32,7 +32,7 @@ class EUpdate extends EUpdateBroadcast
      */
     public function rooms()
     {
-        return self::$roomName.".{$this->_equipmentId}.{$this->id}";
+        return self::$roomName.".{$this->equipmentId}.{$this->id}";
     }
 
     /**
@@ -42,7 +42,7 @@ class EUpdate extends EUpdateBroadcast
     {
         return [
             'id' => $this->id,
-            'equipment_id' => $this->_equipmentId,
+            'equipment_id' => $this->equipmentId,
         ];
     }
 }

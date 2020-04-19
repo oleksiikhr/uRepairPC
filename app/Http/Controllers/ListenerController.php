@@ -1,9 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use App\Events\JoinRooms;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Events\Roles\EGlobal as RolesEvent;
 use App\Events\Users\EGlobal as UsersEvent;
 use App\Events\Requests\EGlobal as RequestsEvent;
@@ -33,9 +34,9 @@ class ListenerController extends Controller
     /**
      * Refresh all rooms for socketId and listen profile events.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function sync()
+    public function sync(): JsonResponse
     {
         // Listen events profile
         $user = auth()->user();

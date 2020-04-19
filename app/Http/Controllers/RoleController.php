@@ -1,10 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use App\Role;
 use App\Enums\Perm;
 use App\Events\Roles\EJoin;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Events\Roles\ECreate;
 use App\Events\Roles\EUpdate;
@@ -36,9 +37,9 @@ class RoleController extends Controller
      * Display a listing of the resource.
      *
      * @param  RoleRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index(RoleRequest $request)
+    public function index(RoleRequest $request): JsonResponse
     {
         $query = Role::query();
 
@@ -68,9 +69,9 @@ class RoleController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  RoleRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(RoleRequest $request)
+    public function store(RoleRequest $request): JsonResponse
     {
         $role = new Role;
         $role->fill($request->all());
@@ -91,9 +92,9 @@ class RoleController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         $role = Role::with('permissions')->findOrFail($id);
 
@@ -110,9 +111,9 @@ class RoleController extends Controller
      *
      * @param  RoleRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(RoleRequest $request, int $id)
+    public function update(RoleRequest $request, int $id): JsonResponse
     {
         $role = Role::findOrFail($id);
         $role->fill($request->all());
@@ -134,9 +135,9 @@ class RoleController extends Controller
      *
      * @param  Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function updatePermissions(Request $request, int $id)
+    public function updatePermissions(Request $request, int $id): JsonResponse
     {
         $request->validate([
             'permissions' => 'array',
@@ -158,9 +159,9 @@ class RoleController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $role = Role::findOrFail($id);
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Mail;
 
@@ -13,7 +13,7 @@ class EmailChange extends Mailable
     /**
      * @var string
      */
-    private $_email;
+    private $email;
 
     /**
      * Create a new message instance.
@@ -22,7 +22,7 @@ class EmailChange extends Mailable
      */
     public function __construct(string $email)
     {
-        $this->_email = $email;
+        $this->email = $email;
     }
 
     /**
@@ -30,12 +30,13 @@ class EmailChange extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): self
     {
+        // TODO Translate
         return $this->markdown('emails.users.email')
             ->subject(config('app.name').' - змінився email')
             ->with([
-                'email' => $this->_email,
+                'email' => $this->email,
             ]);
     }
 }

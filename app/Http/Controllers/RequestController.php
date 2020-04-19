@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -8,6 +8,7 @@ use App\Enums\Perm;
 use App\RequestType;
 use App\RequestStatus;
 use App\RequestPriority;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Events\Requests\EJoin;
 use App\Events\Requests\ECreate;
@@ -22,7 +23,7 @@ class RequestController extends Controller
     /**
      * @var User
      */
-    private $_user;
+    private $user;
 
     /**
      * Add middleware depends on user permissions.
@@ -32,7 +33,7 @@ class RequestController extends Controller
      */
     public function permissions(Request $request): array
     {
-        $this->_user = auth()->user();
+        $this->user = auth()->user();
 
         return [
             'index' => [Perm::REQUESTS_VIEW_OWN, Perm::REQUESTS_VIEW_ALL, Perm::REQUESTS_VIEW_ASSIGN],
@@ -47,9 +48,9 @@ class RequestController extends Controller
      * Display a listing of the resource.
      *
      * @param  RequestRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index(RequestRequest $request)
+    public function index(RequestRequest $request): JsonResponse
     {
         $query = RequestModel::querySelectJoins();
 
@@ -80,7 +81,7 @@ class RequestController extends Controller
         }
 
         // Get requests by permissions
-        RequestModel::buildQueryByPerm($query, $this->_user);
+        RequestModel::buildQueryByPerm($query, $this->user);
 
         $list = $query->paginate(self::PAGINATE_DEFAULT);
         event(new EJoin(...$list->items()));
@@ -92,13 +93,13 @@ class RequestController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  RequestRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(RequestRequest $request)
+    public function store(RequestRequest $request): JsonResponse
     {
         $requestModel = new RequestModel;
         $requestModel->fill($request->all());
-        $requestModel->user_id = $this->_user->id;
+        $requestModel->user_id = $this->user->id;
         $requestModel->type_id = RequestType::getDefaultValue()->id;
         $requestModel->priority_id = RequestPriority::getDefaultValue()->id;
         $requestModel->status_id = RequestStatus::getDefaultValue()->id;
@@ -107,7 +108,7 @@ class RequestController extends Controller
         // + EquipmentController (show method)
         // Add Equipment if has access
         if ($request->has('equipment_id')) {
-            if ($this->_user->perm(Perm::EQUIPMENTS_VIEW_ALL)) {
+            if ($this->user->perm(Perm::EQUIPMENTS_VIEW_ALL)) {
                 $requestModel->equipment_id = $request->equipment_id;
             } else {
                 $equipment = Equipment::findOrFail($request->equipment_id);
@@ -134,13 +135,13 @@ class RequestController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         $requestModel = RequestModel::querySelectJoins()->findOrFail($id);
 
-        if (! RequestModel::hasAccessByPerm($requestModel, $this->_user)) {
+        if (! RequestModel::hasAccessByPerm($requestModel, $this->user)) {
             return $this->responseNoPermission();
         }
 
@@ -157,13 +158,13 @@ class RequestController extends Controller
      *
      * @param  RequestRequest  $request
      * @param  int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(RequestRequest $request, int $id)
+    public function update(RequestRequest $request, int $id): JsonResponse
     {
         $requestModel = RequestModel::findOrFail($id);
 
-        if (! RequestModel::hasAccessByPerm($requestModel, $this->_user)) {
+        if (! RequestModel::hasAccessByPerm($requestModel, $this->user)) {
             return $this->responseNoPermission();
         }
 
@@ -171,7 +172,7 @@ class RequestController extends Controller
 
         // Change Equipment if has access
         if ($request->has('equipment_id')) {
-            if ($this->_user->perm(Perm::EQUIPMENTS_VIEW_ALL)) {
+            if ($this->user->perm(Perm::EQUIPMENTS_VIEW_ALL)) {
                 $requestModel->equipment_id = $request->equipment_id;
             } else {
                 $equipment = Equipment::findOrFail($request->equipment_id);
@@ -183,12 +184,12 @@ class RequestController extends Controller
 
         // Only user, who can edit every request - can assign user to request
         // TODO Move to another method (after web system*)
-        if ($request->has('assign_id') && $this->_user->perm(Perm::REQUESTS_EDIT_ALL)) {
+        if ($request->has('assign_id') && $this->user->perm(Perm::REQUESTS_EDIT_ALL)) {
             $requestModel->assign_id = $request->assign_id;
         }
 
         // Config attributes
-        if ($this->_user->perm(Perm::REQUESTS_CONFIG_VIEW_ALL)) {
+        if ($this->user->perm(Perm::REQUESTS_CONFIG_VIEW_ALL)) {
             if ($request->has('type_id')) {
                 $requestModel->type_id = $request->type_id;
             }
@@ -218,14 +219,14 @@ class RequestController extends Controller
      *
      * @param  RequestRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
-    public function destroy(RequestRequest $request, int $id)
+    public function destroy(RequestRequest $request, int $id): JsonResponse
     {
         $requestModel = RequestModel::findOrFail($id);
 
-        if (! RequestModel::hasAccessByPerm($requestModel, $this->_user)) {
+        if (! RequestModel::hasAccessByPerm($requestModel, $this->user)) {
             return $this->responseNoPermission();
         }
 

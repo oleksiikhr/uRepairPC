@@ -1,11 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use JWTAuth;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Requests\AuthRequest;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -23,9 +24,9 @@ class AuthController extends Controller
     /**
      * Get a current user with permissions.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function profile()
+    public function profile(): JsonResponse
     {
         $user = auth()->user();
 
@@ -39,9 +40,9 @@ class AuthController extends Controller
      * Auth the user by login and password.
      *
      * @param  AuthRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function login(AuthRequest $request)
+    public function login(AuthRequest $request): JsonResponse
     {
         if (! $token = JWTAuth::attempt($request->only('email', 'password'))) {
             return response()->json(['message' => __('app.auth.login_error')], 422);
@@ -60,9 +61,9 @@ class AuthController extends Controller
     /**
      * Refresh token to user.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function refresh()
+    public function refresh(): JsonResponse
     {
         $token = JWTAuth::getToken();
 
@@ -89,9 +90,9 @@ class AuthController extends Controller
     /**
      * Invalidate current JWT Token.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function logout()
+    public function logout(): JsonResponse
     {
         JWTAuth::invalidate(JWTAuth::getToken());
 

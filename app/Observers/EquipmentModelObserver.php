@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Observers;
 
@@ -10,10 +10,10 @@ class EquipmentModelObserver
     /**
      * Handle the equipment model "deleted" event.
      *
-     * @param  \App\EquipmentModel  $equipmentModel
+     * @param  EquipmentModel  $equipmentModel
      * @return void
      */
-    public function deleted(EquipmentModel $equipmentModel)
+    public function deleted(EquipmentModel $equipmentModel): void
     {
         event(new EDelete($equipmentModel));
     }

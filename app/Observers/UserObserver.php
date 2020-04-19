@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Observers;
 
@@ -12,10 +12,10 @@ class UserObserver
     /**
      * Handle the user "created" event.
      *
-     * @param User $user
+     * @param  User  $user
      * @return void
      */
-    public function created(User $user)
+    public function created(User $user): void
     {
         event(new ECreate($user));
     }
@@ -23,10 +23,10 @@ class UserObserver
     /**
      * Handle the user "updated" event.
      *
-     * @param User $user
+     * @param  User  $user
      * @return void
      */
-    public function updated(User $user)
+    public function updated(User $user): void
     {
         event(new EUpdate($user->id, $user->getChangesWithoutHiddenAttrs()));
     }
@@ -34,10 +34,10 @@ class UserObserver
     /**
      * Handle the user "deleted" event.
      *
-     * @param User $user
+     * @param  User  $user
      * @return void
      */
-    public function deleted(User $user)
+    public function deleted(User $user): void
     {
         event(new EDelete($user));
     }

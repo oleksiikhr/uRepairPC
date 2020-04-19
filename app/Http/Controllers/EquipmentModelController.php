@@ -1,10 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use App\User;
 use App\Enums\Perm;
 use App\EquipmentModel;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Events\EquipmentModels\EJoin;
@@ -17,7 +18,7 @@ class EquipmentModelController extends Controller
     /**
      * @var User
      */
-    private $_user;
+    private $user;
 
     /**
      * Add middleware depends on user permissions.
@@ -27,7 +28,7 @@ class EquipmentModelController extends Controller
      */
     public function permissions(Request $request): array
     {
-        $this->_user = auth()->user();
+        $this->user = auth()->user();
 
         return [
             'index' => Perm::EQUIPMENTS_CONFIG_VIEW_ALL,
@@ -41,9 +42,9 @@ class EquipmentModelController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         $list = EquipmentModel::querySelectJoins()->get();
 
@@ -56,13 +57,13 @@ class EquipmentModelController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  EquipmentModelRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(EquipmentModelRequest $request)
+    public function store(EquipmentModelRequest $request): JsonResponse
     {
         $equipmentModel = new EquipmentModel;
         $equipmentModel->fill($request->all());
-        $equipmentModel->user_id = $this->_user->id;
+        $equipmentModel->user_id = $this->user->id;
 
         if (! $equipmentModel->save()) {
             return $this->responseDatabaseSaveError();
@@ -81,9 +82,9 @@ class EquipmentModelController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         $equipmentModel = EquipmentModel::querySelectJoins()->findOrFail($id);
 
@@ -100,14 +101,14 @@ class EquipmentModelController extends Controller
      *
      * @param  EquipmentModelRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(EquipmentModelRequest $request, int $id)
+    public function update(EquipmentModelRequest $request, int $id): JsonResponse
     {
         $equipmentModel = EquipmentModel::findOrFail($id);
 
         // Edit only own equipments config
-        if (! $this->_user->perm(Perm::EQUIPMENTS_CONFIG_EDIT_ALL) &&
+        if (! $this->user->perm(Perm::EQUIPMENTS_CONFIG_EDIT_ALL) &&
             Gate::denies('owner', $equipmentModel)
         ) {
             return $this->responseNoPermission();
@@ -132,14 +133,14 @@ class EquipmentModelController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $equipmentModel = EquipmentModel::findOrFail($id);
 
         // Delete only own equipments config
-        if (! $this->_user->perm(Perm::EQUIPMENTS_CONFIG_DELETE_ALL) &&
+        if (! $this->user->perm(Perm::EQUIPMENTS_CONFIG_DELETE_ALL) &&
             Gate::denies('owner', $equipmentModel)
         ) {
             return $this->responseNoPermission();

@@ -12,7 +12,7 @@ class EDelete extends EDeleteBroadcast
     /**
      * @var int
      */
-    private $_requestId;
+    private $requestId;
 
     /**
      * Create a new event instance.
@@ -24,7 +24,7 @@ class EDelete extends EDeleteBroadcast
     public function __construct(int $requestId, Model $model)
     {
         parent::__construct($model);
-        $this->_requestId = $requestId;
+        $this->requestId = $requestId;
     }
 
     /**
@@ -32,7 +32,7 @@ class EDelete extends EDeleteBroadcast
      */
     public function rooms()
     {
-        return self::$roomName.".{$this->_requestId}.{$this->data['id']}";
+        return self::$roomName.".{$this->requestId}.{$this->data['id']}";
     }
 
     /**
@@ -42,7 +42,7 @@ class EDelete extends EDeleteBroadcast
     {
         return [
             'id' => $this->data['id'],
-            'request_id' => $this->_requestId,
+            'request_id' => $this->requestId,
         ];
     }
 }

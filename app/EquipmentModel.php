@@ -1,9 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EquipmentModel extends Model
 {
@@ -22,11 +25,11 @@ class EquipmentModel extends Model
     ];
 
     /**
-     * @return mixed
+     * @return Builder
      */
-    public static function querySelectJoins()
+    public static function querySelectJoins(): Builder
     {
-        return self::select(
+        return self::query()->select(
             'equipment_models.*',
             'equipment_types.name as type_name',
             'equipment_manufacturers.name as manufacturer_name'
@@ -35,22 +38,17 @@ class EquipmentModel extends Model
             ->join('equipment_manufacturers', 'equipment_models.manufacturer_id', '=', 'equipment_manufacturers.id');
     }
 
-    /* | -----------------------------------------------------------------------------------
-     * | Relationships
-     * | -----------------------------------------------------------------------------------
-     */
-
-    public function equipments()
+    public function equipments(): HasMany
     {
         return $this->hasMany(Equipment::class);
     }
 
-    public function type()
+    public function type(): BelongsTo
     {
         return $this->belongsTo(EquipmentType::class);
     }
 
-    public function manufacturer()
+    public function manufacturer(): BelongsTo
     {
         return $this->belongsTo(EquipmentManufacturer::class);
     }
