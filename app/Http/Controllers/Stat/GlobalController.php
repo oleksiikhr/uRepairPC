@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Stat;
 
 use App\Enums\Perm;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Json\GlobalFile;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GlobalRequest;
 use App\Events\Settings\EGlobalUpdate;

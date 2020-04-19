@@ -61,6 +61,7 @@ abstract class EBroadcast implements ShouldBroadcast, IBroadcastWebsocket
 
     /**
      * Join to this room after broadcast.
+     *
      * @return array|string
      */
     protected function join()

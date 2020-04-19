@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Enums\Perm;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\EquipmentManufacturer;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use App\Events\EquipmentManufacturers\EJoin;
 use App\Events\EquipmentManufacturers\ECreate;

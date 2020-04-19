@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Enums\Perm;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Request as RequestModel;
+use Illuminate\Http\JsonResponse;
 use App\Http\Helpers\FilesHelper;
 use App\Events\RequestFiles\EJoin;
 use App\Http\Requests\FileRequest;
