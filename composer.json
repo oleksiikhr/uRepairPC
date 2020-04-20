@@ -16,12 +16,13 @@
   "license": "MIT",
   "require": {
     "php": "^7.2.5",
+    "bschmitt/laravel-amqp": "^2.0",
     "fideloper/proxy": "^4.2",
     "guzzlehttp/guzzle": "^6.3",
     "laravel/framework": "7.6",
     "laravel/tinker": "^2.0",
     "tymon/jwt-auth": "dev-develop",
-    "vladimir-yuldashev/laravel-queue-rabbitmq": "dev-master"
+    "ext-json": "*"
   },
   "require-dev": {
     "facade/ignition": "^2.0",
