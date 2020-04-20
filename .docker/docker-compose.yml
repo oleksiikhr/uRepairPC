@@ -54,6 +54,8 @@ services:
     container_name: u_websocket
     volumes:
       - ../websocket:/usr/app
+    depends_on:
+      - rabbitmq
     labels:
       - traefik.http.routers.websocket.rule=Host(`urepairpc.localhost`) && Path(`/ws/`)
       - traefik.http.routers.websocket.entrypoints=web
