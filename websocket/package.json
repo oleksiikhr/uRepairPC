@@ -4,44 +4,39 @@
   "scripts": {
     "start": "pm2 start app.js",
     "dev": "nodemon --watch",
-    "prod": "node dist/app",
     "build": "tsc",
-    "lint": "tslint src/**/*",
-    "lint:fix": "npm run lint -- --fix",
+    "lint": "yarn eslint ./src --ext .js,.ts",
+    "lint:fix": "yarn run lint --fix",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "release": "standard-version"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/uRepairPC/websocket.git"
-  },
   "author": "Alexey Khrushch, alexeykhr@outlook.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/uRepairPC/websocket/issues"
+    "url": "https://github.com/uRepairPC/uRepairPC/issues"
   },
-  "homepage": "https://github.com/uRepairPC/websocket#readme",
+  "homepage": "https://github.com/uRepairPC/uRepairPC#readme",
   "dependencies": {
-    "dotenv": "^8.0.0",
-    "ioredis": "^4.14.0",
-    "pm2": "^3.5.1",
-    "request": "^2.88.0",
+    "@types/amqplib": "^0.5.13",
+    "amqplib": "^0.5.5",
+    "dotenv": "^8.2.0",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
-    "@types/dotenv": "^6.1.1",
-    "@types/ioredis": "^4.0.13",
-    "@types/jest": "^24.0.16",
-    "@types/node": "^12.6.9",
-    "@types/socket.io": "^2.1.2",
+    "@types/dotenv": "^8.2.0",
+    "@types/node": "^13.13.0",
+    "@types/socket.io": "^2.1.4",
     "@types/socket.io-client": "^1.4.32",
-    "jest": "^24.8.0",
-    "nodemon": "^1.19.1",
-    "socket.io-client": "^2.2.0",
-    "ts-jest": "^24.0.2",
-    "ts-node": "^8.3.0",
-    "tslint": "^5.18.0",
-    "typescript": "^3.5.3"
+    "@typescript-eslint/eslint-plugin": "^2.29.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-typescript": "^7.2.1",
+    "eslint-plugin-import": "^2.20.2",
+    "jest": "^25.3.0",
+    "nodemon": "^2.0.3",
+    "socket.io-client": "^2.3.0",
+    "ts-jest": "^25.4.0",
+    "ts-node": "^8.8.2",
+    "typescript": "^3.8.3"
   }
 }

@@ -3,5 +3,5 @@
 import io from 'socket.io-client'
 
 export default io(location.origin, {
-  path: '/ws'
+  path: '/ws/server'
 })

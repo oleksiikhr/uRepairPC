@@ -57,7 +57,7 @@ services:
     depends_on:
       - rabbitmq
     labels:
-      - traefik.http.routers.websocket.rule=Host(`urepairpc.localhost`) && Path(`/ws/`)
+      - traefik.http.routers.websocket.rule=Host(`urepairpc.localhost`) && Path(`/ws/server/`)
       - traefik.http.routers.websocket.entrypoints=web
 
   mysql:
