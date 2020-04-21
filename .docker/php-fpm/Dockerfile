@@ -6,13 +6,12 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y git libzip-dev zip
 
-RUN pecl install redis
+RUN pecl install -o -f redis
 
 RUN groupmod -o -g 1000 www-data && \
     usermod -o -u 1000 -g www-data www-data
 
-RUN apt-get update && \
-    apt-get install libcurl4-openssl-dev
+RUN apt-get install libcurl4-openssl-dev
 
 RUN docker-php-ext-install mysqli && \
     docker-php-ext-install pdo_mysql && \
