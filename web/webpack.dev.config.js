@@ -25,12 +25,12 @@ module.exports = {
   /** @see https://webpack.js.org/configuration/devtool/ */
   devtool: 'eval',
   devServer: {
-    publicPath: '/',
     contentBase: './dist',
     host: '0.0.0.0',
     port: 80,
     hot: true,
     clientLogLevel: 'error',
+    historyApiFallback: true,
     disableHostCheck: true
   },
   module: {
