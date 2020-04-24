@@ -32,28 +32,14 @@ axios.interceptors.response.use(
     return resp
   },
   async (err) => {
-    // Fatal error
-    if (!err || !err.response) {
-      return Promise.reject(err)
-    }
-
     const { response, config } = err
 
-    // User is not auth
     if (response.status === 401) {
-
+      // If we have not logged in before, it makes no sense
+      // to try to get a new token
       if (!store.state.profile.isLogin) {
         return Promise.reject(err)
       }
-
-      // After token is refreshed - send requests to all 401 statusCode
-      const retryOriginalRequest = new Promise((resolve) => {
-        requestsToRefresh.push((access_token) => {
-          config.headers['Authorization'] = 'Bearer ' + access_token
-          config.baseURL = null
-          resolve(axios(config))
-        })
-      })
 
       // User is auth, probably token is expired, try renew
       // And send all failed requests again
@@ -64,27 +50,38 @@ axios.interceptors.response.use(
         const loadingService = runLoadingService('Оновлюється токен безпеки')
 
         // Send request to refresh token
-        try {
-          await axios.post('auth/refresh')
-            .then(({ data }) => {
-              axios.defaults.headers['Authorization'] = 'Bearer ' + data.token
-              StorageData.token = data.token
-              requestsToRefresh.forEach(callback => callback(data.token))
-            })
-            .catch(() => {
-              logout()
-            })
-            .finally(() => {
-              loadingService.close()
-              requestsToRefresh = []
-              isRequestToRefresh = false
-            })
-        } catch (e) {
-          return Promise.reject(err)
-        }
+        axios.post('auth/refresh')
+          .then(({ data }) => {
+            axios.defaults.headers['Authorization'] = 'Bearer ' + data.token
+            StorageData.token = data.token
+            requestsToRefresh.forEach((cb) => cb(data.token))
+          })
+          .catch(() => {
+            logout()
+            requestsToRefresh.forEach((cb) => cb(null))
+          })
+          .finally(() => {
+            loadingService.close()
+            requestsToRefresh = []
+            isRequestToRefresh = false
+          })
       }
 
-      return retryOriginalRequest
+      return new Promise((resolve, reject) => {
+        // In our variable (requests that expect a new token
+        // from the first request), we add a callback,
+        // which the first request to execute
+        requestsToRefresh.push((token) => {
+          if (token) {
+            config.headers.Authorization = 'Bearer ' + token
+            resolve(axios(config))
+          }
+
+          // If the first request could not update the token, we
+          // must return the basic request processing logic
+          reject(Promise.reject(err))
+        })
+      })
     }
 
     // No access, etc
