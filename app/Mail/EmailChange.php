@@ -13,7 +13,7 @@ class EmailChange extends Mailable
     /**
      * @var string
      */
-    private $email;
+    private string $email;
 
     /**
      * Create a new message instance.
@@ -22,6 +22,8 @@ class EmailChange extends Mailable
      */
     public function __construct(string $email)
     {
+        $this->queue = 'email';
+        $this->connection = 'database';
         $this->email = $email;
     }
 

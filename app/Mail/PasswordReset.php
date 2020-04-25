@@ -13,7 +13,7 @@ class PasswordReset extends Mailable
     /**
      * @var string
      */
-    private $password;
+    private string $password;
 
     /**
      * Create a new message instance.
@@ -22,6 +22,8 @@ class PasswordReset extends Mailable
      */
     public function __construct(string $password)
     {
+        $this->queue = 'email';
+        $this->connection = 'database';
         $this->password = $password;
     }
 

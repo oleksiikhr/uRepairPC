@@ -13,7 +13,7 @@ class UserCreated extends Mailable
     /**
      * @var string
      */
-    private $password;
+    private string $password;
 
     /**
      * Create a new message instance.
@@ -22,6 +22,8 @@ class UserCreated extends Mailable
      */
     public function __construct(string $password)
     {
+        $this->queue = 'email';
+        $this->connection = 'database';
         $this->password = $password;
     }
 

@@ -118,21 +118,15 @@ class UserController extends Controller
      */
     public function store(UserRequest $request): JsonResponse
     {
-        $password = User::generateRandomStrPassword();
-
         $user = new User;
         $user->fill($request->all());
         $user->email = $request->email;
-        $user->password = bcrypt($password);
 
         if (! $user->save()) {
             return $this->responseDatabaseSaveError();
         }
 
         $user->assignRolesById(Role::getDefaultValues()->pluck('id'));
-
-        // TODO Disable on APP_DEMO
-        Mail::to($user)->send(new UserCreated($password));
 
         return response()->json([
             'message' => __('app.users.store'),
