@@ -53,7 +53,7 @@ class GlobalController extends Controller
         $globalFile->mergeAndSaveToFile($data);
 
         $jsonResource = new GlobalJsonResource($data);
-        event(new EGlobalUpdate($jsonResource->jsonSerialize()));
+        EGlobalUpdate::dispatchAfterResponse($jsonResource->jsonSerialize());
 
         return response()->json([
             'message' => __('app.settings.global'),

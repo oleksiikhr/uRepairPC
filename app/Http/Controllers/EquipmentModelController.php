@@ -48,7 +48,7 @@ class EquipmentModelController extends Controller
     {
         $list = EquipmentModel::querySelectJoins()->get();
 
-        event(new EJoin(...$list));
+        EJoin::dispatchAfterResponse(...$list);
 
         return response()->json($list);
     }
@@ -70,7 +70,7 @@ class EquipmentModelController extends Controller
         }
 
         $equipmentModel = EquipmentModel::querySelectJoins()->findOrFail($equipmentModel->id);
-        event(new ECreate($equipmentModel));
+        ECreate::dispatchAfterResponse($equipmentModel);
 
         return response()->json([
             'message' => __('app.equipment_model.store.store'),
@@ -88,7 +88,7 @@ class EquipmentModelController extends Controller
     {
         $equipmentModel = EquipmentModel::querySelectJoins()->findOrFail($id);
 
-        event(new EJoin($equipmentModel));
+        EJoin::dispatchAfterResponse($equipmentModel);
 
         return response()->json([
             'message' => __('app.equipment_model.show'),
@@ -121,7 +121,7 @@ class EquipmentModelController extends Controller
         }
 
         $equipmentModel = EquipmentModel::querySelectJoins()->findOrFail($equipmentModel->id);
-        event(new EUpdate($equipmentModel->id, $equipmentModel));
+        EUpdate::dispatchAfterResponse($equipmentModel->id, $equipmentModel);
 
         return response()->json([
             'message' => __('app.equipment_model.update'),

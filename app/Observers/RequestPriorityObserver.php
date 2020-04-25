@@ -15,6 +15,6 @@ class RequestPriorityObserver
      */
     public function deleted(RequestPriority $requestPriority): void
     {
-        event(new EDelete($requestPriority));
+        EDelete::dispatchAfterResponse($requestPriority);
     }
 }

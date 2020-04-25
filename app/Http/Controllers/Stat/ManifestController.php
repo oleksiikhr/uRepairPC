@@ -101,7 +101,7 @@ class ManifestController extends Controller
         $manifestFile->mergeAndSaveToFile($data);
 
         $response = (new ManifestJsonResource($data))->jsonSerialize();
-        event(new EManifestUpdate($response));
+        EManifestUpdate::dispatchAfterResponse($response);
 
         return response()->json([
             'message' => __('app.settings.manifest'),

@@ -15,6 +15,6 @@ class RequestTypeObserver
      */
     public function deleted(RequestType $requestType): void
     {
-        event(new EDelete($requestType));
+        EDelete::dispatch($requestType);
     }
 }

@@ -78,7 +78,7 @@ class RequestFileController extends Controller
         }
 
         $requestFiles = $query->get();
-        event(new EJoin($requestId, ...$requestFiles));
+        EJoin::dispatchAfterResponse($requestId, ...$requestFiles);
 
         return response()->json([
             'message' => __('app.files.files_get'),
@@ -105,7 +105,7 @@ class RequestFileController extends Controller
         $uploadedFiles = $this->request->files()->whereIn('files.id', $uploadedIds)->get();
 
         if (count($uploadedFiles)) {
-            event(new ECreate($requestId, $uploadedFiles, $this->user->id));
+            ECreate::dispatchAfterResponse($requestId, $uploadedFiles, $this->user->id);
         }
 
         if ($filesHelper->hasErrors()) {
@@ -172,7 +172,7 @@ class RequestFileController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new EUpdate($requestId, $fileId, $requestFile));
+        EUpdate::dispatchAfterResponse($requestId, $fileId, $requestFile);
 
         return response()->json([
             'message' => __('app.files.file_updated'),
@@ -203,7 +203,7 @@ class RequestFileController extends Controller
             return $this->responseDatabaseDestroyError();
         }
 
-        event(new EDelete($requestId, $requestFile));
+        EDelete::dispatchAfterResponse($requestId, $requestFile);
 
         return response()->json([
             'message' => __('app.files.file_destroyed'),

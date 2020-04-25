@@ -80,7 +80,7 @@ class EquipmentFileController extends Controller
         }
 
         $equipmentFiles = $query->get();
-        event(new EJoin($equipmentId, ...$equipmentFiles));
+        EJoin::dispatchAfterResponse($equipmentId, ...$equipmentFiles);
 
         return response()->json([
             'message' => __('app.files.files_get'),
@@ -107,7 +107,7 @@ class EquipmentFileController extends Controller
         $uploadedFiles = $this->equipment->files()->whereIn('files.id', $uploadedIds)->get();
 
         if (count($uploadedFiles)) {
-            event(new ECreate($equipmentId, $uploadedFiles, $this->user->id));
+            ECreate::dispatchAfterResponse($equipmentId, $uploadedFiles, $this->user->id);
         }
 
         if ($filesHelper->hasErrors()) {
@@ -174,7 +174,7 @@ class EquipmentFileController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new EUpdate($equipmentId, $fileId, $equipmentFile));
+        EUpdate::dispatchAfterResponse($equipmentId, $fileId, $equipmentFile);
 
         return response()->json([
             'message' => __('app.files.file_updated'),
@@ -205,7 +205,7 @@ class EquipmentFileController extends Controller
             return $this->responseDatabaseDestroyError();
         }
 
-        event(new EDelete($equipmentId, $equipmentFile));
+        EDelete::dispatchAfterResponse($equipmentId, $equipmentFile);
 
         return response()->json([
             'message' => __('app.files.file_destroyed'),

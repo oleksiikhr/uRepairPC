@@ -55,7 +55,7 @@ class ListenerController extends Controller
         $rooms = array_merge($rooms, RequestPrioritiesEvent::getRooms());
 
         // Send all rooms to listen
-        event(new JoinRooms($rooms, true));
+        JoinRooms::dispatchAfterResponse($rooms, true);
 
         return response()->json([
             'rooms' => $rooms,

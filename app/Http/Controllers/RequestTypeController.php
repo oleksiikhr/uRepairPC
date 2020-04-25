@@ -48,7 +48,7 @@ class RequestTypeController extends Controller
     {
         $list = RequestType::all();
 
-        event(new EJoin(...$list));
+        EJoin::dispatchAfterResponse(...$list);
 
         return response()->json($list);
     }
@@ -73,7 +73,7 @@ class RequestTypeController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new ECreate($requestType));
+        ECreate::dispatchAfterResponse($requestType);
 
         return response()->json([
             'message' => __('app.request_type.store'),
@@ -91,7 +91,7 @@ class RequestTypeController extends Controller
     {
         $requestType = RequestType::findOrFail($id);
 
-        event(new EJoin($requestType));
+        EJoin::dispatchAfterResponse($requestType);
 
         return response()->json([
             'message' => __('app.request_type.show'),
@@ -131,7 +131,7 @@ class RequestTypeController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new EUpdate($requestType->id, $requestType));
+        EUpdate::dispatchAfterResponse($requestType->id, $requestType);
 
         return response()->json([
             'message' => __('app.request_type.update'),

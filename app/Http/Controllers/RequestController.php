@@ -84,7 +84,7 @@ class RequestController extends Controller
         RequestModel::buildQueryByPerm($query, $this->user);
 
         $list = $query->paginate(self::PAGINATE_DEFAULT);
-        event(new EJoin(...$list->items()));
+        EJoin::dispatchAfterResponse(...$list->items());
 
         return response()->json($list);
     }
@@ -123,7 +123,7 @@ class RequestController extends Controller
         }
 
         $requestModel = RequestModel::querySelectJoins()->findOrFail($requestModel->id);
-        event(new ECreate($requestModel));
+        ECreate::dispatchAfterResponse($requestModel);
 
         return response()->json([
             'message' => __('app.requests.store'),
@@ -145,7 +145,7 @@ class RequestController extends Controller
             return $this->responseNoPermission();
         }
 
-        event(new EJoin($requestModel));
+        EJoin::dispatchAfterResponse($requestModel);
 
         return response()->json([
             'message' => __('app.requests.show'),
@@ -206,7 +206,7 @@ class RequestController extends Controller
         }
 
         $requestModel = RequestModel::querySelectJoins()->findOrFail($id);
-        event(new EUpdate($requestModel->id, $requestModel));
+        EUpdate::dispatchAfterResponse($requestModel);
 
         return response()->json([
             'message' => __('app.requests.update'),

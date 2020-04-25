@@ -60,7 +60,7 @@ class RoleController extends Controller
         }
 
         $list = $query->paginate($request->count ?? self::PAGINATE_DEFAULT);
-        event(new EJoin(...$list->items()));
+        EJoin::dispatchAfterResponse(...$list->items());
 
         return response()->json($list);
     }
@@ -80,7 +80,7 @@ class RoleController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new ECreate($role));
+        ECreate::dispatchAfterResponse($role);
 
         return response()->json([
             'message' => __('app.roles.store'),
@@ -98,7 +98,7 @@ class RoleController extends Controller
     {
         $role = Role::with('permissions')->findOrFail($id);
 
-        event(new EJoin($role));
+        EJoin::dispatchAfterResponse($role);
 
         return response()->json([
             'message' => __('app.roles.show'),
@@ -122,7 +122,7 @@ class RoleController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new EUpdate($role->id, $role));
+        EUpdate::dispatchAfterResponse($role->id, $role);
 
         return response()->json([
             'message' => __('app.roles.update'),
@@ -147,7 +147,7 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
         $role->syncPermissions($request->permissions);
 
-        event(new EUpdate($id, $role));
+        EUpdate::dispatchAfterResponse($id, $role);
 
         return response()->json([
             'message' => __('app.roles.update_permissions'),

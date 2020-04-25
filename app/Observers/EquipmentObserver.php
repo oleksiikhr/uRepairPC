@@ -15,6 +15,6 @@ class EquipmentObserver
      */
     public function deleted(Equipment $equipment): void
     {
-        event(new EDelete($equipment));
+        EDelete::dispatch($equipment);
     }
 }

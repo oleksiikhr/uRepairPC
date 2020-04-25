@@ -71,7 +71,7 @@ class RequestCommentController extends Controller
     public function index(int $requestId): JsonResponse
     {
         $requestComments = $this->request->comments()->get();
-        event(new EJoin($requestId, ...$requestComments));
+        EJoin::dispatchAfterResponse($requestId, ...$requestComments);
 
         return response()->json([
             'message' => __('app.request_comments.index'),
@@ -98,7 +98,7 @@ class RequestCommentController extends Controller
         }
 
         $requestComment = $this->request->comments()->findOrFail($requestComment->id);
-        event(new ECreate($requestId, $requestComment));
+        ECreate::dispatchAfterResponse($requestId, $requestComment);
 
         return response()->json([
             'message' => __('app.request_comments.store'),
@@ -117,7 +117,7 @@ class RequestCommentController extends Controller
     {
         $requestComment = $this->request->comments()->findOrFail($commentId);
 
-        event(new EJoin($requestId, $requestComment));
+        EJoin::dispatchAfterResponse($requestId, $requestComment);
 
         return response()->json([
             'message' => __('app.request_comments.show'),
@@ -151,7 +151,7 @@ class RequestCommentController extends Controller
         }
 
         $requestComment = $this->request->comments()->findOrFail($requestComment->id);
-        event(new EUpdate($requestId, $commentId, $requestComment));
+        EUpdate::dispatchAfterResponse($requestId, $commentId, $requestComment);
 
         return response()->json([
             'message' => __('app.request_comments.update'),
@@ -182,7 +182,7 @@ class RequestCommentController extends Controller
             return $this->responseDatabaseDestroyError();
         }
 
-        event(new EDelete($requestId, $requestComment));
+        EDelete::dispatchAfterResponse($requestId, $requestComment);
 
         return response()->json([
             'message' => __('app.request_comments.destroy'),

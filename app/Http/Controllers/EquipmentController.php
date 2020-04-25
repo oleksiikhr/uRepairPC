@@ -68,7 +68,7 @@ class EquipmentController extends Controller
         }
 
         $list = $query->paginate(self::PAGINATE_DEFAULT);
-        event(new EJoin(...$list->items()));
+        EJoin::dispatchAfterResponse(...$list->items());
 
         return response()->json($list);
     }
@@ -90,7 +90,7 @@ class EquipmentController extends Controller
         }
 
         $equipment = Equipment::querySelectJoins()->findOrFail($equipment->id);
-        event(new ECreate($equipment));
+        ECreate::dispatchAfterResponse($equipment);
 
         return response()->json([
             'message' => __('app.equipments.store'),
@@ -113,7 +113,7 @@ class EquipmentController extends Controller
             return $this->responseNoPermission();
         }
 
-        event(new EJoin($equipment));
+        EJoin::dispatchAfterResponse($equipment);
 
         return response()->json([
             'message' => __('app.equipments.show'),
@@ -145,7 +145,7 @@ class EquipmentController extends Controller
 
         // Update model new data from relationship
         $equipment = Equipment::querySelectJoins()->findOrFail($equipment->id);
-        event(new EUpdate($equipment->id, $equipment));
+        EUpdate::dispatchAfterResponse($equipment->id, $equipment);
 
         return response()->json([
             'message' => __('app.equipments.update'),

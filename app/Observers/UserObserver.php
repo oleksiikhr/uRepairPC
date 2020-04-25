@@ -17,7 +17,7 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        event(new ECreate($user));
+        ECreate::dispatchAfterResponse($user);
     }
 
     /**
@@ -28,7 +28,7 @@ class UserObserver
      */
     public function updated(User $user): void
     {
-        event(new EUpdate($user->id, $user->getChangesWithoutHiddenAttrs()));
+        EUpdate::dispatchAfterResponse($user->id, $user->getChangesWithoutHiddenAttrs());
     }
 
     /**
@@ -39,6 +39,6 @@ class UserObserver
      */
     public function deleted(User $user): void
     {
-        event(new EDelete($user));
+        EDelete::dispatchAfterResponse($user);
     }
 }

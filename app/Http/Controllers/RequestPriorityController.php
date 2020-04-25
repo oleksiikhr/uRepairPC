@@ -48,7 +48,7 @@ class RequestPriorityController extends Controller
     {
         $list = RequestPriority::all();
 
-        event(new EJoin(...$list));
+        EJoin::dispatchAfterResponse(...$list);
 
         return response()->json($list);
     }
@@ -73,7 +73,7 @@ class RequestPriorityController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new ECreate($requestPriority));
+        ECreate::dispatchAfterResponse($requestPriority);
 
         return response()->json([
             'message' => __('app.request_priority.store'),
@@ -91,7 +91,7 @@ class RequestPriorityController extends Controller
     {
         $requestPriority = RequestPriority::findOrFail($id);
 
-        event(new EJoin($requestPriority));
+        EJoin::dispatchAfterResponse($requestPriority);
 
         return response()->json([
             'message' => __('app.request_priority.show'),
@@ -131,7 +131,7 @@ class RequestPriorityController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new EUpdate($requestPriority->id, $requestPriority));
+        EUpdate::dispatchAfterResponse($requestPriority->id, $requestPriority);
 
         return response()->json([
             'message' => __('app.request_priority.update'),

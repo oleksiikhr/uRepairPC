@@ -15,6 +15,6 @@ class EquipmentManufacturerObserver
      */
     public function deleted(EquipmentManufacturer $equipmentManufacturer): void
     {
-        event(new EDelete($equipmentManufacturer));
+        EDelete::dispatchAfterResponse($equipmentManufacturer);
     }
 }

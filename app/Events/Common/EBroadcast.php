@@ -2,13 +2,16 @@
 
 namespace App\Events\Common;
 
-use Illuminate\Support\Facades\Event;
+use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use App\Contracts\IBroadcastWebsocket;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 
-abstract class EBroadcast extends Event implements IBroadcastWebsocket
+abstract class EBroadcast implements ShouldQueue, IBroadcastWebsocket
 {
-    use SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     const TYPE_JOIN = 'join';
     const TYPE_SYNC = 'sync';
@@ -16,10 +19,10 @@ abstract class EBroadcast extends Event implements IBroadcastWebsocket
     const TYPE_UPDATE = 'update';
     const TYPE_DELETE = 'delete';
 
-    public function __destruct()
+    public function handle(): void
     {
         \Amqp::publish('', json_encode([
-            'socketId' => request()->header('X-Socket-ID'),
+            'socketId' => \request()->header('X-Socket-ID'),
             'event' => 'server.'.$this->event(),
             'rooms' => $this->rooms(),
             'params' => $this->params(),

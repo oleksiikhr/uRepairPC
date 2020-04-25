@@ -105,7 +105,7 @@ class UserController extends Controller
         }
 
         $list = $query->paginate(self::PAGINATE_DEFAULT);
-        event(new EJoin(...$list->items()));
+        EJoin::dispatchAfterResponse(...$list->items());
 
         return response()->json($list);
     }
@@ -151,7 +151,7 @@ class UserController extends Controller
         $user = User::with('roles')->findOrFail($id);
         $user->permissions = $user->getAllPermNames();
 
-        event(new EJoin($user));
+        EJoin::dispatchAfterResponse($user);
 
         return response()->json([
             'message' => __('app.users.show'),
@@ -241,11 +241,11 @@ class UserController extends Controller
         $user->assignRolesById($request->roles);
         $user->permissions = $user->getAllPermNames();
 
-        event(new EUpdateRoles($id, [
+        EUpdateRoles::dispatchAfterResponse($id, [
             'roles' => $user->roles,
             'permissions' => $user->permissions,
             'updated_at' => $user->updated_at->toDateTimeString(),
-        ]));
+        ]);
 
         return response()->json([
             'message' => __('app.users.roles_changed'),
@@ -365,10 +365,10 @@ class UserController extends Controller
         $user->image_id = null;
 
         // image_id destroy by onDelete('set null') on DB, so send the event manually
-        event(new EUpdate($id, [
+        EUpdate::dispatchAfterResponse([
             'image_id' => null,
             'updated_at' => $user->updated_at->toDateTimeString(),
-        ]));
+        ]);
 
         return response()->json([
             'message' => __('app.files.file_destroyed'),

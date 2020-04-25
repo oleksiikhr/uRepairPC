@@ -48,7 +48,7 @@ class RequestStatusController extends Controller
     {
         $list = RequestStatus::all();
 
-        event(new EJoin(...$list));
+        EJoin::dispatchAfterResponse(...$list);
 
         return response()->json($list);
     }
@@ -73,7 +73,7 @@ class RequestStatusController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new ECreate($requestStatus));
+        ECreate::dispatchAfterResponse($requestStatus);
 
         return response()->json([
             'message' => __('app.request_status.store'),
@@ -91,7 +91,7 @@ class RequestStatusController extends Controller
     {
         $requestStatus = RequestStatus::findOrFail($id);
 
-        event(new EJoin($requestStatus));
+        EJoin::dispatchAfterResponse($requestStatus);
 
         return response()->json([
             'message' => __('app.request_status.show'),
@@ -131,7 +131,7 @@ class RequestStatusController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new EUpdate($requestStatus->id, $requestStatus));
+        EUpdate::dispatchAfterResponse($requestStatus->id, $requestStatus);
 
         return response()->json([
             'message' => __('app.request_status.update'),

@@ -48,7 +48,7 @@ class EquipmentManufacturerController extends Controller
     {
         $list = EquipmentManufacturer::all();
 
-        event(new EJoin(...$list));
+        EJoin::dispatchAfterResponse(...$list);
 
         return response()->json($list);
     }
@@ -69,7 +69,7 @@ class EquipmentManufacturerController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new ECreate($equipmentManufacturer));
+        ECreate::dispatchAfterResponse($equipmentManufacturer);
 
         return response()->json([
             'message' => __('app.equipment_manufacturers.store'),
@@ -87,7 +87,7 @@ class EquipmentManufacturerController extends Controller
     {
         $equipmentManufacturer = EquipmentManufacturer::findOrFail($id);
 
-        event(new EJoin($equipmentManufacturer));
+        EJoin::dispatchAfterResponse($equipmentManufacturer);
 
         return response()->json([
             'message' => __('app.equipment_manufacturers.show'),
@@ -119,7 +119,7 @@ class EquipmentManufacturerController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new EUpdate($equipmentManufacturer->id, $equipmentManufacturer));
+        EUpdate::dispatchAfterResponse($equipmentManufacturer->id, $equipmentManufacturer);
 
         return response()->json([
             'message' => __('app.equipment_manufacturers.update'),

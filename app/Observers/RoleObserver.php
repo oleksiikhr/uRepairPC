@@ -15,6 +15,6 @@ class RoleObserver
      */
     public function deleted(Role $role): void
     {
-        event(new EDelete($role));
+        EDelete::dispatchAfterResponse($role);
     }
 }

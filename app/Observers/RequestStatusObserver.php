@@ -15,6 +15,6 @@ class RequestStatusObserver
      */
     public function deleted(RequestStatus $requestStatus): void
     {
-        event(new EDelete($requestStatus));
+        EDelete::dispatchAfterResponse($requestStatus);
     }
 }
