@@ -1,16 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Events\Common;
 
+use Illuminate\Support\Facades\Event;
 use Illuminate\Queue\SerializesModels;
-use App\Interfaces\IBroadcastWebsocket;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use App\Contracts\IBroadcastWebsocket;
 
-abstract class EBroadcast implements ShouldBroadcast, IBroadcastWebsocket
+abstract class EBroadcast extends Event implements IBroadcastWebsocket
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use SerializesModels;
 
     const TYPE_JOIN = 'join';
     const TYPE_SYNC = 'sync';
@@ -18,32 +16,27 @@ abstract class EBroadcast implements ShouldBroadcast, IBroadcastWebsocket
     const TYPE_UPDATE = 'update';
     const TYPE_DELETE = 'delete';
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array
-     */
-    public function broadcastOn(): array
+    public function __destruct()
     {
-        return ['server.'.$this->event()];
-    }
-
-    /**
-     * Get the data to broadcast.
-     *
-     * @return array
-     */
-    public function broadcastWith(): array
-    {
-        return [
-            'event' => $this->event(),
-            'type' => $this->type(),
+        \Amqp::publish('', json_encode([
             'socketId' => request()->header('X-Socket-ID'),
+            'event' => 'server.'.$this->event(),
             'rooms' => $this->rooms(),
             'params' => $this->params(),
             'data' => $this->transformData($this->data()),
             'join' => $this->join(), // Only for CREATE event
-        ];
+            'type' => $this->type(),
+        ]), ['queue' => 'server.changes']);
+    }
+
+    /**
+     * Join to this room after broadcast.
+     *
+     * @return array
+     */
+    public function join(): array
+    {
+        return [];
     }
 
     /**
@@ -57,15 +50,5 @@ abstract class EBroadcast implements ShouldBroadcast, IBroadcastWebsocket
         }
 
         return $data;
-    }
-
-    /**
-     * Join to this room after broadcast.
-     *
-     * @return array|string
-     */
-    protected function join()
-    {
-        return '';
     }
 }

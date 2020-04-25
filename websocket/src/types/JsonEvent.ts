@@ -2,8 +2,8 @@ export interface JsonEvent {
   event: string;
   type: string;
   socketId: string;
-  rooms: Array<string>;
-  params: Array<string>;
+  rooms: [string];
+  params: [string];
   data: any;
-  join: Array<string>;
+  join: [string];
 }

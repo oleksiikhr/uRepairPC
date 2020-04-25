@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Events\RequestFiles;
 
@@ -12,12 +12,12 @@ class ECreate extends ECreateBroadcast
     /**
      * @var int
      */
-    private $requestId;
+    private int $requestId;
 
     /**
      * @var int
      */
-    private $userIdUpload;
+    private int $userIdUpload;
 
     /**
      * Create a new event instance.
@@ -30,14 +30,15 @@ class ECreate extends ECreateBroadcast
     public function __construct(int $requestId, Collection $data, int $userIdUpload)
     {
         parent::__construct($data);
+
         $this->requestId = $requestId;
         $this->userIdUpload = $userIdUpload;
     }
 
     /**
-     * @return array|string|null
+     * @return array
      */
-    public function rooms()
+    public function rooms(): array
     {
         return [
             self::$roomName.".{$this->requestId}",
@@ -46,9 +47,9 @@ class ECreate extends ECreateBroadcast
     }
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function params(): ?array
+    public function params(): array
     {
         return [
             'request_id' => $this->requestId,
@@ -56,9 +57,9 @@ class ECreate extends ECreateBroadcast
     }
 
     /**
-     * @return string|array
+     * @return array
      */
-    protected function join()
+    public function join(): array
     {
         $rooms = [];
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Events\EquipmentFiles;
 
@@ -12,7 +12,7 @@ class EDelete extends EDeleteBroadcast
     /**
      * @var int
      */
-    private $equipmentId;
+    private int $equipmentId;
 
     /**
      * Create a new event instance.
@@ -28,17 +28,19 @@ class EDelete extends EDeleteBroadcast
     }
 
     /**
-     * @return array|string|null
+     * @return array
      */
-    public function rooms()
+    public function rooms(): array
     {
-        return self::$roomName.".{$this->equipmentId}.{$this->data['id']}";
+        return [
+            self::$roomName.".{$this->equipmentId}.{$this->data['id']}",
+        ];
     }
 
     /**
      * @return array|null
      */
-    public function params(): ?array
+    public function params(): array
     {
         return [
             'id' => $this->data['id'],

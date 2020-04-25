@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Interfaces;
+namespace App\Contracts;
 
 interface IBroadcastWebsocket
 {
@@ -15,14 +15,19 @@ interface IBroadcastWebsocket
     public function type(): string;
 
     /**
-     * @return array|string|null
+     * @return array
      */
-    public function rooms();
+    public function rooms(): array;
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function params(): ?array;
+    public function params(): array;
+
+    /**
+     * @return array
+     */
+    public function join(): array;
 
     /**
      * @return mixed

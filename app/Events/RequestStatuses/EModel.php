@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Events\RequestStatuses;
 
 trait EModel
 {
-    public static $roomName = 'request_statuses';
+    public static string $roomName = 'request_statuses';
 
     /**
      * @return string

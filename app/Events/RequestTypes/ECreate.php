@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Events\RequestTypes;
 
@@ -11,16 +11,18 @@ class ECreate extends ECreateBroadcast
     /**
      * @return array|string|null
      */
-    public function rooms()
+    public function rooms(): array
     {
         return self::$roomName;
     }
 
     /**
-     * @return array|string
+     * @return array
      */
-    protected function join()
+    public function join(): array
     {
-        return self::$roomName.".{$this->data['id']}";
+        return [
+            self::$roomName.".{$this->data['id']}",
+        ];
     }
 }

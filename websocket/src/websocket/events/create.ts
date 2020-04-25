@@ -1,27 +1,31 @@
 import { Socket } from 'socket.io';
 import { JsonEvent } from 'JsonEvent';
 import commonEvent from './common';
+import io from '../io'
 
-export default (socket: Socket, json: JsonEvent) => {
-  // TODO Check and rewrite*
+export default (socket: Socket|undefined, json: JsonEvent) => {
   if (json.join.length) {
-    // Get all clients from input rooms
-    // const sockets = socket.io.sockets;
-    // json.rooms.forEach((room) => sockets.in(room));
-    //
-    // // Who created - listens to the room
-    // socket.join(json.join);
-    //
-    // // Every client now listen the new room
-    // sockets.clients((err: any, clients: string[]) => {
-    //   if (!err) {
-    //     for (const client of clients) {
-    //       try {
-    //         socket.getConnectedSocketById(client).join(json.join);
-    //       } catch {/* No matter */}
-    //     }
-    //   }
-    // });
+    if (socket) {
+      socket.join(json.join);
+    }
+
+    json.rooms.forEach((room: string) => io.sockets.in(room));
+
+    // Every client now listen the new room
+    io.sockets.clients((err: any, clients: string[]) => {
+      if (err) {
+        console.error(err)
+        return
+      }
+
+      clients.forEach((client) => {
+        try {
+          io.sockets.connected[client].join(json.join)
+        } catch (err) {
+          console.warn(err)
+        }
+      })
+    });
   }
 
   commonEvent(socket, json);

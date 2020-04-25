@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Events\EquipmentFiles;
 
@@ -12,12 +12,12 @@ class ECreate extends ECreateBroadcast
     /**
      * @var int
      */
-    private $equipmentId;
+    private int $equipmentId;
 
     /**
      * @var int
      */
-    private $userIdUpload;
+    private int $userIdUpload;
 
     /**
      * Create a new event instance.
@@ -35,9 +35,9 @@ class ECreate extends ECreateBroadcast
     }
 
     /**
-     * @return array|string|null
+     * @return array
      */
-    public function rooms()
+    public function rooms(): array
     {
         return [
             self::$roomName.".{$this->equipmentId}",
@@ -46,9 +46,9 @@ class ECreate extends ECreateBroadcast
     }
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function params(): ?array
+    public function params(): array
     {
         return [
             'equipment_id' => $this->equipmentId,
@@ -56,9 +56,9 @@ class ECreate extends ECreateBroadcast
     }
 
     /**
-     * @return array|string
+     * @return array
      */
-    protected function join()
+    public function join(): array
     {
         $rooms = [];
 

@@ -15,7 +15,7 @@ io.on('server.settings.global', (payload) => {
 })
 
 /*
- * PWA
+ * Progressive Web Application
  */
 io.on('server.settings.manifest', (payload) => {
   store.commit('settings/SET_MANIFEST', payload.data)

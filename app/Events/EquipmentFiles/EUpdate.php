@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Events\EquipmentFiles;
 
@@ -11,7 +11,7 @@ class EUpdate extends EUpdateBroadcast
     /**
      * @var int
      */
-    private $equipmentId;
+    private int $equipmentId;
 
     /**
      * Create a new event instance.
@@ -24,21 +24,24 @@ class EUpdate extends EUpdateBroadcast
     public function __construct(int $equipmentId, int $id, $data)
     {
         parent::__construct($id, $data);
+
         $this->equipmentId = $equipmentId;
     }
 
     /**
-     * @return array|string|null
+     * @return array
      */
-    public function rooms()
+    public function rooms(): array
     {
-        return self::$roomName.".{$this->equipmentId}.{$this->id}";
+        return [
+            self::$roomName.".{$this->equipmentId}.{$this->id}",
+        ];
     }
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function params(): ?array
+    public function params(): array
     {
         return [
             'id' => $this->id,

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Events\Settings;
 
@@ -26,17 +26,18 @@ class EGlobalUpdate extends EUpdateBroadcast
     }
 
     /**
-     * @return array|string|null
+     * @return array
      */
-    public function rooms()
+    public function rooms(): array
     {
+        return [];
     }
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function params(): ?array
+    public function params(): array
     {
-        return null;
+        return [];
     }
 }

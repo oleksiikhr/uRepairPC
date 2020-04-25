@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Events\Common;
 
@@ -31,9 +31,9 @@ abstract class EDeleteBroadcast extends EBroadcast
     }
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function params(): ?array
+    public function params(): array
     {
         return [
             'id' => $this->data['id'],

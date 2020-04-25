@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Events\RequestStatuses;
 
@@ -9,10 +9,12 @@ class EDelete extends EDeleteBroadcast
     use EModel;
 
     /**
-     * @return array|string|null
+     * @return array
      */
-    public function rooms()
+    public function rooms(): array
     {
-        return self::$roomName.".{$this->data['id']}";
+        return [
+            self::$roomName.".{$this->data['id']}",
+        ];
     }
 }

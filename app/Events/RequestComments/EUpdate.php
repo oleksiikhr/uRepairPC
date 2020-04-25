@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Events\RequestComments;
 
@@ -11,7 +11,7 @@ class EUpdate extends EUpdateBroadcast
     /**
      * @var int
      */
-    private $requestId;
+    private int $requestId;
 
     /**
      * Create a new event instance.
@@ -28,17 +28,19 @@ class EUpdate extends EUpdateBroadcast
     }
 
     /**
-     * @return array|string|null
+     * @return array
      */
-    public function rooms()
+    public function rooms(): array
     {
-        return self::$roomName.".{$this->requestId}.{$this->id}";
+        return [
+            self::$roomName.".{$this->requestId}.{$this->id}",
+        ];
     }
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function params(): ?array
+    public function params(): array
     {
         return [
             'id' => $this->id,

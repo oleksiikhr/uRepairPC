@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Events\RequestFiles;
 
@@ -12,7 +12,7 @@ class EDelete extends EDeleteBroadcast
     /**
      * @var int
      */
-    private $requestId;
+    private int $requestId;
 
     /**
      * Create a new event instance.
@@ -24,21 +24,24 @@ class EDelete extends EDeleteBroadcast
     public function __construct(int $requestId, Model $model)
     {
         parent::__construct($model);
+
         $this->requestId = $requestId;
     }
 
     /**
-     * @return array|string|null
+     * @return array
      */
-    public function rooms()
+    public function rooms(): array
     {
-        return self::$roomName.".{$this->requestId}.{$this->data['id']}";
+        return [
+            self::$roomName.".{$this->requestId}.{$this->data['id']}",
+        ];
     }
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function params(): ?array
+    public function params(): array
     {
         return [
             'id' => $this->data['id'],

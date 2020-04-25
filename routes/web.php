@@ -15,14 +15,5 @@ use Illuminate\Support\Facades\Route;
 
 use Illuminate\Support\Facades\File;
 
-Route::get('manifest.json', 'Stat\ManifestController@index');
-
-Route::get('{any}', static function () {
-    $path = public_path('index.html');
-
-    if (file_exists($path)) {
-        return File::get($path);
-    }
-
-    return response()->json(['message' => '/api'], 422);
-})->where('any', '.*');
+// TODO ???
+//Route::get('manifest.json', 'Stat\ManifestController@index');

@@ -19,12 +19,16 @@ io.on('connect', () => {
     syncEvents()
   }
 
-  Notification({ title: 'Real-Time підключен', position: 'bottom-left', type: types.SUCCESS })
+  Notification({ title: 'RT: Підключен', position: 'bottom-left', type: types.SUCCESS })
 })
+
+io.on('reconnect', () => {
+  Notification({ title: 'RT: Перепідключення..', position: 'bottom-left', type: types.WARNING })
+});
 
 io.on('disconnect', () => {
   // Remove socketId from axios
   axios.defaults.headers[SOCKET_HEADER] = null
 
-  Notification({ title: 'Real-Time відключений', position: 'bottom-left', type: types.WARNING })
+  Notification({ title: 'RT: Відключений', position: 'bottom-left', type: types.ERROR })
 })

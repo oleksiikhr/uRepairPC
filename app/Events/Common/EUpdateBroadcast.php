@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Events\Common;
 
@@ -7,7 +7,7 @@ abstract class EUpdateBroadcast extends EBroadcast
     /**
      * @var int
      */
-    protected $id;
+    protected int $id;
 
     /**
      * @var mixed
@@ -36,9 +36,9 @@ abstract class EUpdateBroadcast extends EBroadcast
     }
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function params(): ?array
+    public function params(): array
     {
         return [
             'id' => $this->id,

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Events\Requests;
 
@@ -16,6 +16,7 @@ class EJoin extends EJoinBroadcast
 
         foreach ($items as $item) {
             $rooms[] = self::$roomName.".{$item->id}";
+
             array_push($rooms, ...RequestFiles::getRooms($item->id));
             array_push($rooms, ...RequestComments::getRooms($item->id));
         }
