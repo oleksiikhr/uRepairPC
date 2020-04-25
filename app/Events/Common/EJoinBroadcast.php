@@ -7,21 +7,21 @@ abstract class EJoinBroadcast extends EBroadcast
     /**
      * @var array
      */
-    protected $rooms;
+    protected array $rooms;
 
     /**
      * @var bool
      */
-    protected $sync;
+    protected bool $sync;
 
     /**
      * Create a new event instance.
      *
-     * @param  array|string  $rooms
+     * @param  array  $rooms
      * @param  bool  $sync
      * @return void
      */
-    public function __construct($rooms, bool $sync = false)
+    public function __construct(array $rooms, bool $sync = false)
     {
         $this->rooms = $rooms;
         $this->sync = $sync;
