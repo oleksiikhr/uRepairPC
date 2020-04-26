@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Requests;
 
@@ -12,9 +12,9 @@ class RequestStatusRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -23,10 +23,10 @@ class RequestStatusRequest extends FormRequest
      * @param  Request  $request
      * @return array
      */
-    public function rules(Request $request)
+    public function rules(Request $request): array
     {
         $rules = [
-            'name' => 'string|between:1,191|unique:request_statuses,name',
+            'name' => 'string|between:1,255|unique:request_statuses,name',
             'color' => 'nullable|string|regex:/^#([a-zA-Z0-9]{6})$/i',
             'description' => 'nullable|string|max:600',
             'default' => 'boolean',

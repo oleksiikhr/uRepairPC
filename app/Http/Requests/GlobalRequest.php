@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Requests;
 
@@ -11,9 +11,9 @@ class GlobalRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -21,7 +21,7 @@ class GlobalRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'meta_title' => 'nullable|string',

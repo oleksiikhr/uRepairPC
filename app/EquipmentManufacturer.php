@@ -1,9 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class EquipmentManufacturer extends Model
 {
@@ -19,17 +20,12 @@ class EquipmentManufacturer extends Model
         'description',
     ];
 
-    /* | ---------------------------------------------------------------
-     * | Relationships
-     * | ---------------------------------------------------------------
-     */
-
-    public function equipments()
+    public function equipments(): HasMany
     {
         return $this->hasMany(Equipment::class);
     }
 
-    public function models()
+    public function models(): HasMany
     {
         return $this->hasMany(EquipmentModel::class);
     }

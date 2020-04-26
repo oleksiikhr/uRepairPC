@@ -1,20 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Observers;
 
 use App\RequestType;
-use App\Events\RequestTypes\EDelete;
+use App\Realtime\RequestTypes\EDelete;
 
 class RequestTypeObserver
 {
     /**
      * Handle the request type "deleted" event.
      *
-     * @param  \App\RequestType  $requestType
+     * @param  RequestType  $requestType
      * @return void
      */
-    public function deleted(RequestType $requestType)
+    public function deleted(RequestType $requestType): void
     {
-        event(new EDelete($requestType));
+        EDelete::dispatch($requestType);
     }
 }

@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Exceptions;
 
-use Exception;
+use Throwable;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -10,18 +10,14 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 class Handler extends ExceptionHandler
 {
     /**
-     * A list of the exception types that are not reported.
-     *
-     * @var array
+     * @inheritDoc
      */
     protected $dontReport = [
         //
     ];
 
     /**
-     * A list of the inputs that are never flashed for validation exceptions.
-     *
-     * @var array
+     * @inheritDoc
      */
     protected $dontFlash = [
         'password',
@@ -29,24 +25,17 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Report or log an exception.
-     *
-     * @param  \Exception  $exception
-     * @return void
+     * @inheritDoc
      */
-    public function report(Exception $exception)
+    public function report(Throwable $exception): void
     {
         parent::report($exception);
     }
 
     /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     * @inheritDoc
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $exception)
     {
         // Catch validation exception
         if ($exception instanceof ValidationException) {

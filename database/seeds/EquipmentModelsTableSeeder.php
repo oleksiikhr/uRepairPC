@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use App\EquipmentModel;
 use Illuminate\Database\Seeder;
@@ -10,7 +10,7 @@ class EquipmentModelsTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $arr = [
             ['name' => 'Модель 1', 'type_id' => 1, 'manufacturer_id' => 1, 'user_id' => 1],

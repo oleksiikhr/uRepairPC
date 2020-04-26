@@ -1,9 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Interfaces\IPermissions;
+use App\Contracts\IPermissions;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -24,9 +24,9 @@ abstract class Controller extends BaseController implements IPermissions
     }
 
     /**
-     * Register middleware on depends key-value array.
+     * Register middleware on depends key-value array
      *  key - method
-     *  value - list of permissions.
+     *  value - list of permissions
      *
      * @param  array  $methods
      * @return void
@@ -48,6 +48,7 @@ abstract class Controller extends BaseController implements IPermissions
         if (array_key_exists($activeMethod, $methods)) {
             $role = $methods[$activeMethod];
             $permissions = is_array($role) ? implode('|', $role) : $role;
+
             if (! empty($permissions)) {
                 $this->middleware('permission:'.$permissions);
             }

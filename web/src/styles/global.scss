@@ -1,0 +1,37 @@
+@import "~scss/_variables";
+@import "~scss/_colors";
+
+* {
+  box-sizing: border-box;
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 7px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $info;
+  }
+  &::-webkit-scrollbar-track {
+    background: #ececec;
+  }
+}
+
+body {
+  background: #fbfbfb;
+  margin: 0;
+  padding: 0;
+  overflow-y: scroll;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+a {
+  color: $primary;
+  text-decoration: none !important;
+  transition: color .2s;
+  &:hover {
+    color: $warning;
+  }
+}

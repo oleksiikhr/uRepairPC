@@ -1,4 +1,6 @@
-<?php
+<?php declare(strict_types=1);
+
+// TODO Translate to en, ru
 
 return [
 

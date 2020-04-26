@@ -1,13 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers\Stat;
 
 use App\Enums\Perm;
 use Illuminate\Http\Request;
 use App\Http\Json\GlobalFile;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GlobalRequest;
-use App\Events\Settings\EGlobalUpdate;
+use App\Realtime\Settings\EGlobalUpdate;
 use App\Http\Resources\GlobalJsonResource;
 
 class GlobalController extends Controller
@@ -28,9 +29,9 @@ class GlobalController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         $json = (new GlobalFile)->getData();
 
@@ -41,9 +42,9 @@ class GlobalController extends Controller
      * Update all resources in storage.
      *
      * @param  GlobalRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(GlobalRequest $request)
+    public function store(GlobalRequest $request): JsonResponse
     {
         $globalFile = new GlobalFile;
         $data = $request->validated();
@@ -52,7 +53,7 @@ class GlobalController extends Controller
         $globalFile->mergeAndSaveToFile($data);
 
         $jsonResource = new GlobalJsonResource($data);
-        event(new EGlobalUpdate($jsonResource->jsonSerialize()));
+        EGlobalUpdate::dispatchAfterResponse($jsonResource->jsonSerialize());
 
         return response()->json([
             'message' => __('app.settings.global'),

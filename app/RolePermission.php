@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RolePermission extends Model
 {
@@ -16,12 +17,7 @@ class RolePermission extends Model
         'role_id',
     ];
 
-    /* | -----------------------------------------------------------------------------------
-     * | Relationships
-     * | -----------------------------------------------------------------------------------
-     */
-
-    public function role()
+    public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
     }

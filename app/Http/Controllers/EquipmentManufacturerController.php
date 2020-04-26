@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -6,10 +6,11 @@ use App\User;
 use App\Enums\Perm;
 use Illuminate\Http\Request;
 use App\EquipmentManufacturer;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
-use App\Events\EquipmentManufacturers\EJoin;
-use App\Events\EquipmentManufacturers\ECreate;
-use App\Events\EquipmentManufacturers\EUpdate;
+use App\Realtime\EquipmentManufacturers\EJoin;
+use App\Realtime\EquipmentManufacturers\ECreate;
+use App\Realtime\EquipmentManufacturers\EUpdate;
 use App\Http\Requests\EquipmentManufacturerRequest;
 
 class EquipmentManufacturerController extends Controller
@@ -17,7 +18,7 @@ class EquipmentManufacturerController extends Controller
     /**
      * @var User
      */
-    private $_user;
+    private $user;
 
     /**
      * Add middleware depends on user permissions.
@@ -27,7 +28,7 @@ class EquipmentManufacturerController extends Controller
      */
     public function permissions(Request $request): array
     {
-        $this->_user = auth()->user();
+        $this->user = auth()->user();
 
         return [
             'index' => Perm::EQUIPMENTS_CONFIG_VIEW_ALL,
@@ -41,13 +42,13 @@ class EquipmentManufacturerController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         $list = EquipmentManufacturer::all();
 
-        event(new EJoin(...$list));
+        EJoin::dispatchAfterResponse(...$list);
 
         return response()->json($list);
     }
@@ -56,19 +57,19 @@ class EquipmentManufacturerController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  EquipmentManufacturerRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(EquipmentManufacturerRequest $request)
+    public function store(EquipmentManufacturerRequest $request): JsonResponse
     {
         $equipmentManufacturer = new EquipmentManufacturer;
         $equipmentManufacturer->fill($request->all());
-        $equipmentManufacturer->user_id = $this->_user->id;
+        $equipmentManufacturer->user_id = $this->user->id;
 
         if (! $equipmentManufacturer->save()) {
             return $this->responseDatabaseSaveError();
         }
 
-        event(new ECreate($equipmentManufacturer));
+        ECreate::dispatchAfterResponse($equipmentManufacturer);
 
         return response()->json([
             'message' => __('app.equipment_manufacturers.store'),
@@ -80,13 +81,13 @@ class EquipmentManufacturerController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         $equipmentManufacturer = EquipmentManufacturer::findOrFail($id);
 
-        event(new EJoin($equipmentManufacturer));
+        EJoin::dispatchAfterResponse($equipmentManufacturer);
 
         return response()->json([
             'message' => __('app.equipment_manufacturers.show'),
@@ -99,14 +100,14 @@ class EquipmentManufacturerController extends Controller
      *
      * @param  EquipmentManufacturerRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(EquipmentManufacturerRequest $request, int $id)
+    public function update(EquipmentManufacturerRequest $request, int $id): JsonResponse
     {
         $equipmentManufacturer = EquipmentManufacturer::findOrFail($id);
 
         // Edit only own equipments config
-        if (! $this->_user->perm(Perm::EQUIPMENTS_CONFIG_EDIT_ALL) &&
+        if (! $this->user->perm(Perm::EQUIPMENTS_CONFIG_EDIT_ALL) &&
             Gate::denies('owner', $equipmentManufacturer)
         ) {
             return $this->responseNoPermission();
@@ -118,7 +119,7 @@ class EquipmentManufacturerController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new EUpdate($equipmentManufacturer->id, $equipmentManufacturer));
+        EUpdate::dispatchAfterResponse($equipmentManufacturer->id, $equipmentManufacturer);
 
         return response()->json([
             'message' => __('app.equipment_manufacturers.update'),
@@ -130,14 +131,14 @@ class EquipmentManufacturerController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $equipmentManufacturer = EquipmentManufacturer::findOrFail($id);
 
         // Delete only own equipments config
-        if (! $this->_user->perm(Perm::EQUIPMENTS_CONFIG_DELETE_ALL) &&
+        if (! $this->user->perm(Perm::EQUIPMENTS_CONFIG_DELETE_ALL) &&
             Gate::denies('owner', $equipmentManufacturer)
         ) {
             return $this->responseNoPermission();

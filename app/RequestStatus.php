@@ -1,10 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App;
 
 use App\Traits\ModelHasDefaultTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class RequestStatus extends Model
 {
@@ -31,12 +32,7 @@ class RequestStatus extends Model
         'default' => 'boolean',
     ];
 
-    /* | -----------------------------------------------------------------------------------
-     * | Relationships
-     * | -----------------------------------------------------------------------------------
-     */
-
-    public function requests()
+    public function requests(): HasMany
     {
         return $this->hasMany(Request::class);
     }

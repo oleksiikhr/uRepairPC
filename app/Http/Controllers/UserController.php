@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -8,11 +8,12 @@ use App\User;
 use App\Enums\Perm;
 use App\Mail\EmailChange;
 use App\Mail\UserCreated;
-use App\Events\Users\EJoin;
+use App\Realtime\Users\EJoin;
 use Illuminate\Http\Request;
-use App\Events\Users\EUpdate;
+use App\Realtime\Users\EUpdate;
 use App\Http\Helpers\FileHelper;
-use App\Events\Users\EUpdateRoles;
+use Illuminate\Http\JsonResponse;
+use App\Realtime\Users\EUpdateRoles;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\ImageRequest;
 use Illuminate\Support\Facades\Mail;
@@ -25,7 +26,7 @@ class UserController extends Controller
     /**
      * @var User
      */
-    private $_user;
+    private $user;
 
     /**
      * Add middleware depends on user permissions.
@@ -35,16 +36,16 @@ class UserController extends Controller
      */
     public function permissions(Request $request): array
     {
-        $this->_user = auth()->user();
+        $this->user = auth()->user();
 
-        if (! $this->_user) {
+        if (! $this->user) {
             $this->middleware('jwt.auth');
 
             return [];
         }
 
         $requestId = (int) $request->route('user');
-        $isOwnProfile = $requestId === $this->_user->id;
+        $isOwnProfile = $requestId === $this->user->id;
         $editPermissionProfile = $isOwnProfile
             ? [Perm::PROFILE_EDIT, Perm::USERS_EDIT_ALL]
             : Perm::USERS_EDIT_ALL;
@@ -73,13 +74,13 @@ class UserController extends Controller
      * Display a listing of the resource.
      *
      * @param  UserRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index(UserRequest $request)
+    public function index(UserRequest $request): JsonResponse
     {
         $query = User::query();
 
-        if ($this->_user->perm(Perm::ROLES_VIEW_ALL)) {
+        if ($this->user->perm(Perm::ROLES_VIEW_ALL)) {
             $query->with('roles');
         }
 
@@ -96,15 +97,15 @@ class UserController extends Controller
         }
 
         // Filter
-        if ($request->request_access && $this->_user->perm(Perm::REQUESTS_EDIT_ALL)) {
-            $query->whereHas('roles.permissions', function ($query) {
+        if ($request->request_access && $this->user->perm(Perm::REQUESTS_EDIT_ALL)) {
+            $query->whereHas('roles.permissions', static function ($query) {
                 $query->where('name', Perm::REQUESTS_EDIT_ALL);
                 $query->orWhere('name', Perm::REQUESTS_EDIT_ASSIGN);
             });
         }
 
         $list = $query->paginate(self::PAGINATE_DEFAULT);
-        event(new EJoin(...$list->items()));
+        EJoin::dispatchAfterResponse(...$list->items());
 
         return response()->json($list);
     }
@@ -113,25 +114,19 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  UserRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(UserRequest $request)
+    public function store(UserRequest $request): JsonResponse
     {
-        $password = User::generateRandomStrPassword();
-
         $user = new User;
         $user->fill($request->all());
         $user->email = $request->email;
-        $user->password = bcrypt($password);
 
         if (! $user->save()) {
             return $this->responseDatabaseSaveError();
         }
 
         $user->assignRolesById(Role::getDefaultValues()->pluck('id'));
-
-        // TODO Disable on APP_DEMO
-        Mail::to($user)->send(new UserCreated($password));
 
         return response()->json([
             'message' => __('app.users.store'),
@@ -143,14 +138,14 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         $user = User::with('roles')->findOrFail($id);
         $user->permissions = $user->getAllPermNames();
 
-        event(new EJoin($user));
+        EJoin::dispatchAfterResponse($user);
 
         return response()->json([
             'message' => __('app.users.show'),
@@ -163,9 +158,9 @@ class UserController extends Controller
      *
      * @param  UserRequest  $request
      * @param  int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(UserRequest $request, int $id)
+    public function update(UserRequest $request, int $id): JsonResponse
     {
         $user = User::findOrFail($id);
         $user->fill($request->all());
@@ -185,9 +180,9 @@ class UserController extends Controller
      *
      * @param  UserRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function destroy(UserRequest $request, int $id)
+    public function destroy(UserRequest $request, int $id): JsonResponse
     {
         $user = User::findOrFail($id);
 
@@ -228,9 +223,9 @@ class UserController extends Controller
      *
      * @param  Request  $request
      * @param  int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function updateRoles(Request $request, int $id)
+    public function updateRoles(Request $request, int $id): JsonResponse
     {
         $request->validate([
             'roles' => 'array',
@@ -240,11 +235,11 @@ class UserController extends Controller
         $user->assignRolesById($request->roles);
         $user->permissions = $user->getAllPermNames();
 
-        event(new EUpdateRoles($id, [
+        EUpdateRoles::dispatchAfterResponse($id, [
             'roles' => $user->roles,
             'permissions' => $user->permissions,
             'updated_at' => $user->updated_at->toDateTimeString(),
-        ]));
+        ]);
 
         return response()->json([
             'message' => __('app.users.roles_changed'),
@@ -257,9 +252,9 @@ class UserController extends Controller
      *
      * @param  Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function updateEmail(Request $request, int $id)
+    public function updateEmail(Request $request, int $id): JsonResponse
     {
         $request->validate([
             'email' => 'required|email|unique:users,email',
@@ -285,14 +280,14 @@ class UserController extends Controller
      *
      * @param   Request  $request
      * @param   int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function updatePassword(Request $request, int $id)
+    public function updatePassword(Request $request, int $id): JsonResponse
     {
         $user = User::findOrFail($id);
 
         // We can change only for own profile.
-        if ($this->_user->id === $id) {
+        if ($this->user->id === $id) {
             return $this->setPasswordProfile($request, $user);
         }
 
@@ -304,10 +299,10 @@ class UserController extends Controller
      *
      * @param  ImageRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
-    public function updateImage(ImageRequest $request, int $id)
+    public function updateImage(ImageRequest $request, int $id): JsonResponse
     {
         $user = User::with('image')->findOrFail($id);
 
@@ -347,9 +342,9 @@ class UserController extends Controller
      * Delete avatar for user.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function destroyImage(int $id)
+    public function destroyImage(int $id): JsonResponse
     {
         $user = User::with('image')->findOrFail($id);
 
@@ -364,10 +359,10 @@ class UserController extends Controller
         $user->image_id = null;
 
         // image_id destroy by onDelete('set null') on DB, so send the event manually
-        event(new EUpdate($id, [
+        EUpdate::dispatchAfterResponse([
             'image_id' => null,
             'updated_at' => $user->updated_at->toDateTimeString(),
-        ]));
+        ]);
 
         return response()->json([
             'message' => __('app.files.file_destroyed'),
@@ -379,9 +374,9 @@ class UserController extends Controller
      * Generate a new random password and send to email.
      *
      * @param  User  $user
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    private function setPasswordEmail(User $user)
+    private function setPasswordEmail(User $user): JsonResponse
     {
         $password = User::generateRandomStrPassword();
 
@@ -404,9 +399,9 @@ class UserController extends Controller
      *
      * @param  Request  $request
      * @param  User  $user
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    private function setPasswordProfile(Request $request, User $user)
+    private function setPasswordProfile(Request $request, User $user): JsonResponse
     {
         $request->validate(['password' => 'required|string']);
         $user->password = bcrypt($request->password);

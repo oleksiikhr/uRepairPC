@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Json;
 
@@ -12,13 +12,9 @@ class GlobalFile extends Json
     }
 
     /**
-     * Get attribute and type.
-     *
-     * @return mixed
-     * @example
-     *  ['attr' => 'string']
+     * @inheritDoc
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return [
             'meta_title' => 'string',
@@ -31,11 +27,9 @@ class GlobalFile extends Json
     }
 
     /**
-     * Get default data.
-     *
-     * @return array
+     * @inheritDoc
      */
-    public function getDefaultData()
+    public function getDefaultData(): array
     {
         return [
             'meta_title' => config('app.name'),

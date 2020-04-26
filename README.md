@@ -1,4 +1,4 @@
-# uRepairPC
+# uRepairPC - Server
 
 <p align="center">
   <a href="https://github.com/uRepairPC">
@@ -9,18 +9,22 @@
   Accounting system for orders for the repair of technical means.
 </p>
 
+<p align="center">
+  <a href="https://github.com/uRepairPC/server" rel="nofollow"><img src="https://img.shields.io/github/package-json/v/urepairpc/server.svg" alt="Tag"></a>
+  <a href="https://styleci.io/repos/152962669" rel="nofollow"><img src="https://styleci.io/repos/152962669/shield?branch=master" alt="StyleCI"></a>
+  <a href="https://github.com/uRepairPC/server" rel="nofollow"><img src="https://img.shields.io/github/license/urepairpc/server.svg" alt="License"></a>
+</p>
+
 ## Links
 - [Website](https://urepairpc.com/)
 - [Demo](https://demo.urepairpc.com/)
 - [Docs](https://docs.urepairpc.com/)
 
 ## Introducing
-Internal system with which you can manage applications, users, equipment.
-Manage roles and access to different sections on the site.
+Backend, validation and work with the Database and Redis.
 
-**Preview Branch** - [Demo](https://demo.urepairpc.com/)
-
-*Complete, assembled project for* **production**.
+## Database
+<img src="https://raw.githubusercontent.com/uRepairPC/docs/master/public/server/database.png" alt="Database">
 
 ## Ecosystem
 | Project | Status | Description |
@@ -61,6 +65,9 @@ Manage roles and access to different sections on the site.
 
 [urepairpc-docs]: https://github.com/uRepairPC/docs
 [urepairpc-docs-status]: https://img.shields.io/github/package-json/v/urepairpc/docs.svg
+
+## Changelog
+Detailed changes for each release are documented in the [CHANGELOG.md](https://github.com/uRepairPC/server/blob/master/CHANGELOG.md).
 
 ## License
 [MIT](https://opensource.org/licenses/MIT)

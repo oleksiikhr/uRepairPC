@@ -1,0 +1,4 @@
+php:
+  preset: laravel
+  enabled:
+    - fully_qualified_strict_types

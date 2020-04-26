@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers\Stat;
 
@@ -7,9 +7,10 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Json\ManifestFile;
 use App\Http\Helpers\FileHelper;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ManifestRequest;
-use App\Events\Settings\EManifestUpdate;
+use App\Realtime\Settings\EManifestUpdate;
 use App\Http\Resources\ManifestJsonResource;
 
 class ManifestController extends Controller
@@ -22,7 +23,7 @@ class ManifestController extends Controller
     /**
      * Add middleware depends on user permissions.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function permissions(Request $request): array
@@ -35,9 +36,9 @@ class ManifestController extends Controller
     /**
      * Display a manifest.json.
      *
-     * @return void
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         $json = (new ManifestFile)->getData();
 
@@ -47,11 +48,12 @@ class ManifestController extends Controller
     /**
      * Update all resources in storage.
      *
-     * @param ManifestRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param  ManifestRequest  $request
+     * @return JsonResponse
      */
-    public function store(ManifestRequest $request)
+    public function store(ManifestRequest $request): JsonResponse
     {
+        // TODO Refactor
         $manifestFile = new ManifestFile;
         $data = $request->validated();
 
@@ -99,7 +101,7 @@ class ManifestController extends Controller
         $manifestFile->mergeAndSaveToFile($data);
 
         $response = (new ManifestJsonResource($data))->jsonSerialize();
-        event(new EManifestUpdate($response));
+        EManifestUpdate::dispatchAfterResponse($response);
 
         return response()->json([
             'message' => __('app.settings.manifest'),

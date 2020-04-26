@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -6,13 +6,14 @@ use App\User;
 use App\Equipment;
 use App\Enums\Perm;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Helpers\FilesHelper;
 use App\Http\Requests\FileRequest;
-use App\Events\EquipmentFiles\EJoin;
+use App\Realtime\EquipmentFiles\EJoin;
 use Illuminate\Support\Facades\Gate;
-use App\Events\EquipmentFiles\ECreate;
-use App\Events\EquipmentFiles\EDelete;
-use App\Events\EquipmentFiles\EUpdate;
+use App\Realtime\EquipmentFiles\ECreate;
+use App\Realtime\EquipmentFiles\EDelete;
+use App\Realtime\EquipmentFiles\EUpdate;
 use Illuminate\Support\Facades\Storage;
 
 class EquipmentFileController extends Controller
@@ -20,12 +21,12 @@ class EquipmentFileController extends Controller
     /**
      * @var Equipment
      */
-    private $_equipment;
+    private $equipment;
 
     /**
      * @var User
      */
-    private $_user;
+    private $user;
 
     /**
      * Add middleware depends on user permissions.
@@ -35,20 +36,20 @@ class EquipmentFileController extends Controller
      */
     public function permissions(Request $request): array
     {
-        $this->_user = auth()->user();
+        $this->user = auth()->user();
 
-        if (! $this->_user) {
+        if (! $this->user) {
             $this->middleware('jwt.auth');
 
             return [];
         }
 
         $equipmentId = (int) $request->route('equipment');
-        $this->_equipment = Equipment::findOrFail($equipmentId);
+        $this->equipment = Equipment::findOrFail($equipmentId);
 
         // Permissions on equipment before get a files
-        if (! $this->_user->perm(Perm::EQUIPMENTS_VIEW_ALL) &&
-            Gate::denies('owner', $this->_equipment)
+        if (! $this->user->perm(Perm::EQUIPMENTS_VIEW_ALL) &&
+            Gate::denies('owner', $this->equipment)
         ) {
             $this->middleware('permission:disable');
 
@@ -68,18 +69,18 @@ class EquipmentFileController extends Controller
      * Display a listing of the resource.
      *
      * @param  int  $equipmentId
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index(int $equipmentId)
+    public function index(int $equipmentId): JsonResponse
     {
-        $query = $this->_equipment->files();
+        $query = $this->equipment->files();
 
-        if (! $this->_user->perm(Perm::EQUIPMENTS_FILES_VIEW_ALL)) {
-            $query->where('user_id', $this->_user->id);
+        if (! $this->user->perm(Perm::EQUIPMENTS_FILES_VIEW_ALL)) {
+            $query->where('user_id', $this->user->id);
         }
 
         $equipmentFiles = $query->get();
-        event(new EJoin($equipmentId, ...$equipmentFiles));
+        EJoin::dispatchAfterResponse($equipmentId, ...$equipmentFiles);
 
         return response()->json([
             'message' => __('app.files.files_get'),
@@ -92,9 +93,9 @@ class EquipmentFileController extends Controller
      *
      * @param  FileRequest  $request
      * @param  int  $equipmentId
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(FileRequest $request, int $equipmentId)
+    public function store(FileRequest $request, int $equipmentId): JsonResponse
     {
         $requestFiles = $request->file('files');
 
@@ -102,11 +103,11 @@ class EquipmentFileController extends Controller
         $filesHelper->upload('equipments/'.$equipmentId);
 
         $uploadedIds = $filesHelper->getUploadedIds();
-        $this->_equipment->files()->attach($uploadedIds);
-        $uploadedFiles = $this->_equipment->files()->whereIn('files.id', $uploadedIds)->get();
+        $this->equipment->files()->attach($uploadedIds);
+        $uploadedFiles = $this->equipment->files()->whereIn('files.id', $uploadedIds)->get();
 
         if (count($uploadedFiles)) {
-            event(new ECreate($equipmentId, $uploadedFiles, $this->_user->id));
+            ECreate::dispatchAfterResponse($equipmentId, $uploadedFiles, $this->user->id);
         }
 
         if ($filesHelper->hasErrors()) {
@@ -128,14 +129,14 @@ class EquipmentFileController extends Controller
      *
      * @param  int  $equipmentId
      * @param  int  $fileId
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function show(int $equipmentId, int $fileId)
+    public function show(int $equipmentId, int $fileId): JsonResponse
     {
-        $equipmentFile = $this->_equipment->files()->findOrFail($fileId);
+        $equipmentFile = $this->equipment->files()->findOrFail($fileId);
 
         // Download only own file
-        if (! $this->_user->perm(Perm::EQUIPMENTS_FILES_DOWNLOAD_ALL) &&
+        if (! $this->user->perm(Perm::EQUIPMENTS_FILES_DOWNLOAD_ALL) &&
             Gate::denies('owner', $equipmentFile)
         ) {
             return $this->responseNoPermission();
@@ -154,14 +155,14 @@ class EquipmentFileController extends Controller
      * @param  FileRequest  $request
      * @param  int  $equipmentId
      * @param  int  $fileId
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(FileRequest $request, int $equipmentId, int $fileId)
+    public function update(FileRequest $request, int $equipmentId, int $fileId): JsonResponse
     {
-        $equipmentFile = $this->_equipment->files()->findOrFail($fileId);
+        $equipmentFile = $this->equipment->files()->findOrFail($fileId);
 
         // Edit only own file
-        if (! $this->_user->perm(Perm::EQUIPMENTS_FILES_EDIT_ALL) &&
+        if (! $this->user->perm(Perm::EQUIPMENTS_FILES_EDIT_ALL) &&
             Gate::denies('owner', $equipmentFile)
         ) {
             return $this->responseNoPermission();
@@ -173,7 +174,7 @@ class EquipmentFileController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new EUpdate($equipmentId, $fileId, $equipmentFile));
+        EUpdate::dispatchAfterResponse($equipmentId, $fileId, $equipmentFile);
 
         return response()->json([
             'message' => __('app.files.file_updated'),
@@ -186,15 +187,15 @@ class EquipmentFileController extends Controller
      *
      * @param  int  $equipmentId
      * @param  int  $fileId
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
-    public function destroy(int $equipmentId, int $fileId)
+    public function destroy(int $equipmentId, int $fileId): JsonResponse
     {
-        $equipmentFile = $this->_equipment->files()->findOrFail($fileId);
+        $equipmentFile = $this->equipment->files()->findOrFail($fileId);
 
         // Delete only own file
-        if (! $this->_user->perm(Perm::EQUIPMENTS_FILES_DELETE_ALL) &&
+        if (! $this->user->perm(Perm::EQUIPMENTS_FILES_DELETE_ALL) &&
             Gate::denies('owner', $equipmentFile)
         ) {
             return $this->responseNoPermission();
@@ -204,7 +205,7 @@ class EquipmentFileController extends Controller
             return $this->responseDatabaseDestroyError();
         }
 
-        event(new EDelete($equipmentId, $equipmentFile));
+        EDelete::dispatchAfterResponse($equipmentId, $equipmentFile);
 
         return response()->json([
             'message' => __('app.files.file_destroyed'),

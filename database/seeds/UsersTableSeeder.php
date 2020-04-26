@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use App\User;
 use Illuminate\Database\Seeder;
@@ -10,13 +10,13 @@ class UsersTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $user = User::create([
             'first_name' => 'Oliver',
             'last_name' => 'Noah',
             'email' => 'admin@example.com',
-            'password' => '$2y$10$wUVz4ckveO.3O4Qvbuik/.fleI13a/VxQmeSEbPwaqZ8GbdLedmNC', // admin123
+            'password' => '$2y$10$YKtkMFVFik8o/PYWOYb9ZekkSpuczZKL5sNxZteqU4quLWEue1f6S', // admin123
         ]);
 
         $user->assignRolesById(1); // Admin

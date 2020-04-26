@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 return [
 
@@ -46,15 +46,17 @@ return [
             'host' => 'localhost',
             'queue' => 'default',
             'retry_after' => 90,
+            'block_for' => 0,
         ],
 
         'sqs' => [
             'driver' => 'sqs',
-            'key' => env('SQS_KEY', 'your-public-key'),
-            'secret' => env('SQS_SECRET', 'your-secret-key'),
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
             'prefix' => env('SQS_PREFIX', 'https://sqs.us-east-1.amazonaws.com/your-account-id'),
             'queue' => env('SQS_QUEUE', 'your-queue-name'),
-            'region' => env('SQS_REGION', 'us-east-1'),
+            'suffix' => env('SQS_SUFFIX'),
+            'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
         ],
 
         'redis' => [
@@ -65,6 +67,30 @@ return [
             'block_for' => null,
         ],
 
+        'rabbitmq' => [
+            'driver' => 'rabbitmq',
+            'queue' => env('RABBITMQ_QUEUE', 'default'),
+            'connection' => PhpAmqpLib\Connection\AMQPLazyConnection::class,
+            'hosts' => [
+                [
+                    'host' => env('RABBITMQ_HOST', 'rabbitmq'),
+                    'port' => env('RABBITMQ_PORT', 5672),
+                    'user' => env('RABBITMQ_USER', 'guest'),
+                    'password' => env('RABBITMQ_PASSWORD', 'guest'),
+                    'vhost' => env('RABBITMQ_VHOST', '/'),
+                ],
+            ],
+            'options' => [
+                'ssl_options' => [
+                    'cafile' => env('RABBITMQ_SSL_CAFILE', null),
+                    'local_cert' => env('RABBITMQ_SSL_LOCALCERT', null),
+                    'local_key' => env('RABBITMQ_SSL_LOCALKEY', null),
+                    'verify_peer' => env('RABBITMQ_SSL_VERIFY_PEER', true),
+                    'passphrase' => env('RABBITMQ_SSL_PASSPHRASE', null),
+                ],
+            ],
+            'worker' => env('RABBITMQ_WORKER', 'default'),
+        ],
     ],
 
     /*
@@ -79,6 +105,7 @@ return [
     */
 
     'failed' => [
+        'driver' => env('QUEUE_FAILED_DRIVER', 'database'),
         'database' => env('DB_CONNECTION', 'mysql'),
         'table' => 'failed_jobs',
     ],

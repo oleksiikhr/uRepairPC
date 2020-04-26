@@ -1,0 +1,36 @@
+@import "~scss/_colors";
+
+.form--full {
+  .el-form-item__label {
+    float: none;
+  }
+  .el-select,
+  .el-cascader,
+  .el-upload-dragger {
+    width: 100%;
+  }
+}
+
+/*
+ * Select
+ */
+
+.select--refresh {
+  .el-select-dropdown__list {
+    padding-bottom: 0;
+  }
+  .btn-refresh {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    border-radius: 0;
+    margin-top: 6px;
+    width: 100%;
+    border: 0;
+    border-top: 1px solid $baseBorder;
+    span {
+      display: block;
+    }
+  }
+}

@@ -1,44 +1,61 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Observers;
 
 use App\User;
-use App\Events\Users\ECreate;
-use App\Events\Users\EDelete;
-use App\Events\Users\EUpdate;
+use App\Mail\UserCreated;
+use App\Realtime\Users\ECreate;
+use App\Realtime\Users\EDelete;
+use App\Realtime\Users\EUpdate;
+use Illuminate\Support\Facades\Mail;
 
 class UserObserver
 {
     /**
-     * Handle the user "created" event.
+     * Handle the user "creating" event.
      *
-     * @param User $user
+     * @param  User  $user
      * @return void
      */
-    public function created(User $user)
+    public function creating(User $user): void
     {
-        event(new ECreate($user));
+        $password = User::generateRandomStrPassword();
+
+        $user->password = bcrypt($password);
+
+        Mail::to($user)->send(new UserCreated($password));
+    }
+
+    /**
+     * Handle the user "created" event.
+     *
+     * @param  User  $user
+     * @return void
+     */
+    public function created(User $user): void
+    {
+        ECreate::dispatchAfterResponse($user);
     }
 
     /**
      * Handle the user "updated" event.
      *
-     * @param User $user
+     * @param  User  $user
      * @return void
      */
-    public function updated(User $user)
+    public function updated(User $user): void
     {
-        event(new EUpdate($user->id, $user->getChangesWithoutHiddenAttrs()));
+        EUpdate::dispatchAfterResponse($user->id, $user->getChangesWithoutHiddenAttrs());
     }
 
     /**
      * Handle the user "deleted" event.
      *
-     * @param User $user
+     * @param  User  $user
      * @return void
      */
-    public function deleted(User $user)
+    public function deleted(User $user): void
     {
-        event(new EDelete($user));
+        EDelete::dispatchAfterResponse($user);
     }
 }

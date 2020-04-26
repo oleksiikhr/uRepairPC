@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -6,12 +6,13 @@ use App\User;
 use App\Enums\Perm;
 use Illuminate\Http\Request;
 use App\Request as RequestModel;
+use Illuminate\Http\JsonResponse;
 use App\Http\Helpers\FilesHelper;
-use App\Events\RequestFiles\EJoin;
+use App\Realtime\RequestFiles\EJoin;
 use App\Http\Requests\FileRequest;
-use App\Events\RequestFiles\ECreate;
-use App\Events\RequestFiles\EDelete;
-use App\Events\RequestFiles\EUpdate;
+use App\Realtime\RequestFiles\ECreate;
+use App\Realtime\RequestFiles\EDelete;
+use App\Realtime\RequestFiles\EUpdate;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,12 +21,12 @@ class RequestFileController extends Controller
     /**
      * @var RequestModel
      */
-    private $_request;
+    private $request;
 
     /**
      * @var User
      */
-    private $_user;
+    private $user;
 
     /**
      * Add middleware depends on user permissions.
@@ -35,19 +36,19 @@ class RequestFileController extends Controller
      */
     public function permissions(Request $request): array
     {
-        $this->_user = auth()->user();
+        $this->user = auth()->user();
 
-        if (! $this->_user) {
+        if (! $this->user) {
             $this->middleware('jwt.auth');
 
             return [];
         }
 
         $requestId = (int) $request->route('request');
-        $this->_request = RequestModel::findOrFail($requestId);
+        $this->request = RequestModel::findOrFail($requestId);
 
         // Permissions on request before get a files
-        if (! RequestModel::hasAccessByPerm($this->_request, $this->_user)) {
+        if (! RequestModel::hasAccessByPerm($this->request, $this->user)) {
             $this->middleware('permission:disable');
 
             return [];
@@ -66,18 +67,18 @@ class RequestFileController extends Controller
      * Display a listing of the resource.
      *
      * @param  int  $requestId
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index(int $requestId)
+    public function index(int $requestId): JsonResponse
     {
-        $query = $this->_request->files();
+        $query = $this->request->files();
 
-        if (! $this->_user->perm(Perm::REQUESTS_FILES_VIEW_ALL)) {
-            $query->where('user_id', $this->_user->id);
+        if (! $this->user->perm(Perm::REQUESTS_FILES_VIEW_ALL)) {
+            $query->where('user_id', $this->user->id);
         }
 
         $requestFiles = $query->get();
-        event(new EJoin($requestId, ...$requestFiles));
+        EJoin::dispatchAfterResponse($requestId, ...$requestFiles);
 
         return response()->json([
             'message' => __('app.files.files_get'),
@@ -90,9 +91,9 @@ class RequestFileController extends Controller
      *
      * @param  FileRequest  $request
      * @param  int  $requestId
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(FileRequest $request, int $requestId)
+    public function store(FileRequest $request, int $requestId): JsonResponse
     {
         $requestFiles = $request->file('files');
 
@@ -100,11 +101,11 @@ class RequestFileController extends Controller
         $filesHelper->upload('requests/'.$requestId);
 
         $uploadedIds = $filesHelper->getUploadedIds();
-        $this->_request->files()->attach($uploadedIds);
-        $uploadedFiles = $this->_request->files()->whereIn('files.id', $uploadedIds)->get();
+        $this->request->files()->attach($uploadedIds);
+        $uploadedFiles = $this->request->files()->whereIn('files.id', $uploadedIds)->get();
 
         if (count($uploadedFiles)) {
-            event(new ECreate($requestId, $uploadedFiles, $this->_user->id));
+            ECreate::dispatchAfterResponse($requestId, $uploadedFiles, $this->user->id);
         }
 
         if ($filesHelper->hasErrors()) {
@@ -126,14 +127,14 @@ class RequestFileController extends Controller
      *
      * @param  int  $requestId
      * @param  int  $fileId
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function show(int $requestId, int $fileId)
+    public function show(int $requestId, int $fileId): JsonResponse
     {
-        $requestFile = $this->_request->files()->findOrFail($fileId);
+        $requestFile = $this->request->files()->findOrFail($fileId);
 
         // Download only own file
-        if (! $this->_user->perm(Perm::REQUESTS_FILES_DOWNLOAD_ALL) &&
+        if (! $this->user->perm(Perm::REQUESTS_FILES_DOWNLOAD_ALL) &&
             Gate::denies('owner', $requestFile)
         ) {
             return $this->responseNoPermission();
@@ -152,14 +153,14 @@ class RequestFileController extends Controller
      * @param  FileRequest  $request
      * @param  int  $requestId
      * @param  int  $fileId
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(FileRequest $request, int $requestId, int $fileId)
+    public function update(FileRequest $request, int $requestId, int $fileId): JsonResponse
     {
-        $requestFile = $this->_request->files()->findOrFail($fileId);
+        $requestFile = $this->request->files()->findOrFail($fileId);
 
         // Edit only own file
-        if (! $this->_user->perm(Perm::REQUESTS_FILES_EDIT_ALL) &&
+        if (! $this->user->perm(Perm::REQUESTS_FILES_EDIT_ALL) &&
             Gate::denies('owner', $requestFile)
         ) {
             return $this->responseNoPermission();
@@ -171,7 +172,7 @@ class RequestFileController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new EUpdate($requestId, $fileId, $requestFile));
+        EUpdate::dispatchAfterResponse($requestId, $fileId, $requestFile);
 
         return response()->json([
             'message' => __('app.files.file_updated'),
@@ -184,15 +185,15 @@ class RequestFileController extends Controller
      *
      * @param  int  $requestId
      * @param  int  $fileId
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
-    public function destroy(int $requestId, int $fileId)
+    public function destroy(int $requestId, int $fileId): JsonResponse
     {
-        $requestFile = $this->_request->files()->findOrFail($fileId);
+        $requestFile = $this->request->files()->findOrFail($fileId);
 
         // Delete only own file
-        if (! $this->_user->perm(Perm::REQUESTS_FILES_DELETE_ALL) &&
+        if (! $this->user->perm(Perm::REQUESTS_FILES_DELETE_ALL) &&
             Gate::denies('owner', $requestFile)
         ) {
             return $this->responseNoPermission();
@@ -202,7 +203,7 @@ class RequestFileController extends Controller
             return $this->responseDatabaseDestroyError();
         }
 
-        event(new EDelete($requestId, $requestFile));
+        EDelete::dispatchAfterResponse($requestId, $requestFile);
 
         return response()->json([
             'message' => __('app.files.file_destroyed'),

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Json;
 
@@ -15,29 +15,27 @@ abstract class Json implements IJson
     /**
      * @var string
      */
-    private $_filePath;
+    private $filePath;
 
     /**
      * @var string
      */
-    private $_folder = 'global';
+    private $folder = 'global';
 
     /**
      * @var string
      */
-    private $_disk = 'public';
+    private $disk = 'public';
 
     public function __construct($filePath, $folder, $disk)
     {
-        $this->_filePath = $filePath;
-        $this->_folder = $folder;
-        $this->_disk = $disk;
+        $this->filePath = $filePath;
+        $this->folder = $folder;
+        $this->disk = $disk;
     }
 
     /**
-     * Get data from file or uses default.
-     *
-     * @return array
+     * @inheritDoc
      */
     public function getData()
     {
@@ -53,9 +51,10 @@ abstract class Json implements IJson
     }
 
     /**
-     * @param array $data - from $request->validate() or other data
+     * @param  array  $data - from $request->validate() or other data
+     * @return void
      */
-    public function transformDataAndRequestFiles(array &$data)
+    public function transformDataAndRequestFiles(array &$data): void
     {
         $attributes = $this->getAttributes();
         $json = $this->getData();
@@ -70,13 +69,13 @@ abstract class Json implements IJson
                     case 'file': {
                         // Delete old file
                         if (array_key_exists($key, $json)) {
-                            FileHelper::delete($json[$key], $this->_disk);
+                            FileHelper::delete($json[$key], $this->disk);
                         }
 
                         // Save new file if exists
                         if (\request()->hasFile($key)) {
                             $fileHelper = new FileHelper($data[$key]);
-                            $data[$key] = $fileHelper->store($this->_folder, $this->_disk);
+                            $data[$key] = $fileHelper->store($this->folder, $this->disk);
                         } else {
                             $data[$key] = null;
                         }
@@ -93,16 +92,13 @@ abstract class Json implements IJson
     }
 
     /**
-     * Save data to file.
-     *
-     * @param  array  $arr
-     * @return void
+     * @inheritDoc
      */
-    public function mergeAndSaveToFile($arr)
+    public function mergeAndSaveToFile($arr): void
     {
         $mergeData = array_merge($this->getDefaultData(), $arr);
         $json = json_encode($mergeData, JSON_PRETTY_PRINT);
-        Storage::put($this->_filePath, $json);
+        Storage::put($this->filePath, $json);
     }
 
     /**
@@ -112,9 +108,9 @@ abstract class Json implements IJson
      */
     private function getFileData()
     {
-        if (Storage::exists($this->_filePath)) {
+        if (Storage::exists($this->filePath)) {
             try {
-                $data = Storage::get($this->_filePath);
+                $data = Storage::get($this->filePath);
                 $json = json_decode($data);
 
                 if ($json === null || json_last_error() !== JSON_ERROR_NONE) {

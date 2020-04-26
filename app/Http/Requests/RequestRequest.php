@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Requests;
 
@@ -13,9 +13,9 @@ class RequestRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -24,7 +24,7 @@ class RequestRequest extends FormRequest
      * @param  Request  $request
      * @return array
      */
-    public function rules(Request $request)
+    public function rules(Request $request): array
     {
         $method = $request->method;
 
@@ -49,8 +49,8 @@ class RequestRequest extends FormRequest
         }
 
         $rules = [
-            'title' => 'string|between:1,191',
-            'location' => 'nullable|string|between:1,191',
+            'title' => 'string|between:1,255',
+            'location' => 'nullable|string|between:1,255',
             'description' => 'nullable|string|max:1200',
             'assign_id' => 'nullable|integer|exists:users,id,deleted_at,NULL',
             'type_id' => 'integer|exists:request_types,id,deleted_at,NULL',

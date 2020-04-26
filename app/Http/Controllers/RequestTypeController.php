@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -6,9 +6,10 @@ use App\User;
 use App\Enums\Perm;
 use App\RequestType;
 use Illuminate\Http\Request;
-use App\Events\RequestTypes\EJoin;
-use App\Events\RequestTypes\ECreate;
-use App\Events\RequestTypes\EUpdate;
+use Illuminate\Http\JsonResponse;
+use App\Realtime\RequestTypes\EJoin;
+use App\Realtime\RequestTypes\ECreate;
+use App\Realtime\RequestTypes\EUpdate;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\RequestTypeRequest;
 
@@ -17,7 +18,7 @@ class RequestTypeController extends Controller
     /**
      * @var User
      */
-    private $_user;
+    private $user;
 
     /**
      * Add middleware depends on user permissions.
@@ -27,7 +28,7 @@ class RequestTypeController extends Controller
      */
     public function permissions(Request $request): array
     {
-        $this->_user = auth()->user();
+        $this->user = auth()->user();
 
         return [
             'index' => Perm::REQUESTS_CONFIG_VIEW_ALL,
@@ -41,13 +42,13 @@ class RequestTypeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         $list = RequestType::all();
 
-        event(new EJoin(...$list));
+        EJoin::dispatchAfterResponse(...$list);
 
         return response()->json($list);
     }
@@ -56,13 +57,13 @@ class RequestTypeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  RequestTypeRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(RequestTypeRequest $request)
+    public function store(RequestTypeRequest $request): JsonResponse
     {
         $requestType = new RequestType;
         $requestType->fill($request->all());
-        $requestType->user_id = $this->_user->id;
+        $requestType->user_id = $this->user->id;
 
         if ($request->default) {
             RequestType::clearDefaultValues();
@@ -72,7 +73,7 @@ class RequestTypeController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new ECreate($requestType));
+        ECreate::dispatchAfterResponse($requestType);
 
         return response()->json([
             'message' => __('app.request_type.store'),
@@ -84,13 +85,13 @@ class RequestTypeController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         $requestType = RequestType::findOrFail($id);
 
-        event(new EJoin($requestType));
+        EJoin::dispatchAfterResponse($requestType);
 
         return response()->json([
             'message' => __('app.request_type.show'),
@@ -103,14 +104,14 @@ class RequestTypeController extends Controller
      *
      * @param  RequestTypeRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(RequestTypeRequest $request, int $id)
+    public function update(RequestTypeRequest $request, int $id): JsonResponse
     {
         $requestType = RequestType::findOrFail($id);
 
         // Edit only own requests config
-        if (! $this->_user->perm(Perm::REQUESTS_CONFIG_EDIT_ALL) &&
+        if (! $this->user->perm(Perm::REQUESTS_CONFIG_EDIT_ALL) &&
             Gate::denies('owner', $requestType)
         ) {
             return $this->responseNoPermission();
@@ -130,7 +131,7 @@ class RequestTypeController extends Controller
             return $this->responseDatabaseSaveError();
         }
 
-        event(new EUpdate($requestType->id, $requestType));
+        EUpdate::dispatchAfterResponse($requestType->id, $requestType);
 
         return response()->json([
             'message' => __('app.request_type.update'),
@@ -142,14 +143,14 @@ class RequestTypeController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $requestType = RequestType::findOrFail($id);
 
         // Delete only own requests config
-        if (! $this->_user->perm(Perm::REQUESTS_CONFIG_DELETE_ALL) &&
+        if (! $this->user->perm(Perm::REQUESTS_CONFIG_DELETE_ALL) &&
             Gate::denies('owner', $requestType)
         ) {
             return $this->responseNoPermission();

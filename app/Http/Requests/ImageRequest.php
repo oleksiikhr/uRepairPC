@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Requests;
 
@@ -12,9 +12,9 @@ class ImageRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -22,7 +22,7 @@ class ImageRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'image' => 'required|file|mimes:jpeg,jpg,png|max:2000',

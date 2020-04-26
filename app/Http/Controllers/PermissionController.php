@@ -1,9 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use App\Enums\Perm;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class PermissionController extends Controller
 {
@@ -23,10 +24,12 @@ class PermissionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        return response()->json(Perm::getStructure());
+        $permissions = (object) Perm::getStructure();
+
+        return response()->json($permissions);
     }
 }

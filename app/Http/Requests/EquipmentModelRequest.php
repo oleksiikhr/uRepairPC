@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Requests;
 
@@ -12,9 +12,9 @@ class EquipmentModelRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -23,10 +23,10 @@ class EquipmentModelRequest extends FormRequest
      * @param  Request  $request
      * @return array
      */
-    public function rules(Request $request)
+    public function rules(Request $request): array
     {
         $rules = [
-            'name' => 'string|between:1,191',
+            'name' => 'string|between:1,255',
             'description' => 'nullable|string|max:600',
             'type_id' => 'integer|exists:equipment_types,id,deleted_at,NULL',
             'manufacturer_id' => 'integer|exists:equipment_manufacturers,id,deleted_at,NULL',

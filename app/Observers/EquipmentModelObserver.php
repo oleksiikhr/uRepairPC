@@ -1,20 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Observers;
 
 use App\EquipmentModel;
-use App\Events\EquipmentModels\EDelete;
+use App\Realtime\EquipmentModels\EDelete;
 
 class EquipmentModelObserver
 {
     /**
      * Handle the equipment model "deleted" event.
      *
-     * @param  \App\EquipmentModel  $equipmentModel
+     * @param  EquipmentModel  $equipmentModel
      * @return void
      */
-    public function deleted(EquipmentModel $equipmentModel)
+    public function deleted(EquipmentModel $equipmentModel): void
     {
-        event(new EDelete($equipmentModel));
+        EDelete::dispatchAfterResponse($equipmentModel);
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Json;
 
@@ -16,7 +16,7 @@ interface IJson
      *
      * @return array
      */
-    public function getDefaultData();
+    public function getDefaultData(): array;
 
     /**
      * Get attribute and type.
@@ -33,5 +33,5 @@ interface IJson
      * @param  array  $arr
      * @return object
      */
-    public function mergeAndSaveToFile($arr);
+    public function mergeAndSaveToFile(array $arr);
 }

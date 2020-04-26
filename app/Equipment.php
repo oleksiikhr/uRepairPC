@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App;
 
@@ -85,11 +85,6 @@ class Equipment extends Model
             ->leftJoin('equipment_manufacturers', 'equipments.manufacturer_id', '=', 'equipment_manufacturers.id')
             ->leftJoin('equipment_models', 'equipments.model_id', '=', 'equipment_models.id');
     }
-
-    /* | -----------------------------------------------------------------------------------
-     * | Relationships
-     * | -----------------------------------------------------------------------------------
-     */
 
     public function manufacturer()
     {

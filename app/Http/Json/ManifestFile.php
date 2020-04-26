@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Json;
 
@@ -12,11 +12,7 @@ class ManifestFile extends Json
     }
 
     /**
-     * Get attribute and type.
-     *
-     * @return mixed
-     * @example
-     *  ['attr' => 'string']
+     * @inheritDoc
      */
     public function getAttributes()
     {
@@ -32,11 +28,9 @@ class ManifestFile extends Json
     }
 
     /**
-     * Get default data.
-     *
-     * @return array
+     * @inheritDoc
      */
-    public function getDefaultData()
+    public function getDefaultData(): array
     {
         return [
             'name' => config('app.name'),
