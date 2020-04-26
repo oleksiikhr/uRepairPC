@@ -6,11 +6,11 @@ use App\User;
 use App\Equipment;
 use App\Enums\Perm;
 use Illuminate\Http\Request;
-use App\Events\Equipments\EJoin;
+use App\Realtime\Equipments\EJoin;
 use Illuminate\Http\JsonResponse;
 use App\Http\Helpers\FilesHelper;
-use App\Events\Equipments\ECreate;
-use App\Events\Equipments\EUpdate;
+use App\Realtime\Equipments\ECreate;
+use App\Realtime\Equipments\EUpdate;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\EquipmentRequest;
 

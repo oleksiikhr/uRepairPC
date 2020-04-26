@@ -8,9 +8,9 @@ use App\RequestStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
-use App\Events\RequestStatuses\EJoin;
-use App\Events\RequestStatuses\ECreate;
-use App\Events\RequestStatuses\EUpdate;
+use App\Realtime\RequestStatuses\EJoin;
+use App\Realtime\RequestStatuses\ECreate;
+use App\Realtime\RequestStatuses\EUpdate;
 use App\Http\Requests\RequestStatusRequest;
 
 class RequestStatusController extends Controller

@@ -9,10 +9,10 @@ use Illuminate\Http\Request;
 use App\Request as RequestModel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
-use App\Events\RequestComments\EJoin;
-use App\Events\RequestComments\ECreate;
-use App\Events\RequestComments\EDelete;
-use App\Events\RequestComments\EUpdate;
+use App\Realtime\RequestComments\EJoin;
+use App\Realtime\RequestComments\ECreate;
+use App\Realtime\RequestComments\EDelete;
+use App\Realtime\RequestComments\EUpdate;
 use App\Http\Requests\RequestCommentRequest;
 
 class RequestCommentController extends Controller

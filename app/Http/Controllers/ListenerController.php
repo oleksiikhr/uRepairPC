@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\JoinRooms;
+use App\Realtime\JoinRooms;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Events\Roles\EGlobal as RolesEvent;
-use App\Events\Users\EGlobal as UsersEvent;
-use App\Events\Requests\EGlobal as RequestsEvent;
-use App\Events\Equipments\EGlobal as EquipmentsEvent;
-use App\Events\RequestTypes\EGlobal as RequestTypesEvent;
-use App\Events\EquipmentTypes\EGlobal as EquipmentTypesEvent;
-use App\Events\EquipmentModels\EGlobal as EquipmentModelsEvent;
-use App\Events\RequestStatuses\EGlobal as RequestStatusesEvent;
-use App\Events\RequestPriorities\EGlobal as RequestPrioritiesEvent;
-use App\Events\EquipmentManufacturers\EGlobal as EquipmentManufacturersEvent;
+use App\Realtime\Roles\EGlobal as RolesEvent;
+use App\Realtime\Users\EGlobal as UsersEvent;
+use App\Realtime\Requests\EGlobal as RequestsEvent;
+use App\Realtime\Equipments\EGlobal as EquipmentsEvent;
+use App\Realtime\RequestTypes\EGlobal as RequestTypesEvent;
+use App\Realtime\EquipmentTypes\EGlobal as EquipmentTypesEvent;
+use App\Realtime\EquipmentModels\EGlobal as EquipmentModelsEvent;
+use App\Realtime\RequestStatuses\EGlobal as RequestStatusesEvent;
+use App\Realtime\RequestPriorities\EGlobal as RequestPrioritiesEvent;
+use App\Realtime\EquipmentManufacturers\EGlobal as EquipmentManufacturersEvent;
 
 class ListenerController extends Controller
 {

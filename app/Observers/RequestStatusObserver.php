@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\RequestStatus;
-use App\Events\RequestStatuses\EDelete;
+use App\Realtime\RequestStatuses\EDelete;
 
 class RequestStatusObserver
 {

@@ -8,9 +8,9 @@ use App\EquipmentModel;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
-use App\Events\EquipmentModels\EJoin;
-use App\Events\EquipmentModels\ECreate;
-use App\Events\EquipmentModels\EUpdate;
+use App\Realtime\EquipmentModels\EJoin;
+use App\Realtime\EquipmentModels\ECreate;
+use App\Realtime\EquipmentModels\EUpdate;
 use App\Http\Requests\EquipmentModelRequest;
 
 class EquipmentModelController extends Controller

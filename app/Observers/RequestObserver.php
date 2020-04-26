@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Request;
-use App\Events\Requests\EDelete;
+use App\Realtime\Requests\EDelete;
 
 class RequestObserver
 {

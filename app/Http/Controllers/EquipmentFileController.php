@@ -9,11 +9,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Helpers\FilesHelper;
 use App\Http\Requests\FileRequest;
-use App\Events\EquipmentFiles\EJoin;
+use App\Realtime\EquipmentFiles\EJoin;
 use Illuminate\Support\Facades\Gate;
-use App\Events\EquipmentFiles\ECreate;
-use App\Events\EquipmentFiles\EDelete;
-use App\Events\EquipmentFiles\EUpdate;
+use App\Realtime\EquipmentFiles\ECreate;
+use App\Realtime\EquipmentFiles\EDelete;
+use App\Realtime\EquipmentFiles\EUpdate;
 use Illuminate\Support\Facades\Storage;
 
 class EquipmentFileController extends Controller

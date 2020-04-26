@@ -10,7 +10,7 @@ use App\Http\Helpers\FileHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ManifestRequest;
-use App\Events\Settings\EManifestUpdate;
+use App\Realtime\Settings\EManifestUpdate;
 use App\Http\Resources\ManifestJsonResource;
 
 class ManifestController extends Controller

@@ -4,9 +4,9 @@ namespace App\Observers;
 
 use App\User;
 use App\Mail\UserCreated;
-use App\Events\Users\ECreate;
-use App\Events\Users\EDelete;
-use App\Events\Users\EUpdate;
+use App\Realtime\Users\ECreate;
+use App\Realtime\Users\EDelete;
+use App\Realtime\Users\EUpdate;
 use Illuminate\Support\Facades\Mail;
 
 class UserObserver

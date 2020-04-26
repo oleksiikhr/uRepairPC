@@ -8,9 +8,9 @@ use App\RequestPriority;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
-use App\Events\RequestPriorities\EJoin;
-use App\Events\RequestPriorities\ECreate;
-use App\Events\RequestPriorities\EUpdate;
+use App\Realtime\RequestPriorities\EJoin;
+use App\Realtime\RequestPriorities\ECreate;
+use App\Realtime\RequestPriorities\EUpdate;
 use App\Http\Requests\RequestPriorityRequest;
 
 class RequestPriorityController extends Controller

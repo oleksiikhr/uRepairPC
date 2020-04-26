@@ -7,9 +7,9 @@ use App\Enums\Perm;
 use App\RequestType;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Events\RequestTypes\EJoin;
-use App\Events\RequestTypes\ECreate;
-use App\Events\RequestTypes\EUpdate;
+use App\Realtime\RequestTypes\EJoin;
+use App\Realtime\RequestTypes\ECreate;
+use App\Realtime\RequestTypes\EUpdate;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\RequestTypeRequest;
 

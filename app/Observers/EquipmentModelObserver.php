@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\EquipmentModel;
-use App\Events\EquipmentModels\EDelete;
+use App\Realtime\EquipmentModels\EDelete;
 
 class EquipmentModelObserver
 {

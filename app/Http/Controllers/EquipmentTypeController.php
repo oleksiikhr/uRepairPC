@@ -7,10 +7,10 @@ use App\Enums\Perm;
 use App\EquipmentType;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Events\EquipmentTypes\EJoin;
+use App\Realtime\EquipmentTypes\EJoin;
 use Illuminate\Support\Facades\Gate;
-use App\Events\EquipmentTypes\ECreate;
-use App\Events\EquipmentTypes\EUpdate;
+use App\Realtime\EquipmentTypes\ECreate;
+use App\Realtime\EquipmentTypes\EUpdate;
 use App\Http\Requests\EquipmentTypeRequest;
 
 class EquipmentTypeController extends Controller

@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 use App\EquipmentManufacturer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
-use App\Events\EquipmentManufacturers\EJoin;
-use App\Events\EquipmentManufacturers\ECreate;
-use App\Events\EquipmentManufacturers\EUpdate;
+use App\Realtime\EquipmentManufacturers\EJoin;
+use App\Realtime\EquipmentManufacturers\ECreate;
+use App\Realtime\EquipmentManufacturers\EUpdate;
 use App\Http\Requests\EquipmentManufacturerRequest;
 
 class EquipmentManufacturerController extends Controller

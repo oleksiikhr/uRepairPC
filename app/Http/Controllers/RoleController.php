@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Role;
 use App\Enums\Perm;
-use App\Events\Roles\EJoin;
+use App\Realtime\Roles\EJoin;
 use Illuminate\Http\Request;
-use App\Events\Roles\ECreate;
-use App\Events\Roles\EUpdate;
+use App\Realtime\Roles\ECreate;
+use App\Realtime\Roles\EUpdate;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\RoleRequest;
 

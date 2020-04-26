@@ -8,7 +8,7 @@ use App\Http\Json\GlobalFile;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GlobalRequest;
-use App\Events\Settings\EGlobalUpdate;
+use App\Realtime\Settings\EGlobalUpdate;
 use App\Http\Resources\GlobalJsonResource;
 
 class GlobalController extends Controller

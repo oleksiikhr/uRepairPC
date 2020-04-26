@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Role;
-use App\Events\Roles\EDelete;
+use App\Realtime\Roles\EDelete;
 
 class RoleObserver
 {
