@@ -1,17 +1,10 @@
-FROM php:7.4-fpm
+FROM php:7.4-fpm-alpine
 
-USER root
+RUN apk add shadow && usermod -u 1000 www-data && groupmod -g 1000 www-data
 
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y git libzip-dev zip
+RUN apk add git autoconf libzip-dev zip build-base curl-dev
 
 RUN pecl install -o -f redis
-
-RUN groupmod -o -g 1000 www-data && \
-    usermod -o -u 1000 -g www-data www-data
-
-RUN apt-get install libcurl4-openssl-dev
 
 RUN docker-php-ext-install mysqli && \
     docker-php-ext-install pdo_mysql && \
