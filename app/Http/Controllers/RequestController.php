@@ -206,7 +206,7 @@ class RequestController extends Controller
         }
 
         $requestModel = RequestModel::querySelectJoins()->findOrFail($id);
-        EUpdate::dispatchAfterResponse($requestModel);
+        EUpdate::dispatchAfterResponse($id, $requestModel);
 
         return response()->json([
             'message' => __('app.requests.update'),

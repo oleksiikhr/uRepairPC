@@ -359,7 +359,7 @@ class UserController extends Controller
         $user->image_id = null;
 
         // image_id destroy by onDelete('set null') on DB, so send the event manually
-        EUpdate::dispatchAfterResponse([
+        EUpdate::dispatchAfterResponse($id, [
             'image_id' => null,
             'updated_at' => $user->updated_at->toDateTimeString(),
         ]);
