@@ -9,12 +9,13 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Helpers\FilesHelper;
 use App\Http\Requests\FileRequest;
-use App\Realtime\EquipmentFiles\EJoin;
 use Illuminate\Support\Facades\Gate;
+use App\Realtime\EquipmentFiles\EJoin;
+use Illuminate\Support\Facades\Storage;
 use App\Realtime\EquipmentFiles\ECreate;
 use App\Realtime\EquipmentFiles\EDelete;
 use App\Realtime\EquipmentFiles\EUpdate;
-use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class EquipmentFileController extends Controller
 {
@@ -129,9 +130,9 @@ class EquipmentFileController extends Controller
      *
      * @param  int  $equipmentId
      * @param  int  $fileId
-     * @return JsonResponse
+     * @return StreamedResponse|JsonResponse
      */
-    public function show(int $equipmentId, int $fileId): JsonResponse
+    public function show(int $equipmentId, int $fileId)
     {
         $equipmentFile = $this->equipment->files()->findOrFail($fileId);
 

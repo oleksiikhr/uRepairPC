@@ -8,13 +8,14 @@ use Illuminate\Http\Request;
 use App\Request as RequestModel;
 use Illuminate\Http\JsonResponse;
 use App\Http\Helpers\FilesHelper;
-use App\Realtime\RequestFiles\EJoin;
 use App\Http\Requests\FileRequest;
+use Illuminate\Support\Facades\Gate;
+use App\Realtime\RequestFiles\EJoin;
 use App\Realtime\RequestFiles\ECreate;
 use App\Realtime\RequestFiles\EDelete;
 use App\Realtime\RequestFiles\EUpdate;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class RequestFileController extends Controller
 {
@@ -127,9 +128,9 @@ class RequestFileController extends Controller
      *
      * @param  int  $requestId
      * @param  int  $fileId
-     * @return JsonResponse
+     * @return StreamedResponse|JsonResponse
      */
-    public function show(int $requestId, int $fileId): JsonResponse
+    public function show(int $requestId, int $fileId)
     {
         $requestFile = $this->request->files()->findOrFail($fileId);
 
