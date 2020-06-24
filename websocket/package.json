@@ -18,13 +18,14 @@
   },
   "homepage": "https://github.com/uRepairPC/uRepairPC#readme",
   "dependencies": {
-    "@types/amqplib": "^0.5.13",
     "amqplib": "^0.5.5",
     "dotenv": "^8.2.0",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.5.13",
     "@types/dotenv": "^8.2.0",
+    "@types/jest": "^26.0.3",
     "@types/node": "^13.13.0",
     "@types/socket.io": "^2.1.4",
     "@types/socket.io-client": "^1.4.32",
