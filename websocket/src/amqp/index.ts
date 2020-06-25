@@ -1,5 +1,4 @@
-import amqp from './connect';
-
+import connect from './connect';
 import './queues/realtime';
 
-export default amqp;
+export default connect;

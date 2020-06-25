@@ -1,4 +1,3 @@
-import amqp, { Connection } from 'amqplib';
-import config from '../config';
+import amqp from 'amqplib';
 
-export default (): Promise<Connection> => amqp.connect(config.amqp);
+export default amqp.connect;

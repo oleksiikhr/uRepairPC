@@ -5,7 +5,7 @@ import websocketHandler from '../../websocket/handler';
 import config from '../../config';
 
 export default retry(async () => {
-  const conn = await connect();
+  const conn = await connect(config.amqp);
 
   const ch = await conn.createChannel();
   await ch.assertQueue(config.amqp.queueName, {
