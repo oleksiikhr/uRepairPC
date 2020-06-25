@@ -38,14 +38,14 @@ services:
     restart: always
     volumes:
       - ../:${CONTAINER_PATH}
+      - ../storage/app/public:${CONTAINER_PATH}/public/storage/
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/sites/:/etc/nginx/sites-available
       - ./nginx/conf.d/:/etc/nginx/conf.d
-      - ../storage/app/public:${CONTAINER_PATH}/public/storage/
     depends_on:
       - php-fpm
     labels:
-      - traefik.http.routers.nginx.rule=Host(`urepairpc.localhost`) && PathPrefix(`/api/`, `/storage/`)
+      - traefik.http.routers.nginx.rule=Host(`urepairpc.localhost`) && PathPrefix(`/api/`, `/storage/`, `/robots.txt`)
       - traefik.http.routers.nginx.entrypoints=web
 
   web:
