@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\User;
+use App\Models\User;
 use App\Mail\UserCreated;
 use App\Realtime\Users\ECreate;
 use App\Realtime\Users\EDelete;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Mail;
 class UserObserver
 {
     /**
-     * Handle the user "creating" event.
+     * Handle the user "creating" event
      *
      * @param  User  $user
      * @return void
@@ -27,7 +27,7 @@ class UserObserver
     }
 
     /**
-     * Handle the user "created" event.
+     * Handle the user "created" event
      *
      * @param  User  $user
      * @return void
@@ -38,7 +38,7 @@ class UserObserver
     }
 
     /**
-     * Handle the user "updated" event.
+     * Handle the user "updated" event
      *
      * @param  User  $user
      * @return void
@@ -49,7 +49,7 @@ class UserObserver
     }
 
     /**
-     * Handle the user "deleted" event.
+     * Handle the user "deleted" event
      *
      * @param  User  $user
      * @return void

@@ -2,34 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Enums\Perm;
-use App\RequestStatus;
-use Illuminate\Http\Request;
+use App\Models\RequestStatus;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Gate;
 use App\Realtime\RequestStatuses\EJoin;
 use App\Realtime\RequestStatuses\ECreate;
 use App\Realtime\RequestStatuses\EUpdate;
 use App\Http\Requests\RequestStatusRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class RequestStatusController extends Controller
 {
     /**
-     * @var User
+     * @inheritDoc
      */
-    private $user;
-
-    /**
-     * Add middleware depends on user permissions.
-     *
-     * @param  Request  $request
-     * @return array
-     */
-    public function permissions(Request $request): array
+    public function permissions(): array
     {
-        $this->user = auth()->user();
-
         return [
             'index' => Perm::REQUESTS_CONFIG_VIEW_ALL,
             'show' => Perm::REQUESTS_CONFIG_VIEW_ALL,
@@ -40,7 +28,7 @@ class RequestStatusController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource
      *
      * @return JsonResponse
      */
@@ -54,24 +42,20 @@ class RequestStatusController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource in storage
      *
      * @param  RequestStatusRequest  $request
      * @return JsonResponse
      */
     public function store(RequestStatusRequest $request): JsonResponse
     {
-        $requestStatus = new RequestStatus;
-        $requestStatus->fill($request->all());
-        $requestStatus->user_id = $this->user->id;
-
         if ($request->default) {
             RequestStatus::clearDefaultValues();
         }
 
-        if (! $requestStatus->save()) {
-            return $this->responseDatabaseSaveError();
-        }
+        $requestStatus = new RequestStatus($request->validated());
+        $requestStatus->user_id = auth()->id();
+        $requestStatus->save();
 
         ECreate::dispatchAfterResponse($requestStatus);
 
@@ -82,15 +66,13 @@ class RequestStatusController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resource
      *
-     * @param  int  $id
+     * @param  RequestStatus  $requestStatus
      * @return JsonResponse
      */
-    public function show(int $id): JsonResponse
+    public function show(RequestStatus $requestStatus): JsonResponse
     {
-        $requestStatus = RequestStatus::findOrFail($id);
-
         EJoin::dispatchAfterResponse($requestStatus);
 
         return response()->json([
@@ -100,23 +82,18 @@ class RequestStatusController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage
      *
      * @param  RequestStatusRequest  $request
-     * @param  int  $id
+     * @param  RequestStatus  $requestStatus
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function update(RequestStatusRequest $request, int $id): JsonResponse
+    public function update(RequestStatusRequest $request, RequestStatus $requestStatus): JsonResponse
     {
-        $requestStatus = RequestStatus::findOrFail($id);
+        $this->authorize('update', $requestStatus);
 
-        // Edit only own requests config
-        if (! $this->user->perm(Perm::REQUESTS_CONFIG_EDIT_ALL) &&
-            Gate::denies('owner', $requestStatus)
-        ) {
-            return $this->responseNoPermission();
-        }
-
+        // TODO Refactoring
         if ($request->has('default') && $request->default !== $requestStatus->default) {
             if (! $request->default) {
                 return response()->json(['message' => __('app.request_status.update_default')], 422);
@@ -125,11 +102,8 @@ class RequestStatusController extends Controller
             RequestStatus::clearDefaultValues();
         }
 
-        $requestStatus->fill($request->all());
-
-        if (! $requestStatus->save()) {
-            return $this->responseDatabaseSaveError();
-        }
+        $requestStatus->fill($request->validated());
+        $requestStatus->save();
 
         EUpdate::dispatchAfterResponse($requestStatus->id, $requestStatus);
 
@@ -140,29 +114,18 @@ class RequestStatusController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from storage
      *
-     * @param  int  $id
+     * @param  RequestStatus  $requestStatus
      * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws \Exception
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(RequestStatus $requestStatus): JsonResponse
     {
-        $requestStatus = RequestStatus::findOrFail($id);
+        $this->authorize('delete', $requestStatus);
 
-        // Delete only own requests config
-        if (! $this->user->perm(Perm::REQUESTS_CONFIG_DELETE_ALL) &&
-            Gate::denies('owner', $requestStatus)
-        ) {
-            return $this->responseNoPermission();
-        }
-
-        if ($requestStatus->default) {
-            return response()->json(['message' => __('app.request_status.destroy_default')], 422);
-        }
-
-        if (! $requestStatus->delete($id)) {
-            return $this->responseDatabaseDestroyError();
-        }
+        $requestStatus->delete();
 
         return response()->json([
             'message' => __('app.request_status.destroy'),

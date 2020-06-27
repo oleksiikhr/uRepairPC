@@ -16,7 +16,7 @@ class PasswordReset extends Mailable
     private string $password;
 
     /**
-     * Create a new message instance.
+     * Create a new message instance
      *
      * @param string $password
      */
@@ -28,7 +28,7 @@ class PasswordReset extends Mailable
     }
 
     /**
-     * Build the message.
+     * Build the message
      *
      * @return $this
      */

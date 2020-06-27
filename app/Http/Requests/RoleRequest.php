@@ -2,14 +2,14 @@
 
 namespace App\Http\Requests;
 
-use App\Role;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RoleRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the user is authorized to make this request
      *
      * @return bool
      */
@@ -19,7 +19,7 @@ class RoleRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Get the validation rules that apply to the request
      *
      * @param  Request  $request
      * @return array
@@ -35,7 +35,7 @@ class RoleRequest extends FormRequest
                 'sortColumn' => 'string|in:'.implode(',', Role::ALLOW_COLUMNS_SORT),
                 'sortOrder' => 'string|in:ascending,descending',
                 'permissions' => 'boolean',
-                'count' => 'int',
+                'count' => 'nullable|int',
             ];
         }
 

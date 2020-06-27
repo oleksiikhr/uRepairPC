@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 class AddImageIdColumnToUsersTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Run the migrations
      *
      * @return void
      */
@@ -21,7 +21,7 @@ class AddImageIdColumnToUsersTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse the migrations
      *
      * @return void
      */

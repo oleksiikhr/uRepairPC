@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 class CreateRequestTypesTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Run the migrations
      *
      * @return void
      */
@@ -30,7 +30,7 @@ class CreateRequestTypesTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse the migrations
      *
      * @return void
      */

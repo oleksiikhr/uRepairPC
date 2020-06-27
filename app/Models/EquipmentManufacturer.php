@@ -1,30 +1,33 @@
 <?php declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class EquipmentManufacturer extends Model
+class EquipmentManufacturer extends BaseModel
 {
     use SoftDeletes;
 
     /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
+     * @inheritDoc
      */
     protected $fillable = [
         'name',
         'description',
     ];
 
+    /**
+     * @return HasMany
+     */
     public function equipments(): HasMany
     {
         return $this->hasMany(Equipment::class);
     }
 
+    /**
+     * @return HasMany
+     */
     public function models(): HasMany
     {
         return $this->hasMany(EquipmentModel::class);

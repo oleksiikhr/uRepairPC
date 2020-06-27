@@ -1,37 +1,36 @@
 <?php declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
-use App\Traits\ModelHasDefaultTrait;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\HasDefaultColumn;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class RequestStatus extends Model
+class RequestPriority extends BaseModel
 {
-    use ModelHasDefaultTrait, SoftDeletes;
+    use HasDefaultColumn, SoftDeletes;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
+     * @inheritDoc
      */
     protected $fillable = [
         'name',
+        'value',
         'color',
         'description',
         'default',
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
+     * @inheritDoc
      */
     protected $casts = [
         'default' => 'boolean',
     ];
 
+    /**
+     * @return HasMany
+     */
     public function requests(): HasMany
     {
         return $this->hasMany(Request::class);

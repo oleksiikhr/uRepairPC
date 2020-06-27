@@ -2,7 +2,7 @@
 
 namespace App\Http\Helpers;
 
-use App\File;
+use App\Models\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -53,7 +53,7 @@ class FileHelper
     }
 
     /**
-     * Store the uploaded file on a filesystem disk.
+     * Store the uploaded file on a filesystem disk
      *
      * @param  string  $folder
      * @param  string  $disk
@@ -73,7 +73,7 @@ class FileHelper
     }
 
     /**
-     * Delete file from storage if exists.
+     * Delete file from storage if exists
      *
      * @param  string  $file
      * @param  string  $disk

@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-use App\RequestStatus;
+use App\Models\RequestStatus;
 use Illuminate\Database\Seeder;
 
 class RequestStatusesTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Run the database seeds
      *
      * @return void
      */

@@ -2,14 +2,11 @@
 
 namespace App\Contracts;
 
-use Illuminate\Http\Request;
-
 interface IPermissions
 {
     /**
-     * Add middleware depends on user permissions.
+     * Add middleware depends on user permissions
      *
-     * @param  Request  $request
      * @return array
      * @example [
      *  'index' => Permissions::EQUIPMENTS_FILES_VIEW,
@@ -19,5 +16,5 @@ interface IPermissions
      *  'destroy' => Permissions::EQUIPMENTS_FILES_DELETE,
      * ]
      */
-    public function permissions(Request $request): array;
+    public function permissions(): array;
 }

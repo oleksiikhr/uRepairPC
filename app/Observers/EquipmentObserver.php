@@ -2,13 +2,13 @@
 
 namespace App\Observers;
 
-use App\Equipment;
+use App\Models\Equipment;
 use App\Realtime\Equipments\EDelete;
 
 class EquipmentObserver
 {
     /**
-     * Handle the equipment "deleted" event.
+     * Handle the equipment "deleted" event
      *
      * @param  Equipment  $equipment
      * @return void

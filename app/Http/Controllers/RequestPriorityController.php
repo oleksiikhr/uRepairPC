@@ -2,34 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Enums\Perm;
-use App\RequestPriority;
-use Illuminate\Http\Request;
+use App\Models\RequestPriority;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Gate;
 use App\Realtime\RequestPriorities\EJoin;
 use App\Realtime\RequestPriorities\ECreate;
 use App\Realtime\RequestPriorities\EUpdate;
 use App\Http\Requests\RequestPriorityRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class RequestPriorityController extends Controller
 {
     /**
-     * @var User
+     * @inheritDoc
      */
-    private $user;
-
-    /**
-     * Add middleware depends on user permissions.
-     *
-     * @param  Request  $request
-     * @return array
-     */
-    public function permissions(Request $request): array
+    public function permissions(): array
     {
-        $this->user = auth()->user();
-
         return [
             'index' => Perm::REQUESTS_CONFIG_VIEW_ALL,
             'show' => Perm::REQUESTS_CONFIG_VIEW_ALL,
@@ -40,7 +28,7 @@ class RequestPriorityController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource
      *
      * @return JsonResponse
      */
@@ -54,24 +42,20 @@ class RequestPriorityController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource in storage
      *
      * @param  RequestPriorityRequest  $request
      * @return JsonResponse
      */
     public function store(RequestPriorityRequest $request): JsonResponse
     {
-        $requestPriority = new RequestPriority;
-        $requestPriority->fill($request->all());
-        $requestPriority->user_id = $this->user->id;
-
         if ($request->default) {
             RequestPriority::clearDefaultValues();
         }
 
-        if (! $requestPriority->save()) {
-            return $this->responseDatabaseSaveError();
-        }
+        $requestPriority = new RequestPriority($request->validated());
+        $requestPriority->user_id = auth()->id();
+        $requestPriority->save();
 
         ECreate::dispatchAfterResponse($requestPriority);
 
@@ -82,15 +66,13 @@ class RequestPriorityController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resource
      *
-     * @param  int  $id
+     * @param  RequestPriority  $requestPriority
      * @return JsonResponse
      */
-    public function show(int $id): JsonResponse
+    public function show(RequestPriority $requestPriority): JsonResponse
     {
-        $requestPriority = RequestPriority::findOrFail($id);
-
         EJoin::dispatchAfterResponse($requestPriority);
 
         return response()->json([
@@ -100,23 +82,18 @@ class RequestPriorityController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage
      *
      * @param  RequestPriorityRequest  $request
-     * @param  int  $id
+     * @param  RequestPriority  $requestPriority
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function update(RequestPriorityRequest $request, int $id): JsonResponse
+    public function update(RequestPriorityRequest $request, RequestPriority $requestPriority): JsonResponse
     {
-        $requestPriority = RequestPriority::findOrFail($id);
+        $this->authorize('update', $requestPriority);
 
-        // Edit only own requests config
-        if (! $this->user->perm(Perm::REQUESTS_CONFIG_EDIT_ALL) &&
-            Gate::denies('owner', $requestPriority)
-        ) {
-            return $this->responseNoPermission();
-        }
-
+        // TODO Refactoring
         if ($request->has('default') && $request->default !== $requestPriority->default) {
             if (! $request->default) {
                 return response()->json(['message' => __('app.request_priority.update_default')], 422);
@@ -125,11 +102,8 @@ class RequestPriorityController extends Controller
             RequestPriority::clearDefaultValues();
         }
 
-        $requestPriority->fill($request->all());
-
-        if (! $requestPriority->save()) {
-            return $this->responseDatabaseSaveError();
-        }
+        $requestPriority->fill($request->validated());
+        $requestPriority->save();
 
         EUpdate::dispatchAfterResponse($requestPriority->id, $requestPriority);
 
@@ -140,29 +114,18 @@ class RequestPriorityController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from storage
      *
-     * @param  int  $id
+     * @param  RequestPriority  $requestPriority
      * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws \Exception
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(RequestPriority $requestPriority): JsonResponse
     {
-        $requestPriority = RequestPriority::findOrFail($id);
+        $this->authorize('delete', $requestPriority);
 
-        // Delete only own requests config
-        if (! $this->user->perm(Perm::REQUESTS_CONFIG_DELETE_ALL) &&
-            Gate::denies('owner', $requestPriority)
-        ) {
-            return $this->responseNoPermission();
-        }
-
-        if ($requestPriority->default) {
-            return response()->json(['message' => __('app.request_priority.destroy_default')], 422);
-        }
-
-        if (! $requestPriority->delete($id)) {
-            return $this->responseDatabaseDestroyError();
-        }
+        $requestPriority->delete();
 
         return response()->json([
             'message' => __('app.request_priority.destroy'),

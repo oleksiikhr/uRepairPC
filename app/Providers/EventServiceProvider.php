@@ -7,20 +7,16 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 class EventServiceProvider extends ServiceProvider
 {
     /**
-     * The event listener mappings for the application.
-     *
-     * @var array
+     * @inheritDoc
      */
     protected $listen = [
         //
     ];
 
     /**
-     * Register any events for your application.
-     *
-     * @return void
+     * @inheritDoc
      */
-    public function boot()
+    public function boot(): void
     {
         parent::boot();
 

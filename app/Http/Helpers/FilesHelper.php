@@ -2,7 +2,7 @@
 
 namespace App\Http\Helpers;
 
-use App\File;
+use App\Models\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 
@@ -47,12 +47,7 @@ class FilesHelper
             }
 
             $fileModel->path = $uploadedUri;
-
-            if (! $fileModel->save()) {
-                $this->errors[$file->getClientOriginalName()] = [__('app.database.save_error')];
-                FileHelper::delete($fileModel->path, $fileModel->disk);
-                continue;
-            }
+            $fileModel->save();
 
             $this->filesUploaded[] = $fileModel;
         }
@@ -91,7 +86,7 @@ class FilesHelper
     }
 
     /**
-     * Delete files from storage and records from File Model.
+     * Delete files from storage and records from File Model
      *
      * @param  File[]  $files
      * @return bool - is success

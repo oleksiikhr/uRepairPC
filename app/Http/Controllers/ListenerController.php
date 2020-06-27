@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Realtime\JoinRooms;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Realtime\Roles\EGlobal as RolesEvent;
 use App\Realtime\Users\EGlobal as UsersEvent;
@@ -19,12 +18,9 @@ use App\Realtime\EquipmentManufacturers\EGlobal as EquipmentManufacturersEvent;
 class ListenerController extends Controller
 {
     /**
-     * Add middleware depends on user permissions.
-     *
-     * @param  Request  $request
-     * @return array
+     * @inheritDoc
      */
-    public function permissions(Request $request): array
+    public function permissions(): array
     {
         return [
             //
@@ -32,7 +28,7 @@ class ListenerController extends Controller
     }
 
     /**
-     * Refresh all rooms for socketId and listen profile events.
+     * Refresh all rooms for socketId and listen profile events
      *
      * @return JsonResponse
      */

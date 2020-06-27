@@ -1,21 +1,18 @@
 <?php declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class EquipmentModel extends Model
+class EquipmentModel extends BaseModel
 {
     use SoftDeletes;
 
     /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
+     * @inheritDoc
      */
     protected $fillable = [
         'type_id',
@@ -38,16 +35,25 @@ class EquipmentModel extends Model
             ->join('equipment_manufacturers', 'equipment_models.manufacturer_id', '=', 'equipment_manufacturers.id');
     }
 
+    /**
+     * @return HasMany
+     */
     public function equipments(): HasMany
     {
         return $this->hasMany(Equipment::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function type(): BelongsTo
     {
         return $this->belongsTo(EquipmentType::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function manufacturer(): BelongsTo
     {
         return $this->belongsTo(EquipmentManufacturer::class);

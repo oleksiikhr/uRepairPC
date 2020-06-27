@@ -10,7 +10,7 @@ class EGlobal extends EJoinBroadcast
     use EModel;
 
     /**
-     * Create a new event instance.
+     * Create a new event instance
      *
      * @param int $requestId
      * @return void

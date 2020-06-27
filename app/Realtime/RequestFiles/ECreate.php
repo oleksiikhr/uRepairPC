@@ -20,7 +20,7 @@ class ECreate extends ECreateBroadcast
     private int $userIdUpload;
 
     /**
-     * Create a new event instance.
+     * Create a new event instance
      *
      * @param  int  $requestId
      * @param  Collection  $data

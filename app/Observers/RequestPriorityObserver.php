@@ -2,13 +2,13 @@
 
 namespace App\Observers;
 
-use App\RequestPriority;
+use App\Models\RequestPriority;
 use App\Realtime\RequestPriorities\EDelete;
 
 class RequestPriorityObserver
 {
     /**
-     * Handle the request priority "deleted" event.
+     * Handle the request priority "deleted" event
      *
      * @param  RequestPriority  $requestPriority
      * @return void

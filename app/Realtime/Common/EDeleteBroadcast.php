@@ -12,7 +12,7 @@ abstract class EDeleteBroadcast extends EBroadcast
     protected $data;
 
     /**
-     * Create a new event instance.
+     * Create a new event instance
      *
      * @param  Model  $model
      * @return void

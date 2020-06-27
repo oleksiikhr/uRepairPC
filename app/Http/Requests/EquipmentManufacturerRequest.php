@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class EquipmentManufacturerRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the user is authorized to make this request
      *
      * @return bool
      */
@@ -18,7 +18,7 @@ class EquipmentManufacturerRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Get the validation rules that apply to the request
      *
      * @param  Request  $request
      * @return array
@@ -31,7 +31,7 @@ class EquipmentManufacturerRequest extends FormRequest
         ];
 
         if ($request->manufacturer) {
-            $rules['name'] = $rules['name'].','.$request->manufacturer;
+            $rules['name'] .= ','.$request->manufacturer->id;
         }
 
         if ($request->method === Request::METHOD_POST) {

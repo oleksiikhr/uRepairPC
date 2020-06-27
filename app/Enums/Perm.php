@@ -7,97 +7,94 @@ use ReflectionClass;
 abstract class Perm
 {
     // Profile
-    const PROFILE_EDIT = 'profile.edit';
+    public const PROFILE_EDIT = 'profile.edit';
 
     // Users
-    const USERS_VIEW_SECTION = 'users.view_section';
-    const USERS_VIEW_ALL = 'users.view_all';
-    const USERS_EDIT_ALL = 'users.edit_all';
-    const USERS_CREATE = 'users.create';
-    const USERS_DELETE_ALL = 'users.delete_all';
+    public const USERS_VIEW_SECTION = 'users.view_section';
+    public const USERS_VIEW_ALL = 'users.view_all';
+    public const USERS_EDIT_ALL = 'users.edit_all';
+    public const USERS_CREATE = 'users.create';
+    public const USERS_DELETE_ALL = 'users.delete_all';
 
     // Roles
-    const ROLES_VIEW_SECTION = 'roles.view_section';
-    const ROLES_VIEW_ALL = 'roles.view_all';
-    const ROLES_EDIT_ALL = 'roles.edit_all';
+    public const ROLES_VIEW_SECTION = 'roles.view_section';
+    public const ROLES_VIEW_ALL = 'roles.view_all';
+    public const ROLES_EDIT_ALL = 'roles.edit_all';
 
     // Equipments
-    const EQUIPMENTS_VIEW_SECTION = 'equipments.view_section';
-    const EQUIPMENTS_VIEW_ALL = 'equipments.view_all';
-    const EQUIPMENTS_VIEW_OWN = 'equipments.view_own';
-    const EQUIPMENTS_EDIT_ALL = 'equipments.edit_all';
-    const EQUIPMENTS_EDIT_OWN = 'equipments.edit_own';
-    const EQUIPMENTS_CREATE = 'equipments.create';
-    const EQUIPMENTS_DELETE_ALL = 'equipments.delete_all';
-    const EQUIPMENTS_DELETE_OWN = 'equipments.delete_own';
+    public const EQUIPMENTS_VIEW_SECTION = 'equipments.view_section';
+    public const EQUIPMENTS_VIEW_ALL = 'equipments.view_all';
+    public const EQUIPMENTS_VIEW_OWN = 'equipments.view_own';
+    public const EQUIPMENTS_EDIT_ALL = 'equipments.edit_all';
+    public const EQUIPMENTS_EDIT_OWN = 'equipments.edit_own';
+    public const EQUIPMENTS_CREATE = 'equipments.create';
+    public const EQUIPMENTS_DELETE_ALL = 'equipments.delete_all';
+    public const EQUIPMENTS_DELETE_OWN = 'equipments.delete_own';
 
     // Equipment Files
-    const EQUIPMENTS_FILES_VIEW_ALL = 'equipments.files.view_all';
-    const EQUIPMENTS_FILES_VIEW_OWN = 'equipments.files.view_own';
-    const EQUIPMENTS_FILES_DOWNLOAD_ALL = 'equipments.files.download_all';
-    const EQUIPMENTS_FILES_DOWNLOAD_OWN = 'equipments.files.download_own';
-    const EQUIPMENTS_FILES_EDIT_ALL = 'equipments.files.edit_all';
-    const EQUIPMENTS_FILES_EDIT_OWN = 'equipments.files.edit_own';
-    const EQUIPMENTS_FILES_CREATE = 'equipments.files.create';
-    const EQUIPMENTS_FILES_DELETE_ALL = 'equipments.files.delete_all';
-    const EQUIPMENTS_FILES_DELETE_OWN = 'equipments.files.delete_own';
+    public const EQUIPMENTS_FILES_VIEW_ALL = 'equipments.files.view_all';
+    public const EQUIPMENTS_FILES_VIEW_OWN = 'equipments.files.view_own';
+    public const EQUIPMENTS_FILES_DOWNLOAD_ALL = 'equipments.files.download_all';
+    public const EQUIPMENTS_FILES_DOWNLOAD_OWN = 'equipments.files.download_own';
+    public const EQUIPMENTS_FILES_EDIT_ALL = 'equipments.files.edit_all';
+    public const EQUIPMENTS_FILES_EDIT_OWN = 'equipments.files.edit_own';
+    public const EQUIPMENTS_FILES_CREATE = 'equipments.files.create';
+    public const EQUIPMENTS_FILES_DELETE_ALL = 'equipments.files.delete_all';
+    public const EQUIPMENTS_FILES_DELETE_OWN = 'equipments.files.delete_own';
 
     // Equipments Config
-    const EQUIPMENTS_CONFIG_VIEW_SECTION = 'equipments.config.view_section';
-    const EQUIPMENTS_CONFIG_VIEW_ALL = 'equipments.config.view_all';
-    const EQUIPMENTS_CONFIG_EDIT_ALL = 'equipments.config.edit_all';
-    const EQUIPMENTS_CONFIG_EDIT_OWN = 'equipments.config.edit_own';
-    const EQUIPMENTS_CONFIG_CREATE = 'equipments.config.create';
-    const EQUIPMENTS_CONFIG_DELETE_ALL = 'equipments.config.delete_all';
-    const EQUIPMENTS_CONFIG_DELETE_OWN = 'equipments.config.delete_own';
+    public const EQUIPMENTS_CONFIG_VIEW_SECTION = 'equipments.config.view_section';
+    public const EQUIPMENTS_CONFIG_VIEW_ALL = 'equipments.config.view_all';
+    public const EQUIPMENTS_CONFIG_EDIT_ALL = 'equipments.config.edit_all';
+    public const EQUIPMENTS_CONFIG_EDIT_OWN = 'equipments.config.edit_own';
+    public const EQUIPMENTS_CONFIG_CREATE = 'equipments.config.create';
+    public const EQUIPMENTS_CONFIG_DELETE_ALL = 'equipments.config.delete_all';
+    public const EQUIPMENTS_CONFIG_DELETE_OWN = 'equipments.config.delete_own';
 
     // Requests
-    const REQUESTS_VIEW_SECTION = 'requests.view_section';
-    const REQUESTS_VIEW_ALL = 'requests.view_all';
-    const REQUESTS_VIEW_OWN = 'requests.view_own';
-    const REQUESTS_VIEW_ASSIGN = 'requests.view_assign';
-    const REQUESTS_EDIT_ALL = 'requests.edit_all';
-    const REQUESTS_EDIT_OWN = 'requests.edit_own';
-    const REQUESTS_EDIT_ASSIGN = 'requests.edit_assign';
-    const REQUESTS_CREATE = 'requests.create';
-    const REQUESTS_DELETE_ALL = 'requests.delete_all';
-    const REQUESTS_DELETE_OWN = 'requests.delete_own';
-    const REQUESTS_DELETE_ASSIGN = 'requests.delete_assign';
+    public const REQUESTS_VIEW_SECTION = 'requests.view_section';
+    public const REQUESTS_VIEW_ALL = 'requests.view_all';
+    public const REQUESTS_VIEW_OWN = 'requests.view_own';
+    public const REQUESTS_VIEW_ASSIGN = 'requests.view_assign';
+    public const REQUESTS_EDIT_ALL = 'requests.edit_all';
+    public const REQUESTS_EDIT_OWN = 'requests.edit_own';
+    public const REQUESTS_EDIT_ASSIGN = 'requests.edit_assign';
+    public const REQUESTS_CREATE = 'requests.create';
+    public const REQUESTS_DELETE_ALL = 'requests.delete_all';
+    public const REQUESTS_DELETE_OWN = 'requests.delete_own';
+    public const REQUESTS_DELETE_ASSIGN = 'requests.delete_assign';
 
     // Requests Comments
-    const REQUESTS_COMMENTS_VIEW_ALL = 'requests.comments.view_all';
-    const REQUESTS_COMMENTS_EDIT_ALL = 'requests.comments.edit_all';
-    const REQUESTS_COMMENTS_EDIT_OWN = 'requests.comments.edit_own';
-    const REQUESTS_COMMENTS_CREATE = 'requests.comments.create';
-    const REQUESTS_COMMENTS_DELETE_ALL = 'requests.comments.delete_all';
-    const REQUESTS_COMMENTS_DELETE_OWN = 'requests.comments.delete_own';
+    public const REQUESTS_COMMENTS_VIEW_ALL = 'requests.comments.view_all';
+    public const REQUESTS_COMMENTS_EDIT_ALL = 'requests.comments.edit_all';
+    public const REQUESTS_COMMENTS_EDIT_OWN = 'requests.comments.edit_own';
+    public const REQUESTS_COMMENTS_CREATE = 'requests.comments.create';
+    public const REQUESTS_COMMENTS_DELETE_ALL = 'requests.comments.delete_all';
+    public const REQUESTS_COMMENTS_DELETE_OWN = 'requests.comments.delete_own';
 
     // Requests Files
-    const REQUESTS_FILES_VIEW_ALL = 'requests.files.view_all';
-    const REQUESTS_FILES_VIEW_OWN = 'requests.files.view_own';
-    const REQUESTS_FILES_DOWNLOAD_ALL = 'requests.files.download_all';
-    const REQUESTS_FILES_DOWNLOAD_OWN = 'requests.files.download_own';
-    const REQUESTS_FILES_EDIT_ALL = 'requests.files.edit_all';
-    const REQUESTS_FILES_EDIT_OWN = 'requests.files.edit_own';
-    const REQUESTS_FILES_CREATE = 'requests.files.create';
-    const REQUESTS_FILES_DELETE_ALL = 'requests.files.delete_all';
-    const REQUESTS_FILES_DELETE_OWN = 'requests.files.delete_own';
+    public const REQUESTS_FILES_VIEW_ALL = 'requests.files.view_all';
+    public const REQUESTS_FILES_VIEW_OWN = 'requests.files.view_own';
+    public const REQUESTS_FILES_DOWNLOAD_ALL = 'requests.files.download_all';
+    public const REQUESTS_FILES_DOWNLOAD_OWN = 'requests.files.download_own';
+    public const REQUESTS_FILES_EDIT_ALL = 'requests.files.edit_all';
+    public const REQUESTS_FILES_EDIT_OWN = 'requests.files.edit_own';
+    public const REQUESTS_FILES_CREATE = 'requests.files.create';
+    public const REQUESTS_FILES_DELETE_ALL = 'requests.files.delete_all';
+    public const REQUESTS_FILES_DELETE_OWN = 'requests.files.delete_own';
 
     // Requests Config
-    const REQUESTS_CONFIG_VIEW_SECTION = 'requests.config.view_section';
-    const REQUESTS_CONFIG_VIEW_ALL = 'requests.config.view_all';
-    const REQUESTS_CONFIG_EDIT_ALL = 'requests.config.edit_all';
-    const REQUESTS_CONFIG_EDIT_OWN = 'requests.config.edit_own';
-    const REQUESTS_CONFIG_CREATE = 'requests.config.create';
-    const REQUESTS_CONFIG_DELETE_ALL = 'requests.config.delete_all';
-    const REQUESTS_CONFIG_DELETE_OWN = 'requests.config.delete_own';
+    public const REQUESTS_CONFIG_VIEW_SECTION = 'requests.config.view_section';
+    public const REQUESTS_CONFIG_VIEW_ALL = 'requests.config.view_all';
+    public const REQUESTS_CONFIG_EDIT_ALL = 'requests.config.edit_all';
+    public const REQUESTS_CONFIG_EDIT_OWN = 'requests.config.edit_own';
+    public const REQUESTS_CONFIG_CREATE = 'requests.config.create';
+    public const REQUESTS_CONFIG_DELETE_ALL = 'requests.config.delete_all';
+    public const REQUESTS_CONFIG_DELETE_OWN = 'requests.config.delete_own';
 
     // Global
-    const GLOBAL_SETTINGS_EDIT = 'global.settings.edit';
-    const GLOBAL_MANIFEST_EDIT = 'global.manifest.edit';
-
-    // Disable access to resource
-    const DISABLE = '-';
+    public const GLOBAL_SETTINGS_EDIT = 'global.settings.edit';
+    public const GLOBAL_MANIFEST_EDIT = 'global.manifest.edit';
 
     /**
      * @return array

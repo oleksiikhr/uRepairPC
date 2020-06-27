@@ -1,30 +1,33 @@
 <?php declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
-use App\Request as RequestModel;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Request as RequestModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class RequestComment extends Model
+class RequestComment extends BaseModel
 {
     use SoftDeletes;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
+     * @inheritDoc
      */
     protected $fillable = [
         'message',
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function request(): BelongsTo
     {
         return $this->belongsTo(RequestModel::class);

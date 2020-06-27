@@ -2,56 +2,36 @@
 
 namespace App\Providers;
 
-use App\Role;
-use App\User;
-use App\Request;
-use App\Equipment;
-use App\RequestType;
-use App\EquipmentType;
-use App\RequestStatus;
-use App\EquipmentModel;
-use App\RequestPriority;
-use App\EquipmentManufacturer;
-use App\Observers\RoleObserver;
-use App\Observers\UserObserver;
-use App\Observers\RequestObserver;
-use App\Observers\EquipmentObserver;
-use App\Observers\RequestTypeObserver;
 use Illuminate\Support\ServiceProvider;
-use App\Observers\EquipmentTypeObserver;
-use App\Observers\RequestStatusObserver;
-use App\Observers\EquipmentModelObserver;
-use App\Observers\RequestPriorityObserver;
-use App\Observers\EquipmentManufacturerObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Register any application services
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }
 
     /**
-     * Bootstrap any application services.
+     * Bootstrap any application services
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        User::observe(UserObserver::class);
-        Role::observe(RoleObserver::class);
-        Equipment::observe(EquipmentObserver::class);
-        EquipmentType::observe(EquipmentTypeObserver::class);
-        EquipmentModel::observe(EquipmentModelObserver::class);
-        EquipmentManufacturer::observe(EquipmentManufacturerObserver::class);
-        Request::observe(RequestObserver::class);
-        RequestType::observe(RequestTypeObserver::class);
-        RequestPriority::observe(RequestPriorityObserver::class);
-        RequestStatus::observe(RequestStatusObserver::class);
+        \App\Models\User::observe(\App\Observers\UserObserver::class);
+        \App\Models\Role::observe(\App\Observers\RoleObserver::class);
+        \App\Models\Request::observe(\App\Observers\RequestObserver::class);
+        \App\Models\RequestType::observe(\App\Observers\RequestTypeObserver::class);
+        \App\Models\RequestStatus::observe(\App\Observers\RequestStatusObserver::class);
+        \App\Models\RequestPriority::observe(\App\Observers\RequestPriorityObserver::class);
+        \App\Models\Equipment::observe(\App\Observers\EquipmentObserver::class);
+        \App\Models\EquipmentType::observe(\App\Observers\EquipmentTypeObserver::class);
+        \App\Models\EquipmentModel::observe(\App\Observers\EquipmentModelObserver::class);
+        \App\Models\EquipmentManufacturer::observe(\App\Observers\EquipmentManufacturerObserver::class);
     }
 }

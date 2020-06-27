@@ -15,7 +15,7 @@ abstract class EJoinBroadcast extends EBroadcast
     protected bool $sync;
 
     /**
-     * Create a new event instance.
+     * Create a new event instance
      *
      * @param  array  $rooms
      * @param  bool  $sync

@@ -33,7 +33,7 @@ abstract class EBroadcast implements ShouldQueue, IBroadcastWebsocket
     }
 
     /**
-     * Join to this room after broadcast.
+     * Join to this room after broadcast
      *
      * @return array
      */

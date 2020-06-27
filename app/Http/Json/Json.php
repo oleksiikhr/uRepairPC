@@ -102,7 +102,7 @@ abstract class Json implements IJson
     }
 
     /**
-     * Get data from file.
+     * Get data from file
      *
      * @return null|array
      */

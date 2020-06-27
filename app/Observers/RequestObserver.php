@@ -2,13 +2,13 @@
 
 namespace App\Observers;
 
-use App\Request;
+use App\Models\Request;
 use App\Realtime\Requests\EDelete;
 
 class RequestObserver
 {
     /**
-     * Handle the request "deleted" event.
+     * Handle the request "deleted" event
      *
      * @param  Request  $request
      * @return void

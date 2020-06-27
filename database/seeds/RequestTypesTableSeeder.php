@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-use App\RequestType;
+use App\Models\RequestType;
 use Illuminate\Database\Seeder;
 
 class RequestTypesTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Run the database seeds
      *
      * @return void
      */

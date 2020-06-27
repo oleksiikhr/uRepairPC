@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Stat;
 
 use App\Enums\Perm;
-use Illuminate\Http\Request;
 use App\Http\Json\GlobalFile;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -14,12 +13,9 @@ use App\Http\Resources\GlobalJsonResource;
 class GlobalController extends Controller
 {
     /**
-     * Add middleware depends on user permissions.
-     *
-     * @param  Request  $request
-     * @return array
+     * @inheritDoc
      */
-    public function permissions(Request $request): array
+    public function permissions(): array
     {
         return [
             'store' => Perm::GLOBAL_SETTINGS_EDIT,
@@ -27,7 +23,7 @@ class GlobalController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource
      *
      * @return JsonResponse
      */
@@ -39,7 +35,7 @@ class GlobalController extends Controller
     }
 
     /**
-     * Update all resources in storage.
+     * Update all resources in storage
      *
      * @param  GlobalRequest  $request
      * @return JsonResponse

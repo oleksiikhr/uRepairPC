@@ -14,7 +14,7 @@ class EUpdate extends EUpdateBroadcast
     private int $equipmentId;
 
     /**
-     * Create a new event instance.
+     * Create a new event instance
      *
      * @param  int  $equipmentId
      * @param  int  $id

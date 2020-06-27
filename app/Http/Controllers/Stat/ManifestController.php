@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Stat;
 
 use App\Enums\Perm;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Json\ManifestFile;
 use App\Http\Helpers\FileHelper;
 use Illuminate\Http\JsonResponse;
@@ -16,17 +15,14 @@ use App\Http\Resources\ManifestJsonResource;
 class ManifestController extends Controller
 {
     /**
-     * Keeps default images.
+     * Keeps default images
      */
-    const PROTECT_FOLDER = 'images';
+    public const PROTECT_FOLDER = 'images';
 
     /**
-     * Add middleware depends on user permissions.
-     *
-     * @param  Request  $request
-     * @return array
+     * @inheritDoc
      */
-    public function permissions(Request $request): array
+    public function permissions(): array
     {
         return [
             'store' => Perm::GLOBAL_MANIFEST_EDIT,
@@ -34,7 +30,7 @@ class ManifestController extends Controller
     }
 
     /**
-     * Display a manifest.json.
+     * Display a manifest.json
      *
      * @return JsonResponse
      */
@@ -46,7 +42,7 @@ class ManifestController extends Controller
     }
 
     /**
-     * Update all resources in storage.
+     * Update all resources in storage
      *
      * @param  ManifestRequest  $request
      * @return JsonResponse

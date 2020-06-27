@@ -1,41 +1,37 @@
 <?php declare(strict_types=1);
 
-namespace App\Traits;
+namespace App\Models\Concerns;
 
-use App\Role;
+use App\Models\Role;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-trait ModelHasPermissionsTrait
+trait HasPermissions
 {
     /**
      * @var int seconds
-     * @default 3 days
      */
-    protected $permissionCacheTime = 60 * 60 * 24 * 3;
+    protected int $permissionCacheTime = 60 * 60 * 24 * 3; // 3 days
 
     /**
      * @var string
      */
-    protected $permissionCacheKey = 'permissions';
+    protected string $permissionCacheKey = 'permissions';
 
     /**
-     * @var Collection
-     */
-    private $permissionNames;
-
-    /**
-     * @param  {string|array}  $name
+     * @param  array|string  $names
      * @return array
      */
     public function assignRolesByName($names): array
     {
-        $names = is_array($names) ? $names : [$names];
-
         $query = Role::query();
-        foreach ($names as $name) {
+
+        foreach (Arr::wrap($names) as $name) {
             $query->orWhere('name', $name);
         }
+
         $roles = $query->get();
 
         Cache::forget($this->getCacheKey());
@@ -44,24 +40,22 @@ trait ModelHasPermissionsTrait
     }
 
     /**
-     * @param  {string|array|Collection}  $ids
+     * @param  Collection|array|string  $ids
      * @return array
      */
     public function assignRolesById($ids): array
     {
         if ($ids instanceof Collection) {
             $ids = $ids->toArray();
-        } elseif (! is_array($ids)) {
-            $ids = [$ids];
         }
 
         Cache::forget($this->getCacheKey());
 
-        return $this->roles()->sync($ids);
+        return $this->roles()->sync(Arr::wrap($ids));
     }
 
     /**
-     * Return all the permissions the model has via roles.
+     * Return all the permissions the model has via roles
      *
      * @return Collection
      */
@@ -70,43 +64,40 @@ trait ModelHasPermissionsTrait
         return Cache::remember($this->getCacheKey(), $this->permissionCacheTime, function () {
             $this->loadMissing(['roles', 'roles.permissions']);
 
-            return $this->roles->flatMap(function ($role) {
-                return $role->permissions;
-            })->sort()->values();
+            return $this->roles
+                ->flatMap(static fn (Role $role) => $role->permissions)
+                ->sort()
+                ->values();
         });
     }
 
     /**
-     * Get names of permissions.
+     * Get names of permissions
+     *
      * @return array
      */
     public function getAllPermNames(): array
     {
-        if (! $this->permissionNames) {
-            $this->permissionNames = $this->getAllPerm()
-                ->pluck('name')
-                ->toArray();
-        }
-
-        return $this->permissionNames;
+        return $this->getAllPerm()
+            ->pluck('name')
+            ->toArray();
     }
 
     /**
-     * @param  {array|string}  $permissions
+     * @param  array|string  $permissions
      * @return bool
      */
     public function perm($permissions): bool
     {
-        $permissions = is_array($permissions) ? $permissions : [$permissions];
         $userPermissions = $this->getAllPermNames();
 
-        foreach ($permissions as $permission) {
+        foreach (Arr::wrap($permissions) as $permission) {
             // Check boolean
             if (in_array($permission, ['1', 1, true], true)) {
                 return true;
             }
 
-            if (in_array($permission, $userPermissions)) {
+            if (in_array($permission, $userPermissions, true)) {
                 return true;
             }
         }
@@ -115,10 +106,19 @@ trait ModelHasPermissionsTrait
     }
 
     /**
-     * Get key for Cache permissions.
+     * @return BelongsToMany
+     */
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    /**
+     * Get key for Cache permissions
+     *
      * @return string
      */
-    private function getCacheKey(): string
+    protected function getCacheKey(): string
     {
         return $this->permissionCacheKey.'.'.$this->getTable().'.'.$this->id;
     }

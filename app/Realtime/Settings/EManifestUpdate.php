@@ -7,7 +7,7 @@ use App\Realtime\Common\EUpdateBroadcast;
 class EManifestUpdate extends EUpdateBroadcast
 {
     /**
-     * Create a new event instance.
+     * Create a new event instance
      *
      * @param  mixed  $data
      * @return void

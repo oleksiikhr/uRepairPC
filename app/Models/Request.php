@@ -1,23 +1,24 @@
 <?php declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
 use App\Enums\Perm;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Request extends Model
+class Request extends BaseModel
 {
     use SoftDeletes;
 
-    /** @var array */
-    const ALLOW_COLUMNS_SEARCH = [
+    /**
+     * @var array
+     */
+    public const ALLOW_COLUMNS_SEARCH = [
         'id',
         'user_name',
         'assign_name',
@@ -30,8 +31,10 @@ class Request extends Model
         'created_at',
     ];
 
-    /** @var array */
-    const ALLOW_COLUMNS_SORT = [
+    /**
+     * @var array
+     */
+    public const ALLOW_COLUMNS_SORT = [
         'id',
         'title',
         'location',
@@ -41,11 +44,11 @@ class Request extends Model
     ];
 
     /**
-     * Correctly display ORM request.
+     * Correctly display ORM request
      *
      * @var array
      */
-    const SEARCH_RELATIONSHIP = [
+    public const SEARCH_RELATIONSHIP = [
         'user_name' => 'users.last_name',
         'assign_name' => 'users_assign.last_name',
         'equipment_serial_number' => 'equipments.serial_number',
@@ -54,18 +57,16 @@ class Request extends Model
     ];
 
     /**
-     * Correctly display ORM request.
+     * Correctly display ORM request
      *
      * @var array
      */
-    const SORT_RELATIONSHIP = [
+    public const SORT_RELATIONSHIP = [
         'priority_name' => 'request_priorities.value',
     ];
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
+     * @inheritDoc
      */
     protected $fillable = [
         'title',
@@ -107,72 +108,73 @@ class Request extends Model
     }
 
     /**
-     * @param  self  $request
+     * @param  Builder  $query
      * @param  User  $user
-     * @return bool
+     * @return Builder
      */
-    public static function hasAccessByPerm($request, $user): bool
+    public function scopeFilterByUser(Builder $query, User $user): Builder
     {
-        if (! $user->perm(Perm::REQUESTS_VIEW_ALL)) {
-            if (! $user->perm(Perm::REQUESTS_VIEW_OWN)) {
-                return Gate::allows('assign', $request);
-            }
-            if (! $user->perm(Perm::REQUESTS_VIEW_ASSIGN)) {
-                return Gate::allows('owner', $request);
-            }
-
-            return Gate::allows('owner', $request) || Gate::allows('assign', $request);
+        if ($user->perm(Perm::REQUESTS_VIEW_ALL)) {
+            return $query;
         }
 
-        return true;
+        if (! $user->perm(Perm::REQUESTS_VIEW_OWN)) {
+            $query->where('requests.assign_id', $user->id);
+        } elseif (! $user->perm(Perm::REQUESTS_VIEW_ASSIGN)) {
+            $query->where('requests.user_id', $user->id);
+        } else {
+            $query->where(static function (Builder $query) use ($user) {
+                $query->where('requests.user_id', $user->id);
+                $query->orWhere('requests.assign_id', $user->id);
+            });
+        }
+
+        return $query;
     }
 
     /**
-     * @param  $query
-     * @param  User  $user
-     * @return void
+     * @return BelongsTo
      */
-    public static function buildQueryByPerm($query, $user): void
-    {
-        if (! $user->perm(Perm::REQUESTS_VIEW_ALL)) {
-            if (! $user->perm(Perm::REQUESTS_VIEW_OWN)) {
-                $query->where('requests.assign_id', $user->id);
-            } elseif (! $user->perm(Perm::REQUESTS_VIEW_ASSIGN)) {
-                $query->where('requests.user_id', $user->id);
-            } else {
-                $query->where(function ($query) use ($user) {
-                    $query->where('requests.user_id', $user->id);
-                    $query->orWhere('requests.assign_id', $user->id);
-                });
-            }
-        }
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function equipment(): BelongsTo
     {
         return $this->belongsTo(Equipment::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function priority(): BelongsTo
     {
         return $this->belongsTo(RequestPriority::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function status(): BelongsTo
     {
         return $this->belongsTo(RequestStatus::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function type(): BelongsTo
     {
         return $this->belongsTo(RequestType::class);
     }
 
+    /**
+     * @return HasMany
+     */
     public function comments(): HasMany
     {
         return $this->hasMany(RequestComment::class)
@@ -184,6 +186,9 @@ class Request extends Model
             ->leftJoin('users', 'users.id', '=', 'request_comments.user_id');
     }
 
+    /**
+     * @return BelongsToMany
+     */
     public function files(): BelongsToMany
     {
         return $this->belongsToMany(File::class, 'request_file')

@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-use App\EquipmentType;
+use App\Models\EquipmentType;
 use Illuminate\Database\Seeder;
 
 class EquipmentTypesTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Run the database seeds
      *
      * @return void
      */

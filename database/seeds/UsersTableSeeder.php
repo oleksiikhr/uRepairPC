@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Run the database seeds
      *
      * @return void
      */
@@ -22,9 +22,9 @@ class UsersTableSeeder extends Seeder
         $user->assignRolesById(1); // Admin
 
         if (config('app.env') === 'local') {
-            factory(App\User::class, 70)
+            factory(User::class, 70)
                 ->create()
-                ->each(function ($user) {
+                ->each(static function ($user) {
                     $user->assignRolesById(2); // User
                 });
         }

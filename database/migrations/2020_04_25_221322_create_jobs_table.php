@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateJobsTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Run the migrations
      *
      * @return void
      */
@@ -25,7 +25,7 @@ class CreateJobsTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse the migrations
      *
      * @return void
      */

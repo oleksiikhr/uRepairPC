@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\AuthRequest;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -11,18 +10,15 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthController extends Controller
 {
     /**
-     * Add middleware depends on user permissions.
-     *
-     * @param  Request  $request
-     * @return array
+     * @inheritDoc
      */
-    public function permissions(Request $request): array
+    public function permissions(): array
     {
         return [];
     }
 
     /**
-     * Get a current user with permissions.
+     * Get a current user with permissions
      *
      * @return JsonResponse
      */
@@ -37,7 +33,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Auth the user by login and password.
+     * Auth the user by login and password
      *
      * @param  AuthRequest  $request
      * @return JsonResponse
@@ -59,7 +55,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Refresh token to user.
+     * Refresh token to user
      *
      * @return JsonResponse
      */
@@ -88,7 +84,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Invalidate current JWT Token.
+     * Invalidate current JWT Token
      *
      * @return JsonResponse
      */

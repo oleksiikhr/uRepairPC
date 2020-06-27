@@ -1,19 +1,21 @@
 <?php declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Equipment extends Model
+class Equipment extends BaseModel
 {
     use SoftDeletes;
 
     /**
      * @var array
      */
-    const ALLOW_COLUMNS_SEARCH = [
+    public const ALLOW_COLUMNS_SEARCH = [
         'id',
         'serial_number',
         'inventory_number',
@@ -27,7 +29,7 @@ class Equipment extends Model
     /**
      * @var array
      */
-    const ALLOW_COLUMNS_SORT = [
+    public const ALLOW_COLUMNS_SORT = [
         'id',
         'serial_number',
         'inventory_number',
@@ -39,27 +41,23 @@ class Equipment extends Model
     ];
 
     /**
-     * Correctly display ORM request.
+     * Correctly display ORM request
      *
      * @var array
      */
-    const SEARCH_RELATIONSHIP = [
+    public const SEARCH_RELATIONSHIP = [
         'manufacturer_name' => 'equipment_manufacturers.name',
         'model_name' => 'equipment_models.name',
         'type_name' => 'equipment_types.name',
     ];
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
+     * @inheritDoc
      */
     protected $table = 'equipments';
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
+     * @inheritDoc
      */
     protected $fillable = [
         'serial_number',
@@ -73,9 +71,9 @@ class Equipment extends Model
     /**
      * @return Builder
      */
-    public static function querySelectJoins()
+    public static function querySelectJoins(): Builder
     {
-        return self::select(
+        return self::query()->select(
             'equipments.*',
             'equipment_types.name as type_name',
             'equipment_manufacturers.name as manufacturer_name',
@@ -86,27 +84,42 @@ class Equipment extends Model
             ->leftJoin('equipment_models', 'equipments.model_id', '=', 'equipment_models.id');
     }
 
-    public function manufacturer()
+    /**
+     * @return BelongsTo
+     */
+    public function manufacturer(): BelongsTo
     {
         return $this->belongsTo(EquipmentManufacturer::class);
     }
 
-    public function type()
+    /**
+     * @return BelongsTo
+     */
+    public function type(): BelongsTo
     {
         return $this->belongsTo(EquipmentType::class);
     }
 
-    public function model()
+    /**
+     * @return BelongsTo
+     */
+    public function model(): BelongsTo
     {
         return $this->belongsTo(EquipmentModel::class);
     }
 
-    public function requests()
+    /**
+     * @return HasMany
+     */
+    public function requests(): HasMany
     {
         return $this->hasMany(Request::class);
     }
 
-    public function files()
+    /**
+     * @return BelongsToMany
+     */
+    public function files(): BelongsToMany
     {
         return $this->belongsToMany(File::class, 'equipment_file')
             ->select(

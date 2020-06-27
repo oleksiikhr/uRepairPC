@@ -3,13 +3,14 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 
 class Permission
 {
     /**
-     * Handle an incoming request.
+     * Handle an incoming request
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  \Closure  $next
      * @param  string $permission
      * @return mixed
@@ -25,10 +26,10 @@ class Permission
 
         $permissions = is_array($permission) ? $permission : explode('|', $permission);
 
-        if ($user->perm($permissions)) {
-            return $next($request);
+        if (! $user->perm($permissions)) {
+            return response()->json(['message' => __('app.middleware.no_permission')], 422);
         }
 
-        return response()->json(['message' => __('app.middleware.no_permission')], 422);
+        return $next($request);
     }
 }

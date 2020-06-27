@@ -2,39 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Role;
 use App\Enums\Perm;
-use App\Realtime\Roles\EJoin;
+use App\Models\Role;
 use Illuminate\Http\Request;
+use App\Realtime\Roles\EJoin;
 use App\Realtime\Roles\ECreate;
 use App\Realtime\Roles\EUpdate;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\RoleRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class RoleController extends Controller
 {
     /**
-     * Add middleware depends on user permissions.
-     *
-     * @param  Request  $request
-     * @return array
+     * @inheritDoc
      */
-    public function permissions(Request $request): array
+    public function permissions(): array
     {
-        $requestId = (int) $request->route('role');
-
         return [
             'index' => Perm::ROLES_VIEW_ALL,
             'show' => Perm::ROLES_VIEW_ALL,
             'store' => Perm::ROLES_EDIT_ALL,
             'update' => Perm::ROLES_EDIT_ALL,
-            'destroy' => $requestId === 1 ? Perm::DISABLE : Perm::ROLES_EDIT_ALL,
-            'updatePermissions' => $requestId === 1 ? Perm::DISABLE : Perm::ROLES_EDIT_ALL,
+            'destroy' => Perm::ROLES_EDIT_ALL,
+            'updatePermissions' => Perm::ROLES_EDIT_ALL,
         ];
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource
      *
      * @param  RoleRequest  $request
      * @return JsonResponse
@@ -48,9 +44,9 @@ class RoleController extends Controller
         }
 
         // Search
-        if ($request->has('search') && $request->has('columns') && ! empty($request->columns)) {
+        if ($request->has('search') && $request->exists('columns')) {
             foreach ($request->columns as $column) {
-                $query->orWhere($column, 'LIKE', '%'.$request->search.'%');
+                $query->orWhere($column, 'LIKE', $request->search.'%');
             }
         }
 
@@ -59,26 +55,22 @@ class RoleController extends Controller
             $query->orderBy($request->sortColumn, $request->sortOrder === 'descending' ? 'desc' : 'asc');
         }
 
-        $list = $query->paginate($request->count ?? self::PAGINATE_DEFAULT);
+        $list = $query->paginate($request->count);
         EJoin::dispatchAfterResponse(...$list->items());
 
         return response()->json($list);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource in storage
      *
      * @param  RoleRequest  $request
      * @return JsonResponse
      */
     public function store(RoleRequest $request): JsonResponse
     {
-        $role = new Role;
-        $role->fill($request->all());
-
-        if (! $role->save()) {
-            return $this->responseDatabaseSaveError();
-        }
+        $role = new Role($request->validated());
+        $role->save();
 
         ECreate::dispatchAfterResponse($role);
 
@@ -89,14 +81,14 @@ class RoleController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resource
      *
-     * @param  int  $id
+     * @param  Role  $role
      * @return JsonResponse
      */
-    public function show(int $id): JsonResponse
+    public function show(Role $role): JsonResponse
     {
-        $role = Role::with('permissions')->findOrFail($id);
+        $role->load('permissions');
 
         EJoin::dispatchAfterResponse($role);
 
@@ -107,20 +99,16 @@ class RoleController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage
      *
      * @param  RoleRequest  $request
-     * @param  int  $id
+     * @param  Role  $role
      * @return JsonResponse
      */
-    public function update(RoleRequest $request, int $id): JsonResponse
+    public function update(RoleRequest $request, Role $role): JsonResponse
     {
-        $role = Role::findOrFail($id);
-        $role->fill($request->all());
-
-        if (! $role->save()) {
-            return $this->responseDatabaseSaveError();
-        }
+        $role->fill($request->validated());
+        $role->save();
 
         EUpdate::dispatchAfterResponse($role->id, $role);
 
@@ -131,23 +119,26 @@ class RoleController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage
      *
      * @param  Request  $request
-     * @param  int  $id
+     * @param  Role  $role
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function updatePermissions(Request $request, int $id): JsonResponse
+    public function updatePermissions(Request $request, Role $role): JsonResponse
     {
+        $this->authorize('updatePermissions', $role);
+
+        // TODO Request class
         $request->validate([
             'permissions' => 'array',
             'permissions.*' => 'string',
         ]);
 
-        $role = Role::findOrFail($id);
         $role->syncPermissions($request->permissions);
 
-        EUpdate::dispatchAfterResponse($id, $role);
+        EUpdate::dispatchAfterResponse($role->id, $role);
 
         return response()->json([
             'message' => __('app.roles.update_permissions'),
@@ -156,18 +147,18 @@ class RoleController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from storage
      *
-     * @param  int  $id
+     * @param  Role  $role
      * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws \Exception
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(Role $role): JsonResponse
     {
-        $role = Role::findOrFail($id);
+        $this->authorize('delete', $role);
 
-        if (! $role->delete()) {
-            return $this->responseDatabaseDestroyError();
-        }
+        $role->delete();
 
         return response()->json([
             'message' => __('app.roles.destroy'),

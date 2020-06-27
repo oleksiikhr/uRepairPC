@@ -2,13 +2,13 @@
 
 namespace App\Observers;
 
-use App\Role;
+use App\Models\Role;
 use App\Realtime\Roles\EDelete;
 
 class RoleObserver
 {
     /**
-     * Handle the role "deleted" event.
+     * Handle the role "deleted" event
      *
      * @param  Role  $role
      * @return void

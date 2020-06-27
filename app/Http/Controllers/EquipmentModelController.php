@@ -2,34 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Enums\Perm;
-use App\EquipmentModel;
-use Illuminate\Http\Request;
+use App\Models\EquipmentModel;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Gate;
 use App\Realtime\EquipmentModels\EJoin;
 use App\Realtime\EquipmentModels\ECreate;
 use App\Realtime\EquipmentModels\EUpdate;
 use App\Http\Requests\EquipmentModelRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class EquipmentModelController extends Controller
 {
     /**
-     * @var User
+     * @inheritDoc
      */
-    private $user;
-
-    /**
-     * Add middleware depends on user permissions.
-     *
-     * @param  Request  $request
-     * @return array
-     */
-    public function permissions(Request $request): array
+    public function permissions(): array
     {
-        $this->user = auth()->user();
-
         return [
             'index' => Perm::EQUIPMENTS_CONFIG_VIEW_ALL,
             'show' => Perm::EQUIPMENTS_CONFIG_VIEW_ALL,
@@ -40,7 +28,7 @@ class EquipmentModelController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource
      *
      * @return JsonResponse
      */
@@ -54,40 +42,34 @@ class EquipmentModelController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource in storage
      *
      * @param  EquipmentModelRequest  $request
      * @return JsonResponse
      */
     public function store(EquipmentModelRequest $request): JsonResponse
     {
-        $equipmentModel = new EquipmentModel;
-        $equipmentModel->fill($request->all());
-        $equipmentModel->user_id = $this->user->id;
+        $model = new EquipmentModel($request->validated());
+        $model->user_id = auth()->id();
+        $model->save();
 
-        if (! $equipmentModel->save()) {
-            return $this->responseDatabaseSaveError();
-        }
-
-        $equipmentModel = EquipmentModel::querySelectJoins()->findOrFail($equipmentModel->id);
-        ECreate::dispatchAfterResponse($equipmentModel);
+        $model = EquipmentModel::querySelectJoins()->findOrFail($model->id);
+        ECreate::dispatchAfterResponse($model);
 
         return response()->json([
-            'message' => __('app.equipment_model.store.store'),
-            'equipment_model' => $equipmentModel,
+            'message' => __('app.equipment_model.store'),
+            'equipment_model' => $model,
         ]);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resource
      *
-     * @param  int  $id
+     * @param  EquipmentModel  $equipmentModel
      * @return JsonResponse
      */
-    public function show(int $id): JsonResponse
+    public function show(EquipmentModel $equipmentModel): JsonResponse
     {
-        $equipmentModel = EquipmentModel::querySelectJoins()->findOrFail($id);
-
         EJoin::dispatchAfterResponse($equipmentModel);
 
         return response()->json([
@@ -97,58 +79,42 @@ class EquipmentModelController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage
      *
      * @param  EquipmentModelRequest  $request
-     * @param  int  $id
+     * @param  EquipmentModel  $model
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function update(EquipmentModelRequest $request, int $id): JsonResponse
+    public function update(EquipmentModelRequest $request, EquipmentModel $model): JsonResponse
     {
-        $equipmentModel = EquipmentModel::findOrFail($id);
+        $this->authorize('update', $model);
 
-        // Edit only own equipments config
-        if (! $this->user->perm(Perm::EQUIPMENTS_CONFIG_EDIT_ALL) &&
-            Gate::denies('owner', $equipmentModel)
-        ) {
-            return $this->responseNoPermission();
-        }
+        $model->fill($request->validated());
+        $model->save();
 
-        $equipmentModel->fill($request->all());
-
-        if (! $equipmentModel->save()) {
-            return $this->responseDatabaseSaveError();
-        }
-
-        $equipmentModel = EquipmentModel::querySelectJoins()->findOrFail($equipmentModel->id);
-        EUpdate::dispatchAfterResponse($equipmentModel->id, $equipmentModel);
+        $model = EquipmentModel::querySelectJoins()->findOrFail($model->id);
+        EUpdate::dispatchAfterResponse($model->id, $model);
 
         return response()->json([
             'message' => __('app.equipment_model.update'),
-            'equipment_model' => $equipmentModel,
+            'equipment_model' => $model,
         ]);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from storage
      *
-     * @param  int  $id
+     * @param  EquipmentModel  $model
      * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws \Exception
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(EquipmentModel $model): JsonResponse
     {
-        $equipmentModel = EquipmentModel::findOrFail($id);
+        $this->authorize('delete', $model);
 
-        // Delete only own equipments config
-        if (! $this->user->perm(Perm::EQUIPMENTS_CONFIG_DELETE_ALL) &&
-            Gate::denies('owner', $equipmentModel)
-        ) {
-            return $this->responseNoPermission();
-        }
-
-        if (! $equipmentModel->delete()) {
-            return $this->responseDatabaseDestroyError();
-        }
+        $model->delete();
 
         return response()->json([
             'message' => __('app.equipment_model.destroy'),

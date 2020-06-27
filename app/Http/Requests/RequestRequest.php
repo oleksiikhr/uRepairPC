@@ -3,13 +3,13 @@
 namespace App\Http\Requests;
 
 use Illuminate\Http\Request;
-use App\Request as RequestModel;
+use App\Models\Request as RequestModel;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RequestRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the user is authorized to make this request
      *
      * @return bool
      */
@@ -19,7 +19,7 @@ class RequestRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Get the validation rules that apply to the request
      *
      * @param  Request  $request
      * @return array

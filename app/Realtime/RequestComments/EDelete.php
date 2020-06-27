@@ -15,7 +15,7 @@ class EDelete extends EDeleteBroadcast
     private int $requestId;
 
     /**
-     * Create a new event instance.
+     * Create a new event instance
      *
      * @param  int  $requestId
      * @param  Model  $model

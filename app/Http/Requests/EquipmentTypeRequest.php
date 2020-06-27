@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class EquipmentTypeRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the user is authorized to make this request
      *
      * @return bool
      */
@@ -18,7 +18,7 @@ class EquipmentTypeRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Get the validation rules that apply to the request
      *
      * @param  Request  $request
      * @return array

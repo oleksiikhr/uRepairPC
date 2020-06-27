@@ -10,7 +10,7 @@ abstract class ECreateBroadcast extends EBroadcast
     protected $data;
 
     /**
-     * Create a new event instance.
+     * Create a new event instance
      *
      * @param  mixed  $data
      * @return void
