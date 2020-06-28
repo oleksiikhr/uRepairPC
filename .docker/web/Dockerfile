@@ -1,9 +1,9 @@
-FROM node:13.12-alpine
+FROM node:14.4-alpine
 
 WORKDIR /usr/app
 
 RUN yarn global add cross-env
 
-EXPOSE 80
-
 CMD yarn && npm run dev
+
+EXPOSE 80
