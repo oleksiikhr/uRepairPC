@@ -61,6 +61,7 @@ services:
   websocket:
     build: ./websocket
     container_name: u_websocket
+    restart: always
     volumes:
       - ../websocket:/usr/app
     depends_on:
@@ -107,12 +108,13 @@ services:
   prometheus:
     image: prom/prometheus
     container_name: u_prometheus
+    restart: always
     user: "0"
     labels:
       - traefik.http.routers.prometheus.rule=Host(`prometheus.localhost`)
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:7.0.4
     container_name: u_grafana
     restart: always
     depends_on:
@@ -124,7 +126,7 @@ services:
       - ${DATA_PATH}/grafana:/var/lib/grafana
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.0.2-fpm-alpine
     container_name: u_phpmyadmin
     restart: always
     environment:
@@ -136,7 +138,7 @@ services:
       - traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.localhost`)
 
   netdata:
-    image: titpetric/netdata
+    image: netdata/netdata:v1.23.0
     container_name: u_netdata
     restart: always
     cap_add:
