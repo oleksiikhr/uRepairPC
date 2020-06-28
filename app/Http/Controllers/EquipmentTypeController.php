@@ -64,16 +64,16 @@ class EquipmentTypeController extends Controller
     /**
      * Display the specified resource
      *
-     * @param  EquipmentType  $type
+     * @param  EquipmentType  $equipmentType
      * @return JsonResponse
      */
-    public function show(EquipmentType $type): JsonResponse
+    public function show(EquipmentType $equipmentType): JsonResponse
     {
-        EJoin::dispatchAfterResponse($type);
+        EJoin::dispatchAfterResponse($equipmentType);
 
         return response()->json([
             'message' => __('app.equipment_type.show'),
-            'equipment_type' => $type,
+            'equipment_type' => $equipmentType,
         ]);
     }
 
@@ -81,38 +81,38 @@ class EquipmentTypeController extends Controller
      * Update the specified resource in storage
      *
      * @param  EquipmentTypeRequest  $request
-     * @param  EquipmentType  $type
+     * @param  EquipmentType  $equipmentType
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    public function update(EquipmentTypeRequest $request, EquipmentType $type): JsonResponse
+    public function update(EquipmentTypeRequest $request, EquipmentType $equipmentType): JsonResponse
     {
-        $this->authorize('update', $type);
+        $this->authorize('update', $equipmentType);
 
-        $type->fill($request->validated());
-        $type->save();
+        $equipmentType->fill($request->validated());
+        $equipmentType->save();
 
-        EUpdate::dispatchAfterResponse($type->id, $type);
+        EUpdate::dispatchAfterResponse($equipmentType->id, $equipmentType);
 
         return response()->json([
             'message' => __('app.equipment_type.update'),
-            'equipment_type' => $type,
+            'equipment_type' => $equipmentType,
         ]);
     }
 
     /**
      * Remove the specified resource from storage
      *
-     * @param  EquipmentType  $type
+     * @param  EquipmentType  $equipmentType
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws \Exception
      */
-    public function destroy(EquipmentType $type): JsonResponse
+    public function destroy(EquipmentType $equipmentType): JsonResponse
     {
-        $this->authorize('delete', $type);
+        $this->authorize('delete', $equipmentType);
 
-        $type->delete();
+        $equipmentType->delete();
 
         return response()->json([
             'message' => __('app.equipment_type.destroy'),

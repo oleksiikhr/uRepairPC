@@ -32,16 +32,16 @@ class RequestCommentController extends Controller
     /**
      * Display a listing of the resource
      *
-     * @param  RequestModel  $model
+     * @param  RequestModel  $requestModel
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    public function index(RequestModel $model): JsonResponse
+    public function index(RequestModel $requestModel): JsonResponse
     {
-        $this->authorize('show', $model);
+        $this->authorize('show', $requestModel);
 
-        $comments = $model->comments()->get();
-        EJoin::dispatchAfterResponse($model->id, ...$comments);
+        $comments = $requestModel->comments()->get();
+        EJoin::dispatchAfterResponse($requestModel->id, ...$comments);
 
         return response()->json([
             'message' => __('app.request_comments.index'),

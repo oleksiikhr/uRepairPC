@@ -36,7 +36,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('file', \App\Models\File::class);
 
         Route::pattern('equipment', '[0-9]+');
-        Route::model('equipment', \App\Models\Equipment::class);
+        Route::bind('equipment', static fn ($id) => \App\Models\Equipment::querySelectJoins()->firstOrFail($id));
         Route::pattern('equipmentManufacturer', '[0-9]+');
         Route::model('equipmentManufacturer', \App\Models\EquipmentManufacturer::class);
         Route::pattern('equipmentModel', '[0-9]+');

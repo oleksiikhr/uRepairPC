@@ -118,21 +118,19 @@ class RequestController extends Controller
     /**
      * Display the specified resource
      *
-     * @param  int  $id
+     * @param  RequestModel  $requestModel
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    public function show(int $id): JsonResponse
+    public function show(RequestModel $requestModel): JsonResponse
     {
-        $model = RequestModel::querySelectJoins()->findOrFail($id);
+        $this->authorize('show', $requestModel);
 
-        $this->authorize('show', $model);
-
-        EJoin::dispatchAfterResponse($model);
+        EJoin::dispatchAfterResponse($requestModel);
 
         return response()->json([
             'message' => __('app.requests.show'),
-            'request' => $model,
+            'request' => $requestModel,
         ]);
     }
 
@@ -197,20 +195,20 @@ class RequestController extends Controller
      * Remove the specified resource from storage
      *
      * @param  RequestRequest  $request
-     * @param  RequestModel  $model
+     * @param  RequestModel  $requestModel
      * @return JsonResponse
      * @throws \Exception
      */
-    public function destroy(RequestRequest $request, RequestModel $model): JsonResponse
+    public function destroy(RequestRequest $request, RequestModel $requestModel): JsonResponse
     {
-        $this->authorize('delete', $model);
+        $this->authorize('delete', $requestModel);
 
         // Destroy files
-        if ($request->files_delete && ! FilesHelper::delete($model->files)) {
+        if ($request->files_delete && ! FilesHelper::delete($requestModel->files)) {
             return response()->json(['message' => __('app.files.files_not_deleted')], 422);
         }
 
-        $model->delete();
+        $requestModel->delete();
 
         return response()->json([
             'message' => __('app.requests.destroy'),

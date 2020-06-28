@@ -82,39 +82,39 @@ class EquipmentModelController extends Controller
      * Update the specified resource in storage
      *
      * @param  EquipmentModelRequest  $request
-     * @param  EquipmentModel  $model
+     * @param  EquipmentModel  $equipmentModel
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    public function update(EquipmentModelRequest $request, EquipmentModel $model): JsonResponse
+    public function update(EquipmentModelRequest $request, EquipmentModel $equipmentModel): JsonResponse
     {
-        $this->authorize('update', $model);
+        $this->authorize('update', $equipmentModel);
 
-        $model->fill($request->validated());
-        $model->save();
+        $equipmentModel->fill($request->validated());
+        $equipmentModel->save();
 
-        $model = EquipmentModel::querySelectJoins()->findOrFail($model->id);
-        EUpdate::dispatchAfterResponse($model->id, $model);
+        $equipmentModel = EquipmentModel::querySelectJoins()->findOrFail($equipmentModel->id);
+        EUpdate::dispatchAfterResponse($equipmentModel->id, $equipmentModel);
 
         return response()->json([
             'message' => __('app.equipment_model.update'),
-            'equipment_model' => $model,
+            'equipment_model' => $equipmentModel,
         ]);
     }
 
     /**
      * Remove the specified resource from storage
      *
-     * @param  EquipmentModel  $model
+     * @param  EquipmentModel  $equipmentModel
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws \Exception
      */
-    public function destroy(EquipmentModel $model): JsonResponse
+    public function destroy(EquipmentModel $equipmentModel): JsonResponse
     {
-        $this->authorize('delete', $model);
+        $this->authorize('delete', $equipmentModel);
 
-        $model->delete();
+        $equipmentModel->delete();
 
         return response()->json([
             'message' => __('app.equipment_model.destroy'),

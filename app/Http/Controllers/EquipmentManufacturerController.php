@@ -64,16 +64,16 @@ class EquipmentManufacturerController extends Controller
     /**
      * Display the specified resource
      *
-     * @param  EquipmentManufacturer  $manufacturer
+     * @param  EquipmentManufacturer  $equipmentManufacturer
      * @return JsonResponse
      */
-    public function show(EquipmentManufacturer $manufacturer): JsonResponse
+    public function show(EquipmentManufacturer $equipmentManufacturer): JsonResponse
     {
-        EJoin::dispatchAfterResponse($manufacturer);
+        EJoin::dispatchAfterResponse($equipmentManufacturer);
 
         return response()->json([
             'message' => __('app.equipment_manufacturers.show'),
-            'equipment_manufacturer' => $manufacturer,
+            'equipment_manufacturer' => $equipmentManufacturer,
         ]);
     }
 
@@ -81,38 +81,38 @@ class EquipmentManufacturerController extends Controller
      * Update the specified resource in storage
      *
      * @param  EquipmentManufacturerRequest  $request
-     * @param  EquipmentManufacturer  $manufacturer
+     * @param  EquipmentManufacturer  $equipmentManufacturer
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    public function update(EquipmentManufacturerRequest $request, EquipmentManufacturer $manufacturer): JsonResponse
+    public function update(EquipmentManufacturerRequest $request, EquipmentManufacturer $equipmentManufacturer): JsonResponse
     {
-        $this->authorize('update', $manufacturer);
+        $this->authorize('update', $equipmentManufacturer);
 
-        $manufacturer->fill($request->validated());
-        $manufacturer->save();
+        $equipmentManufacturer->fill($request->validated());
+        $equipmentManufacturer->save();
 
-        EUpdate::dispatchAfterResponse($manufacturer->id, $manufacturer);
+        EUpdate::dispatchAfterResponse($equipmentManufacturer->id, $equipmentManufacturer);
 
         return response()->json([
             'message' => __('app.equipment_manufacturers.update'),
-            'equipment_manufacturer' => $manufacturer,
+            'equipment_manufacturer' => $equipmentManufacturer,
         ]);
     }
 
     /**
      * Remove the specified resource from storage
      *
-     * @param  EquipmentManufacturer  $manufacturer
+     * @param  EquipmentManufacturer  $equipmentManufacturer
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws \Exception
      */
-    public function destroy(EquipmentManufacturer $manufacturer): JsonResponse
+    public function destroy(EquipmentManufacturer $equipmentManufacturer): JsonResponse
     {
-        $this->authorize('delete', $manufacturer);
+        $this->authorize('delete', $equipmentManufacturer);
 
-        $manufacturer->delete();
+        $equipmentManufacturer->delete();
 
         return response()->json([
             'message' => __('app.equipment_manufacturers.destroy'),

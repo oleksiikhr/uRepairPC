@@ -31,23 +31,23 @@ class EquipmentController extends Controller
     /**
      * Display a listing of the resource
      *
-     * @param  EquipmentRequest  $equipmentRequest
+     * @param  EquipmentRequest  $request
      * @return JsonResponse
      */
-    public function index(EquipmentRequest $equipmentRequest): JsonResponse
+    public function index(EquipmentRequest $request): JsonResponse
     {
         $query = Equipment::querySelectJoins();
 
         // Search
-        if ($equipmentRequest->has('search') && $equipmentRequest->exists('columns')) {
-            foreach ($equipmentRequest->columns as $column) {
-                $query->orWhere(Equipment::SEARCH_RELATIONSHIP[$column] ?? $column, 'LIKE', $equipmentRequest->search.'%');
+        if ($request->has('search') && $request->exists('columns')) {
+            foreach ($request->columns as $column) {
+                $query->orWhere(Equipment::SEARCH_RELATIONSHIP[$column] ?? $column, 'LIKE', $request->search.'%');
             }
         }
 
         // Order
-        if ($equipmentRequest->has('sortColumn')) {
-            $query->orderBy($equipmentRequest->sortColumn, $equipmentRequest->sortOrder === 'descending' ? 'desc' : 'asc');
+        if ($request->has('sortColumn')) {
+            $query->orderBy($request->sortColumn, $request->sortOrder === 'descending' ? 'desc' : 'asc');
         }
 
         // Show only own equipments
@@ -64,12 +64,12 @@ class EquipmentController extends Controller
     /**
      * Store a newly created resource in storage
      *
-     * @param  EquipmentRequest  $equipmentRequest
+     * @param  EquipmentRequest  $request
      * @return JsonResponse
      */
-    public function store(EquipmentRequest $equipmentRequest): JsonResponse
+    public function store(EquipmentRequest $request): JsonResponse
     {
-        $equipment = new Equipment($equipmentRequest->validated());
+        $equipment = new Equipment($request->validated());
         $equipment->user_id = auth()->id();
         $equipment->save();
 
