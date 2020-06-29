@@ -21,6 +21,6 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 WORKDIR /var/www
 
-CMD ["php-fpm"]
+CMD composer install && php-fpm
 
 EXPOSE 9000
