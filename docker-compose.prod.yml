@@ -2,12 +2,13 @@ version: '3'
 
 services:
   web:
-    build: ./.docker/web-prod
+    build:
+      context: ./web
+      dockerfile: Dockerfile.prod
     container_name: u_web
     restart: always
     volumes:
-      - ./web:/usr/app
-      - ./.docker/web-prod/nginx.conf:/etc/nginx/nginx.conf
+      - ./web/.docker/nginx.conf:/etc/nginx/nginx.conf
     labels:
       - traefik.http.routers.web.rule=Host(`${DOCKER_DOMAIN}`)
       - traefik.http.routers.web.entrypoints=web
