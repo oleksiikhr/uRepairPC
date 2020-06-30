@@ -104,7 +104,7 @@ services:
       - traefik.http.routers.prometheus.rule=Host(`prometheus.localhost`)
 
   grafana:
-    image: grafana/grafana:7.0.4
+    image: grafana/grafana:7.0.5
     container_name: u_grafana
     restart: always
     depends_on:
