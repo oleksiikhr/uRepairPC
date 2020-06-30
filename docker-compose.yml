@@ -48,16 +48,6 @@ services:
       - traefik.http.routers.nginx.rule=Host(`${DOCKER_DOMAIN}`) && PathPrefix(`/api/`, `/storage/`, `/robots.txt`)
       - traefik.http.routers.nginx.entrypoints=web
 
-  web:
-    build: ./.docker/web
-    container_name: u_web
-    restart: always
-    volumes:
-      - ./web:/usr/app
-    labels:
-      - traefik.http.routers.web.rule=Host(`${DOCKER_DOMAIN}`)
-      - traefik.http.routers.web.entrypoints=web
-
   websocket:
     build: ./.docker/websocket
     container_name: u_websocket
@@ -145,13 +135,3 @@ services:
       - SYS_PTRACE
     labels:
       - traefik.http.routers.netdata.rule=Host(`netdata.localhost`)
-
-  maildev:
-    image: djfarrelly/maildev
-    container_name: u_maildev
-    restart: always
-    ports:
-      - 25:25
-    labels:
-      - traefik.http.routers.maildev.rule=Host(`maildev.localhost`)
-      - traefik.http.services.maildev.loadbalancer.server.port=80
