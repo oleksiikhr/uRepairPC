@@ -4,7 +4,7 @@ WORKDIR /usr/app
 
 RUN apk add yarn
 
-RUN yarn global add pm2
+COPY package.json yarn.lock ./
 
 CMD yarn && yarn dev
 

@@ -24,6 +24,22 @@ services:
     volumes:
       - ./:${DOCKER_CONTAINER_PATH}
 
+  web:
+    container_name: u_web
+    restart: always
+    labels:
+      - traefik.http.routers.web.rule=Host(`${DOCKER_DOMAIN}`)
+      - traefik.http.routers.web.entrypoints=web
+
+  websocket:
+    container_name: u_websocket
+    restart: always
+    depends_on:
+      - rabbitmq
+    labels:
+      - traefik.http.routers.websocket.rule=Host(`${DOCKER_DOMAIN}`) && Path(`/ws/server/`)
+      - traefik.http.routers.websocket.entrypoints=web
+
   php-worker:
     build: .docker/php-worker
     container_name: u_php_worker
@@ -47,18 +63,6 @@ services:
     labels:
       - traefik.http.routers.nginx.rule=Host(`${DOCKER_DOMAIN}`) && PathPrefix(`/api/`, `/storage/`, `/robots.txt`)
       - traefik.http.routers.nginx.entrypoints=web
-
-  websocket:
-    build: ./.docker/websocket
-    container_name: u_websocket
-    restart: always
-    volumes:
-      - ./websocket:/usr/app
-    depends_on:
-      - rabbitmq
-    labels:
-      - traefik.http.routers.websocket.rule=Host(`${DOCKER_DOMAIN}`) && Path(`/ws/server/`)
-      - traefik.http.routers.websocket.entrypoints=web
 
   mysql:
     build: ./.docker/mysql

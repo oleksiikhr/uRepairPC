@@ -5,10 +5,10 @@ services:
     build:
       context: ./web
       dockerfile: Dockerfile.prod
-    container_name: u_web
-    restart: always
     volumes:
       - ./web/.docker/nginx.conf:/etc/nginx/nginx.conf
-    labels:
-      - traefik.http.routers.web.rule=Host(`${DOCKER_DOMAIN}`)
-      - traefik.http.routers.web.entrypoints=web
+
+  websocket:
+    build:
+      context: ./websocket
+      dockerfile: Dockerfile.prod

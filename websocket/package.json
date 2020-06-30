@@ -2,7 +2,7 @@
   "name": "@urepairpc/websocket",
   "main": "dist/app",
   "scripts": {
-    "start": "pm2 start app.js",
+    "start": "pm2 start dist/app.js",
     "dev": "nodemon --watch",
     "build": "tsc",
     "lint": "yarn eslint ./src --ext .js,.ts",
