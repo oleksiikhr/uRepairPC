@@ -17,9 +17,9 @@ services:
       - 80:80
       - 8080:8080
 
-  php-fpm:
-    build: ./.docker/php-fpm
-    container_name: u_php_fpm
+  server:
+    build: .
+    container_name: u_server
     restart: always
     volumes:
       - ./:${DOCKER_CONTAINER_PATH}
@@ -43,7 +43,7 @@ services:
       - ./.docker/nginx/sites/:/etc/nginx/sites-available
       - ./.docker/nginx/conf.d/:/etc/nginx/conf.d
     depends_on:
-      - php-fpm
+      - server
     labels:
       - traefik.http.routers.nginx.rule=Host(`${DOCKER_DOMAIN}`) && PathPrefix(`/api/`, `/storage/`, `/robots.txt`)
       - traefik.http.routers.nginx.entrypoints=web

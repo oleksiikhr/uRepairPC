@@ -16,11 +16,18 @@ RUN docker-php-ext-install mysqli && \
 RUN curl -sSL https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer
 
-# TODO production
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+ARG MODE=development
+ENV MODE $MODE
+
+RUN mv "$PHP_INI_DIR/php.ini-$MODE" "$PHP_INI_DIR/php.ini"
 
 WORKDIR /var/www
 
-CMD composer install && php-fpm
+COPY composer.* ./
+
+CMD if ["$MODE" = "production"]; \
+  then composer install && php-fpm; \
+  else composer install --no-dev && php-fpm; \
+fi
 
 EXPOSE 9000
