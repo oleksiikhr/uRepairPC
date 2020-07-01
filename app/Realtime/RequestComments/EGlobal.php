@@ -26,10 +26,9 @@ class EGlobal extends EJoinBroadcast
      */
     public static function getRooms(int $requestId): array
     {
-        $user = auth()->user();
         $rooms = [];
 
-        if ($user->perm(Perm::REQUESTS_COMMENTS_VIEW_ALL)) {
+        if (perm(Perm::REQUESTS_COMMENTS_VIEW_ALL)) {
             $rooms[] = self::$roomName.".{$requestId}";
         }
 

@@ -61,7 +61,7 @@ class UserController extends Controller
     {
         $query = User::query();
 
-        if (auth()->user()->perm(Perm::ROLES_VIEW_ALL)) {
+        if (perm(Perm::ROLES_VIEW_ALL)) {
             $query->with('roles');
         }
 

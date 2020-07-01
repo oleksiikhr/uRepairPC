@@ -11,7 +11,7 @@ class EJoin extends EJoinBroadcast
 
     public function __construct(...$items)
     {
-        $canViewAllRoles = auth()->user()->perm(Perm::ROLES_VIEW_ALL);
+        $canViewAllRoles = perm(Perm::ROLES_VIEW_ALL);
         $rooms = [];
 
         foreach ($items as $item) {

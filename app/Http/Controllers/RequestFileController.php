@@ -44,7 +44,7 @@ class RequestFileController extends Controller
 
         $query = $requestModel->files();
 
-        if (! auth()->user()->perm(Perm::REQUESTS_FILES_VIEW_ALL)) {
+        if (! perm(Perm::REQUESTS_FILES_VIEW_ALL)) {
             $query->where('user_id', auth()->id());
         }
 

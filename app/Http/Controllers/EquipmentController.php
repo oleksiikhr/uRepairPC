@@ -51,7 +51,7 @@ class EquipmentController extends Controller
         }
 
         // Show only own equipments
-        if (! auth()->user()->perm(Perm::EQUIPMENTS_VIEW_ALL)) {
+        if (! perm(Perm::EQUIPMENTS_VIEW_ALL)) {
             $query->where('user_id', auth()->id());
         }
 

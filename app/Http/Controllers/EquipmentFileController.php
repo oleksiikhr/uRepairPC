@@ -44,7 +44,7 @@ class EquipmentFileController extends Controller
 
         $query = $equipment->files();
 
-        if (! auth()->user()->perm(Perm::EQUIPMENTS_FILES_VIEW_ALL)) {
+        if (! perm(Perm::EQUIPMENTS_FILES_VIEW_ALL)) {
             $query->where('user_id', auth()->id());
         }
 

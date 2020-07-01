@@ -94,7 +94,7 @@ class RequestController extends Controller
         // + EquipmentController (show method)
         // Add Equipment if has access
         if ($request->has('equipment_id')) {
-            if (auth()->user()->perm(Perm::EQUIPMENTS_VIEW_ALL)) {
+            if (perm(Perm::EQUIPMENTS_VIEW_ALL)) {
                 $model->equipment_id = $request->equipment_id;
             } else {
                 $equipment = Equipment::findOrFail($request->equipment_id);
@@ -151,7 +151,7 @@ class RequestController extends Controller
 
         // Change Equipment if has access
         if ($request->has('equipment_id')) {
-            if (auth()->user()->perm(Perm::EQUIPMENTS_VIEW_ALL)) {
+            if (perm(Perm::EQUIPMENTS_VIEW_ALL)) {
                 $model->equipment_id = $request->equipment_id;
             } else {
                 $equipment = Equipment::findOrFail($request->equipment_id);
@@ -163,12 +163,12 @@ class RequestController extends Controller
 
         // Only user, who can edit every request - can assign user to request
         // TODO Move to another method (after web system*)
-        if ($request->has('assign_id') && auth()->user()->perm(Perm::REQUESTS_EDIT_ALL)) {
+        if ($request->has('assign_id') && perm(Perm::REQUESTS_EDIT_ALL)) {
             $model->assign_id = $request->assign_id;
         }
 
         // Config attributes
-        if (auth()->user()->perm(Perm::REQUESTS_CONFIG_VIEW_ALL)) {
+        if (perm(Perm::REQUESTS_CONFIG_VIEW_ALL)) {
             if ($request->has('type_id')) {
                 $model->type_id = $request->type_id;
             }

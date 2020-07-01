@@ -12,21 +12,15 @@ class Permission
      *
      * @param  Request  $request
      * @param  \Closure  $next
-     * @param  string $permission
+     * @param  string|array $permission
      * @return mixed
      * @throws \Exception
      */
     public function handle($request, Closure $next, $permission)
     {
-        $user = auth()->user();
-
-        if (! $user) {
-            return response()->json(['message' => __('app.middleware.no_permission')], 422);
-        }
-
         $permissions = is_array($permission) ? $permission : explode('|', $permission);
 
-        if (! $user->perm($permissions)) {
+        if (! perm($permissions)) {
             return response()->json(['message' => __('app.middleware.no_permission')], 422);
         }
 
