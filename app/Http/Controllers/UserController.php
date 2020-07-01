@@ -237,7 +237,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
         ]);
 
-        Mail::to($user)->send(new EmailChange($request->email)); // TODO Disable on APP_DEMO
+        Mail::to($user)->send(new EmailChange($request->email));
         $user->email = $request->email;
         $user->save();
 
@@ -341,7 +341,7 @@ class UserController extends Controller
         $user->password = bcrypt($password);
         $user->save();
 
-        Mail::to($user)->send(new UserCreated($password)); // TODO Disable on APP_DEMO
+        Mail::to($user)->send(new UserCreated($password));
 
         return response()->json([
             'message' => __('app.users.password_email_changed'),
