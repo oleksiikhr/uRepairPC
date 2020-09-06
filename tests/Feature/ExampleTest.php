@@ -13,7 +13,7 @@ class ExampleTest extends TestCase
      */
     public function testBasicTest(): void
     {
-        $response = $this->get('/');
+        $response = $this->get('/api/settings/global');
 
         $response->assertStatus(200);
     }
