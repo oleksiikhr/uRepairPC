@@ -78,7 +78,7 @@ class UserController extends Controller
         }
 
         // Filter
-        if ($request->request_access && auth()->user()->perm(Perm::REQUESTS_EDIT_ALL)) {
+        if ($request->has('request_access') && perm(Perm::REQUESTS_EDIT_ALL)) {
             $query->whereHas('roles.permissions', static function ($query) {
                 $query->where('name', Perm::REQUESTS_EDIT_ALL);
                 $query->orWhere('name', Perm::REQUESTS_EDIT_ASSIGN);
@@ -99,9 +99,7 @@ class UserController extends Controller
      */
     public function store(UserRequest $request): JsonResponse
     {
-        $user = new User($request->validated());
-        $user->email = $request->email;
-        $user->save();
+        $user = User::create($request->validated());
 
         $ids = Role::getDefaultValues()->pluck('id');
         $user->assignRolesById($ids);

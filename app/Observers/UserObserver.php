@@ -23,7 +23,7 @@ class UserObserver
 
         $user->password = bcrypt($password);
 
-        Mail::to($user)->send(new UserCreated($password));
+        Mail::to($user)->queue(new UserCreated($password));
     }
 
     /**
