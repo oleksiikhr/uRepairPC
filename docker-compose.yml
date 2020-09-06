@@ -120,7 +120,7 @@ services:
       - traefik.http.routers.grafana.rule=Host(`grafana.localhost`)
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5.0-fpm-alpine
+    image: phpmyadmin/phpmyadmin:5.0
     container_name: u_phpmyadmin
     restart: always
     environment:
