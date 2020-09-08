@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Requests;
 
@@ -7,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class ManifestRequest extends FormRequest
 {
     /**
-     * Defines the default orientation for all the website's top level browsing contexts
+     * Defines the default orientation for all the website's top level browsing contexts.
      * @see https://developer.mozilla.org/en-US/docs/Web/Manifest#orientation
      */
     private const ORIENTATION = [
@@ -16,7 +18,7 @@ class ManifestRequest extends FormRequest
     ];
 
     /**
-     * Defines the developers’ preferred display mode for the website
+     * Defines the developers’ preferred display mode for the website.
      * @see https://developer.mozilla.org/en-US/docs/Web/Manifest#display
      */
     private const DISPLAY = [
@@ -24,7 +26,7 @@ class ManifestRequest extends FormRequest
     ];
 
     /**
-     * Determine if the user is authorized to make this request
+     * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
@@ -34,7 +36,7 @@ class ManifestRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request
+     * Get the validation rules that apply to the request.
      *
      * @return array
      */

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Observers;
 
@@ -8,7 +10,7 @@ use App\Realtime\RequestStatuses\EDelete;
 class RequestStatusObserver
 {
     /**
-     * Handle the request status "deleted" event
+     * Handle the request status "deleted" event.
      *
      * @param  RequestStatus  $requestStatus
      * @return void

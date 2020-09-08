@@ -1,10 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Models;
 
 use App\Enums\Perm;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -44,7 +45,7 @@ class Request extends BaseModel
     ];
 
     /**
-     * Correctly display ORM request
+     * Correctly display ORM request.
      *
      * @var array
      */
@@ -57,7 +58,7 @@ class Request extends BaseModel
     ];
 
     /**
-     * Correctly display ORM request
+     * Correctly display ORM request.
      *
      * @var array
      */
@@ -66,7 +67,7 @@ class Request extends BaseModel
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $fillable = [
         'title',

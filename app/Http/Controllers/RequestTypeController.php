@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -14,7 +16,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 class RequestTypeController extends Controller
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function permissions(): array
     {
@@ -28,7 +30,7 @@ class RequestTypeController extends Controller
     }
 
     /**
-     * Display a listing of the resource
+     * Display a listing of the resource.
      *
      * @return JsonResponse
      */
@@ -42,7 +44,7 @@ class RequestTypeController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage
+     * Store a newly created resource in storage.
      *
      * @param  RequestTypeRequest  $request
      * @return JsonResponse
@@ -66,7 +68,7 @@ class RequestTypeController extends Controller
     }
 
     /**
-     * Display the specified resource
+     * Display the specified resource.
      *
      * @param  RequestType  $requestType
      * @return JsonResponse
@@ -82,7 +84,7 @@ class RequestTypeController extends Controller
     }
 
     /**
-     * Update the specified resource in storage
+     * Update the specified resource in storage.
      *
      * @param  RequestTypeRequest  $request
      * @param  RequestType  $requestType
@@ -114,7 +116,7 @@ class RequestTypeController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage
+     * Remove the specified resource from storage.
      *
      * @param  RequestType  $requestType
      * @return JsonResponse

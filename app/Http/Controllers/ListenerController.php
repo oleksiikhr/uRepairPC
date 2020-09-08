@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -18,7 +20,7 @@ use App\Realtime\EquipmentManufacturers\EGlobal as EquipmentManufacturersEvent;
 class ListenerController extends Controller
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function permissions(): array
     {
@@ -28,7 +30,7 @@ class ListenerController extends Controller
     }
 
     /**
-     * Refresh all rooms for socketId and listen profile events
+     * Refresh all rooms for socketId and listen profile events.
      *
      * @return JsonResponse
      */

@@ -1,23 +1,25 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use App\Enums\Perm;
-use App\Models\User;
 use App\Models\File;
 use App\Models\Role;
+use App\Models\User;
 use App\Mail\EmailChange;
 use App\Mail\UserCreated;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Realtime\Users\EJoin;
+use Illuminate\Http\Response;
 use App\Realtime\Users\EUpdate;
 use App\Http\Helpers\FileHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\ImageRequest;
-use Illuminate\Support\Facades\Mail;
 use App\Realtime\Users\EUpdateRoles;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Auth\Access\AuthorizationException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -27,7 +29,7 @@ class UserController extends Controller
     private const FOLDER_AVATARS = 'users/avatars';
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function permissions(): array
     {
@@ -52,7 +54,7 @@ class UserController extends Controller
     }
 
     /**
-     * Display a listing of the resource
+     * Display a listing of the resource.
      *
      * @param  UserRequest  $request
      * @return JsonResponse
@@ -92,7 +94,7 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage
+     * Store a newly created resource in storage.
      *
      * @param  UserRequest  $request
      * @return JsonResponse
@@ -111,7 +113,7 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource
+     * Display the specified resource.
      *
      * @param  User  $user
      * @return JsonResponse
@@ -130,7 +132,7 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage
+     * Update the specified resource in storage.
      *
      * @param  UserRequest  $request
      * @param  User  $user
@@ -148,7 +150,7 @@ class UserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage
+     * Remove the specified resource from storage.
      *
      * @param  User  $user
      * @return JsonResponse
@@ -167,7 +169,7 @@ class UserController extends Controller
     }
 
     /**
-     * Get avatar for specified user
+     * Get avatar for specified user.
      *
      * @param  User  $user
      * @return Response|BinaryFileResponse
@@ -190,7 +192,7 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage
+     * Update the specified resource in storage.
      *
      * @param  Request  $request
      * @param  User  $user
@@ -222,7 +224,7 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage
+     * Update the specified resource in storage.
      *
      * @param  Request  $request
      * @param  User  $user
@@ -247,7 +249,7 @@ class UserController extends Controller
 
     /**
      * Update the specified resource in storage. If the user edit the same, need password
-     * Another - send email to the user with new random password
+     * Another - send email to the user with new random password.
      *
      * @param   Request  $request
      * @param   User  $user
@@ -264,7 +266,7 @@ class UserController extends Controller
     }
 
     /**
-     * Upload avatar for user
+     * Upload avatar for user.
      *
      * @param  ImageRequest  $request
      * @param  User  $user
@@ -298,7 +300,7 @@ class UserController extends Controller
     }
 
     /**
-     * Delete avatar for user
+     * Delete avatar for user.
      *
      * @param  User  $user
      * @return JsonResponse
@@ -326,7 +328,7 @@ class UserController extends Controller
     }
 
     /**
-     * Generate a new random password and send to email
+     * Generate a new random password and send to email.
      *
      * @param  User  $user
      * @return JsonResponse
@@ -347,7 +349,7 @@ class UserController extends Controller
     }
 
     /**
-     * Set a new password to profile of the current user
+     * Set a new password to profile of the current user.
      *
      * @param  Request  $request
      * @param  User  $user

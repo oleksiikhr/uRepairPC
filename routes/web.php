@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 
@@ -12,8 +14,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-use Illuminate\Support\Facades\File;
 
 // TODO ???
 //Route::get('manifest.json', 'Stat\ManifestController@index');

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use App\Enums\Perm;
 use App\Models\Role;
@@ -8,7 +10,7 @@ use Illuminate\Database\Seeder;
 class RolesAndPermissionsSeeder extends Seeder
 {
     /**
-     * Run the database seeds
+     * Run the database seeds.
      *
      * @return void
      */

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -10,7 +12,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthController extends Controller
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function permissions(): array
     {
@@ -18,7 +20,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Get a current user with permissions
+     * Get a current user with permissions.
      *
      * @return JsonResponse
      */
@@ -33,7 +35,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Auth the user by login and password
+     * Auth the user by login and password.
      *
      * @param  AuthRequest  $request
      * @return JsonResponse
@@ -55,7 +57,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Refresh token to user
+     * Refresh token to user.
      *
      * @return JsonResponse
      */
@@ -84,7 +86,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Invalidate current JWT Token
+     * Invalidate current JWT Token.
      *
      * @return JsonResponse
      */

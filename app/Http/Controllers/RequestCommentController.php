@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -16,7 +18,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 class RequestCommentController extends Controller
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function permissions(): array
     {
@@ -30,7 +32,7 @@ class RequestCommentController extends Controller
     }
 
     /**
-     * Display a listing of the resource
+     * Display a listing of the resource.
      *
      * @param  RequestModel  $requestModel
      * @return JsonResponse
@@ -50,7 +52,7 @@ class RequestCommentController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage
+     * Store a newly created resource in storage.
      *
      * @param  RequestCommentRequest  $request
      * @param  RequestModel  $requestModel
@@ -76,7 +78,7 @@ class RequestCommentController extends Controller
     }
 
     /**
-     * Display the specified resource
+     * Display the specified resource.
      *
      * @param  RequestModel  $requestModel
      * @param  int  $id
@@ -97,7 +99,7 @@ class RequestCommentController extends Controller
     }
 
     /**
-     * Update the specified resource in storage
+     * Update the specified resource in storage.
      *
      * @param  RequestCommentRequest  $request
      * @param  RequestModel  $requestModel
@@ -126,7 +128,7 @@ class RequestCommentController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage
+     * Remove the specified resource from storage.
      *
      * @param  RequestModel  $requestModel
      * @param  int  $id

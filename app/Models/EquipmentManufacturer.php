@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Models;
 
@@ -10,7 +12,7 @@ class EquipmentManufacturer extends BaseModel
     use SoftDeletes;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $fillable = [
         'name',

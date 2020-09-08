@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Exceptions;
 
@@ -10,14 +12,14 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 class Handler extends ExceptionHandler
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $dontReport = [
         //
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $dontFlash = [
         'password',
@@ -25,7 +27,7 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function report(Throwable $exception): void
     {
@@ -33,7 +35,7 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function render($request, Throwable $exception)
     {

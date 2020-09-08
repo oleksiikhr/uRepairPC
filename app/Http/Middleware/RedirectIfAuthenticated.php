@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
@@ -10,7 +12,7 @@ use App\Providers\RouteServiceProvider;
 class RedirectIfAuthenticated
 {
     /**
-     * Handle an incoming request
+     * Handle an incoming request.
      *
      * @param  Request  $request
      * @param  \Closure  $next

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Realtime\Common;
 
@@ -15,7 +17,7 @@ abstract class EUpdateBroadcast extends EBroadcast
     protected $data;
 
     /**
-     * Create a new event instance
+     * Create a new event instance.
      *
      * @param  int  $id
      * @param  mixed  $data

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Providers;
 
@@ -8,7 +10,7 @@ use Illuminate\Support\Facades\Broadcast;
 class BroadcastServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap any application services
+     * Bootstrap any application services.
      *
      * @return void
      */

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -20,7 +22,7 @@ abstract class Controller extends BaseController implements IPermissions
     /**
      * Register middleware on depends key-value array
      *  key - method
-     *  value - permissions
+     *  value - permissions.
      *
      * @param  array  $methods
      * @return void

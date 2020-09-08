@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Models;
 
@@ -9,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class File extends BaseModel
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function boot(): void
     {

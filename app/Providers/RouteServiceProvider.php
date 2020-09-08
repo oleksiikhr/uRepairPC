@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Providers;
 
@@ -8,19 +10,19 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $namespace = 'App\Http\Controllers';
 
     /**
-     * The path to the "home" route for your application
+     * The path to the "home" route for your application.
      *
      * @var string
      */
     public const HOME = '/home';
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function boot(): void
     {
@@ -59,7 +61,7 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Define the routes for the application
+     * Define the routes for the application.
      *
      * @return void
      */
@@ -73,7 +75,7 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Define the "web" routes for the application
+     * Define the "web" routes for the application.
      *
      * These routes all receive session state, CSRF protection, etc.
      *
@@ -86,7 +88,7 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Define the "api" routes for the application
+     * Define the "api" routes for the application.
      *
      * These routes are typically stateless
      *

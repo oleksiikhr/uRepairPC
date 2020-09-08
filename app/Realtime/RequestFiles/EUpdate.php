@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Realtime\RequestFiles;
 
@@ -14,7 +16,7 @@ class EUpdate extends EUpdateBroadcast
     private int $requestId;
 
     /**
-     * Create a new event instance
+     * Create a new event instance.
      *
      * @param  int  $requestId
      * @param  int  $id

@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Realtime\EquipmentFiles;
 
-use App\Realtime\Common\EDeleteBroadcast;
 use Illuminate\Database\Eloquent\Model;
+use App\Realtime\Common\EDeleteBroadcast;
 
 class EDelete extends EDeleteBroadcast
 {
@@ -15,7 +17,7 @@ class EDelete extends EDeleteBroadcast
     private int $equipmentId;
 
     /**
-     * Create a new event instance
+     * Create a new event instance.
      *
      * @param  int  $equipmentId
      * @param  Model  $model

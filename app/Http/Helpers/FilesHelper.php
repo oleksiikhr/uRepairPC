@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Helpers;
 
@@ -86,7 +88,7 @@ class FilesHelper
     }
 
     /**
-     * Delete files from storage and records from File Model
+     * Delete files from storage and records from File Model.
      *
      * @param  File[]  $files
      * @return bool - is success

@@ -1,23 +1,28 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Models;
 
 use App\Enums\Perm;
 use Illuminate\Support\Str;
-use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Authenticatable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Auth\MustVerifyEmail;
 use App\Models\Concerns\HasPermissions;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class User extends BaseModel implements AuthorizableContract, AuthenticatableContract, CanResetPasswordContract,
+class User extends BaseModel implements
+    AuthorizableContract,
+    AuthenticatableContract,
+    CanResetPasswordContract,
     JWTSubject
 {
     use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail, SoftDeletes, HasPermissions;
@@ -61,7 +66,7 @@ class User extends BaseModel implements AuthorizableContract, AuthenticatableCon
     protected string $guard_name = 'api';
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $fillable = [
         'first_name',
@@ -73,21 +78,21 @@ class User extends BaseModel implements AuthorizableContract, AuthenticatableCon
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $hidden = [
         'password',
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getJWTIdentifier()
     {
@@ -95,7 +100,7 @@ class User extends BaseModel implements AuthorizableContract, AuthenticatableCon
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getJWTCustomClaims(): array
     {
@@ -103,7 +108,7 @@ class User extends BaseModel implements AuthorizableContract, AuthenticatableCon
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function toArray(): array
     {

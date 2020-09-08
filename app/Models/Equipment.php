@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Models;
 
@@ -41,7 +43,7 @@ class Equipment extends BaseModel
     ];
 
     /**
-     * Correctly display ORM request
+     * Correctly display ORM request.
      *
      * @var array
      */
@@ -52,12 +54,12 @@ class Equipment extends BaseModel
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $table = 'equipments';
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $fillable = [
         'serial_number',

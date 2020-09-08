@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
+<?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateFailedJobsTable extends Migration
 {
     /**
-     * Run the migrations
+     * Run the migrations.
      *
      * @return void
      */
@@ -24,7 +26,7 @@ class CreateFailedJobsTable extends Migration
     }
 
     /**
-     * Reverse the migrations
+     * Reverse the migrations.
      *
      * @return void
      */

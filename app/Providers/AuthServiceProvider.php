@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Providers;
 
@@ -8,7 +10,7 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 class AuthServiceProvider extends ServiceProvider
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $policies = [
         \App\Models\EquipmentManufacturer::class => \App\Policies\EquipmentManufacturerPolicy::class,
@@ -26,7 +28,7 @@ class AuthServiceProvider extends ServiceProvider
     ];
 
     /**
-     * Register any authentication / authorization services
+     * Register any authentication / authorization services.
      *
      * @return void
      */
