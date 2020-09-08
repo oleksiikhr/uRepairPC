@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Models;
 
@@ -34,7 +36,7 @@ class Role extends BaseModel
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $fillable = [
         'name',
@@ -43,14 +45,14 @@ class Role extends BaseModel
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $casts = [
         'default' => 'boolean',
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function toArray(): array
     {
@@ -67,10 +69,10 @@ class Role extends BaseModel
                     $active = in_array($permission, $permissions, true);
 
                     $temp[] = (object) [
-                         'name' => $permission,
-                         'action' => $action,
-                         'active' => $active,
-                     ];
+                        'name' => $permission,
+                        'action' => $action,
+                        'active' => $active,
+                    ];
 
                     if ($active) {
                         $permissionsActive[] = $permission;

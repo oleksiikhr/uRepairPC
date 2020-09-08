@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -14,7 +16,7 @@ use App\Http\Requests\EquipmentManufacturerRequest;
 class EquipmentManufacturerController extends Controller
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function permissions(): array
     {
@@ -28,7 +30,7 @@ class EquipmentManufacturerController extends Controller
     }
 
     /**
-     * Display a listing of the resource
+     * Display a listing of the resource.
      *
      * @return JsonResponse
      */
@@ -42,7 +44,7 @@ class EquipmentManufacturerController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage
+     * Store a newly created resource in storage.
      *
      * @param  EquipmentManufacturerRequest  $request
      * @return JsonResponse
@@ -62,7 +64,7 @@ class EquipmentManufacturerController extends Controller
     }
 
     /**
-     * Display the specified resource
+     * Display the specified resource.
      *
      * @param  EquipmentManufacturer  $equipmentManufacturer
      * @return JsonResponse
@@ -78,7 +80,7 @@ class EquipmentManufacturerController extends Controller
     }
 
     /**
-     * Update the specified resource in storage
+     * Update the specified resource in storage.
      *
      * @param  EquipmentManufacturerRequest  $request
      * @param  EquipmentManufacturer  $equipmentManufacturer
@@ -101,7 +103,7 @@ class EquipmentManufacturerController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage
+     * Remove the specified resource from storage.
      *
      * @param  EquipmentManufacturer  $equipmentManufacturer
      * @return JsonResponse

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Helpers;
 
@@ -53,7 +55,7 @@ class FileHelper
     }
 
     /**
-     * Store the uploaded file on a filesystem disk
+     * Store the uploaded file on a filesystem disk.
      *
      * @param  string  $folder
      * @param  string  $disk
@@ -73,7 +75,7 @@ class FileHelper
     }
 
     /**
-     * Delete file from storage if exists
+     * Delete file from storage if exists.
      *
      * @param  string  $file
      * @param  string  $disk

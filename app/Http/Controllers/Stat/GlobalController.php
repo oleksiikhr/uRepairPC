@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers\Stat;
 
@@ -13,7 +15,7 @@ use App\Http\Resources\GlobalJsonResource;
 class GlobalController extends Controller
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function permissions(): array
     {
@@ -23,7 +25,7 @@ class GlobalController extends Controller
     }
 
     /**
-     * Display a listing of the resource
+     * Display a listing of the resource.
      *
      * @return JsonResponse
      */
@@ -35,7 +37,7 @@ class GlobalController extends Controller
     }
 
     /**
-     * Update all resources in storage
+     * Update all resources in storage.
      *
      * @param  GlobalRequest  $request
      * @return JsonResponse

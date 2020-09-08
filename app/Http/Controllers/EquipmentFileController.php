@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use App\Enums\Perm;
 use App\Models\Equipment;
-use Illuminate\Http\JsonResponse;
 use App\Http\Helpers\FilesHelper;
+use Illuminate\Http\JsonResponse;
 use App\Http\Requests\FileRequest;
 use App\Realtime\EquipmentFiles\EJoin;
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +20,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class EquipmentFileController extends Controller
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function permissions(): array
     {
@@ -32,7 +34,7 @@ class EquipmentFileController extends Controller
     }
 
     /**
-     * Display a listing of the resource
+     * Display a listing of the resource.
      *
      * @param  Equipment  $equipment
      * @return JsonResponse
@@ -58,7 +60,7 @@ class EquipmentFileController extends Controller
     }
 
     /**
-     * Display the specified resource
+     * Display the specified resource.
      *
      * @param  Equipment  $equipment
      * @param  int  $id
@@ -81,7 +83,7 @@ class EquipmentFileController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage
+     * Store a newly created resource in storage.
      *
      * @param  FileRequest  $request
      * @param  Equipment  $equipment
@@ -121,7 +123,7 @@ class EquipmentFileController extends Controller
     }
 
     /**
-     * Update the specified resource in storage
+     * Update the specified resource in storage.
      *
      * @param  FileRequest  $request
      * @param  Equipment  $equipment
@@ -149,7 +151,7 @@ class EquipmentFileController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage
+     * Remove the specified resource from storage.
      *
      * @param  Equipment  $equipment
      * @param  int  $id

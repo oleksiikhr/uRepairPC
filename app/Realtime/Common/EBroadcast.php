@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Realtime\Common;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
 use App\Contracts\IBroadcastWebsocket;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -36,7 +38,7 @@ abstract class EBroadcast implements ShouldQueue, IBroadcastWebsocket
     }
 
     /**
-     * Join to this room after broadcast
+     * Join to this room after broadcast.
      *
      * @return array
      */

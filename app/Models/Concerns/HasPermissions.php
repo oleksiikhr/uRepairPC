@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Models\Concerns;
 
@@ -55,7 +57,7 @@ trait HasPermissions
     }
 
     /**
-     * Return all the permissions the model has via roles
+     * Return all the permissions the model has via roles.
      *
      * @return Collection
      */
@@ -72,7 +74,7 @@ trait HasPermissions
     }
 
     /**
-     * Get names of permissions
+     * Get names of permissions.
      *
      * @return array
      */
@@ -114,7 +116,7 @@ trait HasPermissions
     }
 
     /**
-     * Get key for Cache permissions
+     * Get key for Cache permissions.
      *
      * @return string
      */

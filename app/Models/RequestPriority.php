@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Models;
 
@@ -11,7 +13,7 @@ class RequestPriority extends BaseModel
     use HasDefaultColumn, SoftDeletes;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $fillable = [
         'name',
@@ -22,7 +24,7 @@ class RequestPriority extends BaseModel
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $casts = [
         'default' => 'boolean',

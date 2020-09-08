@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -15,7 +17,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 class RoleController extends Controller
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function permissions(): array
     {
@@ -30,7 +32,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Display a listing of the resource
+     * Display a listing of the resource.
      *
      * @param  RoleRequest  $request
      * @return JsonResponse
@@ -62,7 +64,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage
+     * Store a newly created resource in storage.
      *
      * @param  RoleRequest  $request
      * @return JsonResponse
@@ -81,7 +83,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Display the specified resource
+     * Display the specified resource.
      *
      * @param  Role  $role
      * @return JsonResponse
@@ -99,7 +101,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Update the specified resource in storage
+     * Update the specified resource in storage.
      *
      * @param  RoleRequest  $request
      * @param  Role  $role
@@ -119,7 +121,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Update the specified resource in storage
+     * Update the specified resource in storage.
      *
      * @param  Request  $request
      * @param  Role  $role
@@ -147,7 +149,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage
+     * Remove the specified resource from storage.
      *
      * @param  Role  $role
      * @return JsonResponse

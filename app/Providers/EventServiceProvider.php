@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Providers;
 
@@ -7,14 +9,14 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 class EventServiceProvider extends ServiceProvider
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $listen = [
         //
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function boot(): void
     {

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers\Stat;
 
@@ -15,12 +17,12 @@ use App\Http\Resources\ManifestJsonResource;
 class ManifestController extends Controller
 {
     /**
-     * Keeps default images
+     * Keeps default images.
      */
     public const PROTECT_FOLDER = 'images';
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function permissions(): array
     {
@@ -30,7 +32,7 @@ class ManifestController extends Controller
     }
 
     /**
-     * Display a manifest.json
+     * Display a manifest.json.
      *
      * @return JsonResponse
      */
@@ -42,7 +44,7 @@ class ManifestController extends Controller
     }
 
     /**
-     * Update all resources in storage
+     * Update all resources in storage.
      *
      * @param  ManifestRequest  $request
      * @return JsonResponse

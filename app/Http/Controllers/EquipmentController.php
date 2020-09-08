@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use App\Enums\Perm;
 use App\Models\Equipment;
-use Illuminate\Http\JsonResponse;
 use App\Http\Helpers\FilesHelper;
+use Illuminate\Http\JsonResponse;
 use App\Realtime\Equipments\EJoin;
 use App\Realtime\Equipments\ECreate;
 use App\Realtime\Equipments\EUpdate;
@@ -15,7 +17,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 class EquipmentController extends Controller
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function permissions(): array
     {
@@ -29,7 +31,7 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Display a listing of the resource
+     * Display a listing of the resource.
      *
      * @param  EquipmentRequest  $request
      * @return JsonResponse
@@ -62,7 +64,7 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage
+     * Store a newly created resource in storage.
      *
      * @param  EquipmentRequest  $request
      * @return JsonResponse
@@ -83,7 +85,7 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Display the specified resource
+     * Display the specified resource.
      *
      * @param  Equipment  $equipment
      * @return JsonResponse
@@ -104,7 +106,7 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Update the specified resource in storage
+     * Update the specified resource in storage.
      *
      * @param  EquipmentRequest  $request
      * @param  Equipment  $equipment
@@ -129,7 +131,7 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage
+     * Remove the specified resource from storage.
      *
      * @param  EquipmentRequest  $request
      * @param  Equipment  $equipment

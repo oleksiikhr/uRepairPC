@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Observers;
 
@@ -8,7 +10,7 @@ use App\Realtime\EquipmentManufacturers\EDelete;
 class EquipmentManufacturerObserver
 {
     /**
-     * Handle the equipment manufacturer "deleted" event
+     * Handle the equipment manufacturer "deleted" event.
      *
      * @param  EquipmentManufacturer  $equipmentManufacturer
      * @return void

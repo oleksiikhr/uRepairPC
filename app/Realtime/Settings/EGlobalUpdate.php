@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Realtime\Settings;
 
@@ -7,7 +9,7 @@ use App\Realtime\Common\EUpdateBroadcast;
 class EGlobalUpdate extends EUpdateBroadcast
 {
     /**
-     * Create a new event instance
+     * Create a new event instance.
      *
      * @param  mixed  $data
      * @return void

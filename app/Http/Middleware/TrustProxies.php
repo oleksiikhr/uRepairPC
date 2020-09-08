@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
@@ -8,12 +10,12 @@ use Fideloper\Proxy\TrustProxies as Middleware;
 class TrustProxies extends Middleware
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $proxies;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $headers = Request::HEADER_X_FORWARDED_ALL;
 }

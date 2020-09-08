@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -7,7 +9,7 @@ use Illuminate\Database\Migrations\Migration;
 class CreateRequestPrioritiesTable extends Migration
 {
     /**
-     * Run the migrations
+     * Run the migrations.
      *
      * @return void
      */
@@ -32,7 +34,7 @@ class CreateRequestPrioritiesTable extends Migration
     }
 
     /**
-     * Reverse the migrations
+     * Reverse the migrations.
      *
      * @return void
      */

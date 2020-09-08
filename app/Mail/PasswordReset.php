@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Mail;
 
@@ -16,7 +18,7 @@ class PasswordReset extends Mailable
     private string $password;
 
     /**
-     * Create a new message instance
+     * Create a new message instance.
      *
      * @param string $password
      */
@@ -28,7 +30,7 @@ class PasswordReset extends Mailable
     }
 
     /**
-     * Build the message
+     * Build the message.
      *
      * @return $this
      */
