@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use App\Realtime\JoinRooms;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Realtime\Roles\EGlobal as RolesEvent;
 use App\Realtime\Users\EGlobal as UsersEvent;
@@ -19,12 +20,9 @@ use App\Realtime\EquipmentManufacturers\EGlobal as EquipmentManufacturersEvent;
 class ListenerController extends Controller
 {
     /**
-     * Add middleware depends on user permissions.
-     *
-     * @param  Request  $request
-     * @return array
+     * {@inheritdoc}
      */
-    public function permissions(Request $request): array
+    public function permissions(): array
     {
         return [
             //

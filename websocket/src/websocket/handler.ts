@@ -1,13 +1,13 @@
-import { JsonEvent } from 'JsonEvent';
+import JsonEvent from 'JsonEvent';
 import * as types from '../enum/types';
 import joinEvent from './events/join';
 import syncEvent from './events/sync';
 import commonEvent from './events/common';
 import createEvent from './events/create';
-import io from "./io";
+import io from './io';
 
 export default (json: JsonEvent) => {
-  const socket = io.sockets.connected[json.socketId]
+  const socket = io.sockets.connected[json.socketId];
 
   switch (json.type) {
     case types.JOIN:

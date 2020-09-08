@@ -6,12 +6,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/uRepairPC/server.git"
+    "url": "git+https://github.com/uRepairPC/uRepairPC.git"
   },
   "author": "Alexey Khrushch <alexeykhr@outlook.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/uRepairPC/server/issues"
+    "url": "https://github.com/uRepairPC/uRepairPC/issues"
   },
-  "homepage": "https://github.com/uRepairPC/server#readme"
+  "homepage": "https://github.com/uRepairPC/uRepairPC#readme"
 }

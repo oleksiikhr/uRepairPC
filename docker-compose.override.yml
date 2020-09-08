@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  web:
+    build: ./web
+    volumes:
+      - ./web:/usr/app
+
+  websocket:
+    build: ./websocket
+    volumes:
+      - ./websocket:/usr/app
+
+  maildev:
+    image: djfarrelly/maildev
+    container_name: u_maildev
+    restart: always
+    ports:
+      - ${MAIL_PORT}:25
+    labels:
+      - traefik.http.routers.maildev.rule=Host(`maildev.localhost`)
+      - traefik.http.services.maildev.loadbalancer.server.port=80

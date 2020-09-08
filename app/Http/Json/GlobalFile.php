@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Json;
 
@@ -12,7 +14,7 @@ class GlobalFile extends Json
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getAttributes(): array
     {
@@ -27,7 +29,7 @@ class GlobalFile extends Json
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getDefaultData(): array
     {

@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: ./web
+      dockerfile: prod.Dockerfile
+    volumes:
+      - ./web/.docker/nginx.conf:/etc/nginx/nginx.conf
+
+  websocket:
+    build:
+      context: ./websocket
+      dockerfile: prod.Dockerfile

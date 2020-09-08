@@ -1,4 +1,4 @@
-export interface JsonEvent {
+export default interface JsonEvent {
   event: string;
   type: string;
   socketId: string;

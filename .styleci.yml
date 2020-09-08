@@ -1,4 +1,12 @@
-php:
-  preset: laravel
-  enabled:
-    - fully_qualified_strict_types
+preset: laravel
+
+finder:
+  exclude:
+    - "web"
+    - "websocket"
+
+enabled:
+  - length_ordered_imports
+
+disabled:
+  - alpha_ordered_imports

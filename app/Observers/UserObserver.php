@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\User;
+use App\Models\User;
 use App\Mail\UserCreated;
 use App\Realtime\Users\ECreate;
 use App\Realtime\Users\EDelete;
@@ -23,7 +25,7 @@ class UserObserver
 
         $user->password = bcrypt($password);
 
-        Mail::to($user)->send(new UserCreated($password));
+        Mail::to($user)->queue(new UserCreated($password));
     }
 
     /**

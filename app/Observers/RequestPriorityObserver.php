@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\RequestPriority;
+use App\Models\RequestPriority;
 use App\Realtime\RequestPriorities\EDelete;
 
 class RequestPriorityObserver

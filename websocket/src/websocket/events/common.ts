@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
-import { JsonEvent } from 'JsonEvent';
-import io from "../io";
+import JsonEvent from 'JsonEvent';
+import io from '../io';
 
 export default (socket: Socket|undefined, json: JsonEvent) => {
   if (socket) {

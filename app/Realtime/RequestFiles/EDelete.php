@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Realtime\RequestFiles;
 
-use App\Realtime\Common\EDeleteBroadcast;
 use Illuminate\Database\Eloquent\Model;
+use App\Realtime\Common\EDeleteBroadcast;
 
 class EDelete extends EDeleteBroadcast
 {

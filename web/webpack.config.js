@@ -82,9 +82,7 @@ module.exports = {
   },
   plugins: [
     new VueLoaderPlugin,
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['web/*', 'index.html', 'sw.js']
-    }),
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: './index.html',
@@ -98,12 +96,12 @@ module.exports = {
     }),
     new GenerateSW({
       swDest: 'sw.js',
-      importWorkboxFrom: 'local',
-      importsDirectory: 'web/pwa',
       clientsClaim: true,
       skipWaiting: true,
+      cleanupOutdatedCaches: true,
+      // TODO
       navigateFallback: '/index.html',
-      navigateFallbackWhitelist: [
+      navigateFallbackAllowlist: [
         // Output build
         /^\/web/, /sw\.js$/, /index\.html/,
         // Pages

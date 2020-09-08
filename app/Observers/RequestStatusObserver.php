@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\RequestStatus;
+use App\Models\RequestStatus;
 use App\Realtime\RequestStatuses\EDelete;
 
 class RequestStatusObserver

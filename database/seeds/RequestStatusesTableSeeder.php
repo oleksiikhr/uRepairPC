@@ -1,6 +1,8 @@
-<?php declare(strict_types=1);
+<?php
 
-use App\RequestStatus;
+declare(strict_types=1);
+
+use App\Models\RequestStatus;
 use Illuminate\Database\Seeder;
 
 class RequestStatusesTableSeeder extends Seeder

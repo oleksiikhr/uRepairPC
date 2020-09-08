@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Providers;
 
@@ -8,12 +10,21 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 class AuthServiceProvider extends ServiceProvider
 {
     /**
-     * The policy mappings for the application.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $policies = [
-        //
+        \App\Models\EquipmentManufacturer::class => \App\Policies\EquipmentManufacturerPolicy::class,
+        \App\Models\EquipmentModel::class => \App\Policies\EquipmentModelPolicy::class,
+        \App\Models\Equipment::class => \App\Policies\EquipmentPolicy::class,
+        \App\Models\EquipmentType::class => \App\Policies\EquipmentTypePolicy::class,
+        \App\Models\File::class => \App\Policies\FilePolicy::class,
+        \App\Models\RequestComment::class => \App\Policies\RequestCommentPolicy::class,
+        \App\Models\Request::class => \App\Policies\RequestPolicy::class,
+        \App\Models\RequestPriority::class => \App\Policies\RequestPriorityPolicy::class,
+        \App\Models\RequestStatus::class => \App\Policies\RequestStatusPolicy::class,
+        \App\Models\RequestType::class => \App\Policies\RequestTypePolicy::class,
+        \App\Models\Role::class => \App\Policies\RolePolicy::class,
+        \App\Models\User::class => \App\Policies\UserPolicy::class,
     ];
 
     /**
@@ -25,12 +36,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('owner', static function ($user, $model) {
-            return $user->id === $model->user_id;
-        });
-
-        Gate::define('assign', static function ($user, $model) {
-            return $user->id === $model->assign_id;
-        });
+        Gate::define('owner', static fn ($user, $model) => $user->id === $model->user_id);
+        Gate::define('assign', static fn ($user, $model) => $user->id === $model->assign_id);
     }
 }

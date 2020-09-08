@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 // TODO Translate to en, ru
 
 return [
 
     /*
-     * Middleware.
+     * Middleware
      */
     'middleware' => [
         'no_permission' => 'Немає прав',
@@ -13,7 +15,7 @@ return [
     ],
 
     /*
-     * Stat Controllers.
+     * Stat Controllers
      */
     'settings' => [
         'global' => 'Налаштування оновлені',
@@ -21,7 +23,7 @@ return [
     ],
 
     /*
-     * AuthController.
+     * AuthController
      */
     'auth' => [
         'login_error' => 'Дані невірні',
@@ -32,7 +34,7 @@ return [
     ],
 
     /*
-     * RequestController.
+     * RequestController
      */
     'requests' => [
         'show' => 'Заявка отримана',
@@ -42,7 +44,7 @@ return [
     ],
 
     /*
-     * RequestCommentController.
+     * RequestCommentController
      */
     'request_comments' => [
         'index' => 'Коментарії отримані',
@@ -53,7 +55,7 @@ return [
     ],
 
     /*
-     * UserController.
+     * UserController
      */
     'users' => [
         'show' => 'Користувач отриман',
@@ -68,7 +70,7 @@ return [
     ],
 
     /*
-     * RoleController.
+     * RoleController
      */
     'roles' => [
         'show' => 'Роль отримана',
@@ -79,7 +81,7 @@ return [
     ],
 
     /*
-     * EquipmentController.
+     * EquipmentController
      */
     'equipments' => [
         'show' => 'Обладнання отримано',
@@ -89,7 +91,7 @@ return [
     ],
 
     /*
-     * EquipmentManufacturerController.
+     * EquipmentManufacturerController
      */
     'equipment_manufacturers' => [
         'show' => 'Виробник обладнання отриманий',
@@ -99,7 +101,7 @@ return [
     ],
 
     /*
-     * EquipmentModelController.
+     * EquipmentModelController
      */
     'equipment_model' => [
         'show' => 'Модель обладнання отримано',
@@ -109,7 +111,7 @@ return [
     ],
 
     /*
-     * EquipmentTypeController.
+     * EquipmentTypeController
      */
     'equipment_type' => [
         'show' => 'Тип обладнання отримано',
@@ -119,7 +121,7 @@ return [
     ],
 
     /*
-     * RequestStatusController.
+     * RequestStatusController
      */
     'request_status' => [
         'show' => 'Статус заявки отримано',
@@ -131,7 +133,7 @@ return [
     ],
 
     /*
-     * RequestPriorityController.
+     * RequestPriorityController
      */
     'request_priority' => [
         'show' => 'Пріорітет заявки отримано',
@@ -143,7 +145,7 @@ return [
     ],
 
     /*
-     * RequestTypeController.
+     * RequestTypeController
      */
     'request_type' => [
         'show' => 'Тип заявки отримано',
@@ -155,7 +157,7 @@ return [
     ],
 
     /*
-     * Working with files.
+     * Working with files
      */
     'files' => [
         'files_not_deleted' => 'Виникла помилка під час видалення файлів',
@@ -171,7 +173,7 @@ return [
     ],
 
     /*
-     * Database operations.
+     * Database operations
      */
     'database' => [
         'save_error' => 'Виникла помилка при збереженні',

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Realtime\Users;
 
@@ -19,7 +21,7 @@ class EGlobal extends EJoinBroadcast
      */
     public static function getRooms(): array
     {
-        if (auth()->user()->perm(Perm::USERS_VIEW_ALL)) {
+        if (perm(Perm::USERS_VIEW_ALL)) {
             return [self::$roomName];
         }
 

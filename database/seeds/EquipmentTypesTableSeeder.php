@@ -1,6 +1,8 @@
-<?php declare(strict_types=1);
+<?php
 
-use App\EquipmentType;
+declare(strict_types=1);
+
+use App\Models\EquipmentType;
 use Illuminate\Database\Seeder;
 
 class EquipmentTypesTableSeeder extends Seeder

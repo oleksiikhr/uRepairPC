@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Resources;
 
@@ -7,7 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class ManifestJsonResource extends JsonResource
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function toArray($request): array
     {
@@ -19,7 +21,7 @@ class ManifestJsonResource extends JsonResource
             'display' => $this['display'],
             'background_color' => $this['background_color'],
             'theme_color' => $this['theme_color'],
-            'icons' => collect($this['icons'])->map(function ($item) {
+            'icons' => collect($this['icons'])->map(static function ($item) {
                 $item->src = url('storage/'.$item->src);
 
                 return $item;

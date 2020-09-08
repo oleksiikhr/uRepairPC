@@ -1,6 +1,8 @@
-<?php declare(strict_types=1);
+<?php
 
-use App\RequestType;
+declare(strict_types=1);
+
+use App\Models\RequestType;
 use Illuminate\Database\Seeder;
 
 class RequestTypesTableSeeder extends Seeder

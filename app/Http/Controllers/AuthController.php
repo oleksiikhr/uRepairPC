@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\User;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\AuthRequest;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -11,12 +12,9 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthController extends Controller
 {
     /**
-     * Add middleware depends on user permissions.
-     *
-     * @param  Request  $request
-     * @return array
+     * {@inheritdoc}
      */
-    public function permissions(Request $request): array
+    public function permissions(): array
     {
         return [];
     }

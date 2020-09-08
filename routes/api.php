@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 
@@ -67,10 +69,10 @@ Route::group(['middleware' => ['jwt.auth']], static function () {
      */
     Route::apiResource('equipments', 'EquipmentController');
     Route::group(['prefix' => 'equipments'], static function () {
-        Route::apiResource('types', 'EquipmentTypeController');
-        Route::apiResource('manufacturers', 'EquipmentManufacturerController');
-        Route::apiResource('models', 'EquipmentModelController');
-        Route::apiResource('{equipment}/files', 'EquipmentFileController');
+        Route::apiResource('manufacturers', 'EquipmentManufacturerController')->parameter('manufacturers', 'equipmentManufacturer');
+        Route::apiResource('models', 'EquipmentModelController')->parameter('models', 'equipmentModel');
+        Route::apiResource('types', 'EquipmentTypeController')->parameter('types', 'equipmentType');
+        Route::apiResource('{equipment}/files', 'EquipmentFileController')->parameter('files', 'id');
     });
 
     /*
@@ -91,10 +93,10 @@ Route::group(['middleware' => ['jwt.auth']], static function () {
      */
     Route::apiResource('requests', 'RequestController');
     Route::group(['prefix' => 'requests'], static function () {
-        Route::apiResource('statuses', 'RequestStatusController');
-        Route::apiResource('priorities', 'RequestPriorityController');
-        Route::apiResource('types', 'RequestTypeController');
-        Route::apiResource('{request}/files', 'RequestFileController');
-        Route::apiResource('{request}/comments', 'RequestCommentController');
+        Route::apiResource('statuses', 'RequestStatusController')->parameter('statuses', 'requestStatus');
+        Route::apiResource('priorities', 'RequestPriorityController')->parameter('priorities', 'requestPriority');
+        Route::apiResource('types', 'RequestTypeController')->parameter('types', 'requestType');
+        Route::apiResource('{request}/comments', 'RequestCommentController')->parameter('comments', 'id');
+        Route::apiResource('{request}/files', 'RequestFileController')->parameter('files', 'id');
     });
 });

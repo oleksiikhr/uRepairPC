@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\EquipmentModel;
+use App\Models\EquipmentModel;
 use App\Realtime\EquipmentModels\EDelete;
 
 class EquipmentModelObserver

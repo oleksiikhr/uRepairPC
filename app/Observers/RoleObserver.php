@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\Role;
+use App\Models\Role;
 use App\Realtime\Roles\EDelete;
 
 class RoleObserver

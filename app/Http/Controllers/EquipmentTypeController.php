@@ -1,35 +1,25 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Enums\Perm;
-use App\EquipmentType;
-use Illuminate\Http\Request;
+use App\Models\EquipmentType;
 use Illuminate\Http\JsonResponse;
 use App\Realtime\EquipmentTypes\EJoin;
-use Illuminate\Support\Facades\Gate;
 use App\Realtime\EquipmentTypes\ECreate;
 use App\Realtime\EquipmentTypes\EUpdate;
 use App\Http\Requests\EquipmentTypeRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class EquipmentTypeController extends Controller
 {
     /**
-     * @var User
+     * {@inheritdoc}
      */
-    private $user;
-
-    /**
-     * Add middleware depends on user permissions.
-     *
-     * @param  Request  $request
-     * @return array
-     */
-    public function permissions(Request $request): array
+    public function permissions(): array
     {
-        $this->user = auth()->user();
-
         return [
             'index' => Perm::EQUIPMENTS_CONFIG_VIEW_ALL,
             'show' => Perm::EQUIPMENTS_CONFIG_VIEW_ALL,
@@ -61,32 +51,26 @@ class EquipmentTypeController extends Controller
      */
     public function store(EquipmentTypeRequest $request): JsonResponse
     {
-        $equipmentType = new EquipmentType;
-        $equipmentType->fill($request->all());
-        $equipmentType->user_id = $this->user->id;
+        $type = new EquipmentType($request->validated());
+        $type->user_id = auth()->id();
+        $type->save();
 
-        if (! $equipmentType->save()) {
-            return $this->responseDatabaseSaveError();
-        }
-
-        ECreate::dispatchAfterResponse($equipmentType);
+        ECreate::dispatchAfterResponse($type);
 
         return response()->json([
             'message' => __('app.equipment_type.store'),
-            'equipment_type' => $equipmentType,
+            'equipment_type' => $type,
         ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  EquipmentType  $equipmentType
      * @return JsonResponse
      */
-    public function show(int $id): JsonResponse
+    public function show(EquipmentType $equipmentType): JsonResponse
     {
-        $equipmentType = EquipmentType::findOrFail($id);
-
         EJoin::dispatchAfterResponse($equipmentType);
 
         return response()->json([
@@ -99,25 +83,16 @@ class EquipmentTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  EquipmentTypeRequest  $request
-     * @param  int  $id
+     * @param  EquipmentType  $equipmentType
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function update(EquipmentTypeRequest $request, int $id): JsonResponse
+    public function update(EquipmentTypeRequest $request, EquipmentType $equipmentType): JsonResponse
     {
-        $equipmentType = EquipmentType::findOrFail($id);
+        $this->authorize('update', $equipmentType);
 
-        // Edit only own equipments config
-        if (! $this->user->perm(Perm::EQUIPMENTS_CONFIG_EDIT_ALL) &&
-            Gate::denies('owner', $equipmentType)
-        ) {
-            return $this->responseNoPermission();
-        }
-
-        $equipmentType->fill($request->all());
-
-        if (! $equipmentType->save()) {
-            return $this->responseDatabaseSaveError();
-        }
+        $equipmentType->fill($request->validated());
+        $equipmentType->save();
 
         EUpdate::dispatchAfterResponse($equipmentType->id, $equipmentType);
 
@@ -130,23 +105,16 @@ class EquipmentTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  EquipmentType  $equipmentType
      * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws \Exception
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(EquipmentType $equipmentType): JsonResponse
     {
-        $equipmentType = EquipmentType::findOrFail($id);
+        $this->authorize('delete', $equipmentType);
 
-        // Delete only own equipments config
-        if (! $this->user->perm(Perm::EQUIPMENTS_CONFIG_DELETE_ALL) &&
-            Gate::denies('owner', $equipmentType)
-        ) {
-            return $this->responseNoPermission();
-        }
-
-        if (! $equipmentType->delete()) {
-            return $this->responseDatabaseDestroyError();
-        }
+        $equipmentType->delete();
 
         return response()->json([
             'message' => __('app.equipment_type.destroy'),

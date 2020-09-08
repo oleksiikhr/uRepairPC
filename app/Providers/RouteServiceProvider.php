@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Providers;
 
@@ -8,11 +10,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * This namespace is applied to your controller routes.
-     *
-     * In addition, it is set as the URL generator's root namespace.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $namespace = 'App\Http\Controllers';
 
@@ -24,17 +22,40 @@ class RouteServiceProvider extends ServiceProvider
     public const HOME = '/home';
 
     /**
-     * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function boot(): void
     {
-        $types = ['id', 'equipment', 'file', 'type', 'model', 'manufacturer', 'request', 'comment'];
+        Route::pattern('id', '[0-9]+');
 
-        foreach ($types as $type) {
-            Route::pattern($type, '[0-9]+');
-        }
+        Route::pattern('user', '[0-9]+');
+        Route::model('user', \App\Models\User::class);
+
+        Route::pattern('role', '[0-9]+');
+        Route::model('role', \App\Models\Role::class);
+
+        Route::pattern('file', '[0-9]+');
+        Route::model('file', \App\Models\File::class);
+
+        Route::pattern('equipment', '[0-9]+');
+        Route::bind('equipment', static fn ($id) => \App\Models\Equipment::querySelectJoins()->firstOrFail($id));
+        Route::pattern('equipmentManufacturer', '[0-9]+');
+        Route::model('equipmentManufacturer', \App\Models\EquipmentManufacturer::class);
+        Route::pattern('equipmentModel', '[0-9]+');
+        Route::bind('equipmentModel', static fn ($id) => \App\Models\EquipmentModel::querySelectJoins()->firstOrFail($id));
+        Route::pattern('equipmentType', '[0-9]+');
+        Route::model('equipmentType', \App\Models\EquipmentType::class);
+
+        Route::pattern('request', '[0-9]+');
+        Route::bind('request', static fn ($id) => \App\Models\Request::querySelectJoins()->firstOrFail($id));
+        Route::pattern('requestPriority', '[0-9]+');
+        Route::model('requestPriority', \App\Models\RequestPriority::class);
+        Route::pattern('requestStatus', '[0-9]+');
+        Route::model('requestStatus', \App\Models\RequestType::class);
+        Route::pattern('requestType', '[0-9]+');
+        Route::model('requestType', \App\Models\RequestType::class);
+        Route::pattern('requestComment', '[0-9]+');
+        Route::model('requestComment', \App\Models\RequestComment::class);
 
         parent::boot();
     }
@@ -60,7 +81,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapWebRoutes()
+    protected function mapWebRoutes(): void
     {
         Route::namespace($this->namespace)
             ->group(base_path('routes/web.php'));
@@ -69,11 +90,11 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * Define the "api" routes for the application.
      *
-     * These routes are typically stateless.
+     * These routes are typically stateless
      *
      * @return void
      */
-    protected function mapApiRoutes()
+    protected function mapApiRoutes(): void
     {
         Route::prefix('api')
             ->middleware('api')

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Helpers;
 
-use App\File;
+use App\Models\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 
@@ -47,12 +49,7 @@ class FilesHelper
             }
 
             $fileModel->path = $uploadedUri;
-
-            if (! $fileModel->save()) {
-                $this->errors[$file->getClientOriginalName()] = [__('app.database.save_error')];
-                FileHelper::delete($fileModel->path, $fileModel->disk);
-                continue;
-            }
+            $fileModel->save();
 
             $this->filesUploaded[] = $fileModel;
         }

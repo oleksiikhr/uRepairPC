@@ -1,40 +1,31 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Equipment;
 use App\Enums\Perm;
-use App\RequestType;
-use App\RequestStatus;
-use App\RequestPriority;
-use Illuminate\Http\Request;
+use App\Models\Equipment;
+use App\Models\RequestType;
+use App\Models\RequestStatus;
+use App\Models\RequestPriority;
 use App\Realtime\Requests\EJoin;
-use App\Realtime\Requests\ECreate;
-use App\Realtime\Requests\EUpdate;
-use App\Request as RequestModel;
 use App\Http\Helpers\FilesHelper;
 use Illuminate\Http\JsonResponse;
+use App\Realtime\Requests\ECreate;
+use App\Realtime\Requests\EUpdate;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\RequestRequest;
+use App\Models\Request as RequestModel;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class RequestController extends Controller
 {
     /**
-     * @var User
+     * {@inheritdoc}
      */
-    private $user;
-
-    /**
-     * Add middleware depends on user permissions.
-     *
-     * @param  Request  $request
-     * @return array
-     */
-    public function permissions(Request $request): array
+    public function permissions(): array
     {
-        $this->user = auth()->user();
-
         return [
             'index' => [Perm::REQUESTS_VIEW_OWN, Perm::REQUESTS_VIEW_ALL, Perm::REQUESTS_VIEW_ASSIGN],
             'show' => [Perm::REQUESTS_VIEW_OWN, Perm::REQUESTS_VIEW_ALL, Perm::REQUESTS_VIEW_ASSIGN],
@@ -55,9 +46,9 @@ class RequestController extends Controller
         $query = RequestModel::querySelectJoins();
 
         // Search
-        if ($request->has('search') && $request->has('columns') && ! empty($request->columns)) {
+        if ($request->has('search') && $request->exists('columns')) {
             foreach ($request->columns as $column) {
-                $query->orWhere(RequestModel::SEARCH_RELATIONSHIP[$column] ?? $column, 'LIKE', '%'.$request->search.'%');
+                $query->orWhere(RequestModel::SEARCH_RELATIONSHIP[$column] ?? $column, 'LIKE', $request->search.'%');
             }
         }
 
@@ -80,10 +71,7 @@ class RequestController extends Controller
             $query->where('requests.type_id', $request->type_id);
         }
 
-        // Get requests by permissions
-        RequestModel::buildQueryByPerm($query, $this->user);
-
-        $list = $query->paginate(self::PAGINATE_DEFAULT);
+        $list = $query->filterByUser(auth()->user())->paginate();
         EJoin::dispatchAfterResponse(...$list->items());
 
         return response()->json($list);
@@ -94,56 +82,51 @@ class RequestController extends Controller
      *
      * @param  RequestRequest  $request
      * @return JsonResponse
+     * @todo refactoring
      */
     public function store(RequestRequest $request): JsonResponse
     {
-        $requestModel = new RequestModel;
-        $requestModel->fill($request->all());
-        $requestModel->user_id = $this->user->id;
-        $requestModel->type_id = RequestType::getDefaultValue()->id;
-        $requestModel->priority_id = RequestPriority::getDefaultValue()->id;
-        $requestModel->status_id = RequestStatus::getDefaultValue()->id;
+        $model = new RequestModel($request->validated());
+        $model->user_id = auth()->id();
+        $model->type_id = RequestType::getDefaultValue()->id;
+        $model->priority_id = RequestPriority::getDefaultValue()->id;
+        $model->status_id = RequestStatus::getDefaultValue()->id;
 
         // FIXME Move to another method + in update method + EquipmentFileController (permissions method)
         // + EquipmentController (show method)
         // Add Equipment if has access
         if ($request->has('equipment_id')) {
-            if ($this->user->perm(Perm::EQUIPMENTS_VIEW_ALL)) {
-                $requestModel->equipment_id = $request->equipment_id;
+            if (perm(Perm::EQUIPMENTS_VIEW_ALL)) {
+                $model->equipment_id = $request->equipment_id;
             } else {
                 $equipment = Equipment::findOrFail($request->equipment_id);
                 if (Gate::allows('owner', $equipment)) {
-                    $requestModel->equipment_id = $request->equipment_id;
+                    $model->equipment_id = $request->equipment_id;
                 }
             }
         }
 
-        if (! $requestModel->save()) {
-            return $this->responseDatabaseSaveError();
-        }
+        $model->save();
 
-        $requestModel = RequestModel::querySelectJoins()->findOrFail($requestModel->id);
-        ECreate::dispatchAfterResponse($requestModel);
+        $model = RequestModel::querySelectJoins()->findOrFail($model->id);
+        ECreate::dispatchAfterResponse($model);
 
         return response()->json([
             'message' => __('app.requests.store'),
-            'request' => RequestModel::querySelectJoins()->findOrFail($requestModel->id),
+            'request' => $model,
         ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  RequestModel  $requestModel
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function show(int $id): JsonResponse
+    public function show(RequestModel $requestModel): JsonResponse
     {
-        $requestModel = RequestModel::querySelectJoins()->findOrFail($id);
-
-        if (! RequestModel::hasAccessByPerm($requestModel, $this->user)) {
-            return $this->responseNoPermission();
-        }
+        $this->authorize('show', $requestModel);
 
         EJoin::dispatchAfterResponse($requestModel);
 
@@ -157,60 +140,56 @@ class RequestController extends Controller
      * Update the specified resource in storage.
      *
      * @param  RequestRequest  $request
-     * @param  int $id
+     * @param  RequestModel  $model
      * @return JsonResponse
+     * @throws AuthorizationException
+     * @todo refactoring
      */
-    public function update(RequestRequest $request, int $id): JsonResponse
+    public function update(RequestRequest $request, RequestModel $model): JsonResponse
     {
-        $requestModel = RequestModel::findOrFail($id);
+        $this->authorize('update', $model);
 
-        if (! RequestModel::hasAccessByPerm($requestModel, $this->user)) {
-            return $this->responseNoPermission();
-        }
-
-        $requestModel->fill($request->all());
+        $model->fill($request->validated());
 
         // Change Equipment if has access
         if ($request->has('equipment_id')) {
-            if ($this->user->perm(Perm::EQUIPMENTS_VIEW_ALL)) {
-                $requestModel->equipment_id = $request->equipment_id;
+            if (perm(Perm::EQUIPMENTS_VIEW_ALL)) {
+                $model->equipment_id = $request->equipment_id;
             } else {
                 $equipment = Equipment::findOrFail($request->equipment_id);
                 if (Gate::allows('owner', $equipment)) {
-                    $requestModel->equipment_id = $request->equipment_id;
+                    $model->equipment_id = $request->equipment_id;
                 }
             }
         }
 
         // Only user, who can edit every request - can assign user to request
         // TODO Move to another method (after web system*)
-        if ($request->has('assign_id') && $this->user->perm(Perm::REQUESTS_EDIT_ALL)) {
-            $requestModel->assign_id = $request->assign_id;
+        if ($request->has('assign_id') && perm(Perm::REQUESTS_EDIT_ALL)) {
+            $model->assign_id = $request->assign_id;
         }
 
         // Config attributes
-        if ($this->user->perm(Perm::REQUESTS_CONFIG_VIEW_ALL)) {
+        if (perm(Perm::REQUESTS_CONFIG_VIEW_ALL)) {
             if ($request->has('type_id')) {
-                $requestModel->type_id = $request->type_id;
+                $model->type_id = $request->type_id;
             }
             if ($request->has('priority_id')) {
-                $requestModel->priority_id = $request->priority_id;
+                $model->priority_id = $request->priority_id;
             }
             if ($request->has('status_id')) {
-                $requestModel->status_id = $request->status_id;
+                $model->status_id = $request->status_id;
             }
         }
 
-        if (! $requestModel->save()) {
-            return $this->responseDatabaseSaveError();
-        }
+        $model->save();
 
-        $requestModel = RequestModel::querySelectJoins()->findOrFail($id);
-        EUpdate::dispatchAfterResponse($requestModel);
+        $model = RequestModel::querySelectJoins()->findOrFail($model->id);
+        EUpdate::dispatchAfterResponse($model->id, $model);
 
         return response()->json([
             'message' => __('app.requests.update'),
-            'request' => $requestModel,
+            'request' => $model,
         ]);
     }
 
@@ -218,28 +197,20 @@ class RequestController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  RequestRequest  $request
-     * @param  int  $id
+     * @param  RequestModel  $requestModel
      * @return JsonResponse
      * @throws \Exception
      */
-    public function destroy(RequestRequest $request, int $id): JsonResponse
+    public function destroy(RequestRequest $request, RequestModel $requestModel): JsonResponse
     {
-        $requestModel = RequestModel::findOrFail($id);
-
-        if (! RequestModel::hasAccessByPerm($requestModel, $this->user)) {
-            return $this->responseNoPermission();
-        }
+        $this->authorize('delete', $requestModel);
 
         // Destroy files
-        if ($request->files_delete) {
-            if (! FilesHelper::delete($requestModel->files)) {
-                return response()->json(['message' => __('app.files.files_not_deleted')], 422);
-            }
+        if ($request->files_delete && ! FilesHelper::delete($requestModel->files)) {
+            return response()->json(['message' => __('app.files.files_not_deleted')], 422);
         }
 
-        if (! $requestModel->delete()) {
-            return $this->responseDatabaseDestroyError();
-        }
+        $requestModel->delete();
 
         return response()->json([
             'message' => __('app.requests.destroy'),

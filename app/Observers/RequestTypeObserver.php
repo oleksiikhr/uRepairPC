@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\RequestType;
+use App\Models\RequestType;
 use App\Realtime\RequestTypes\EDelete;
 
 class RequestTypeObserver

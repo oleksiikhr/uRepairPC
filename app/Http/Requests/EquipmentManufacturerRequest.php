@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Requests;
 
@@ -31,7 +33,7 @@ class EquipmentManufacturerRequest extends FormRequest
         ];
 
         if ($request->manufacturer) {
-            $rules['name'] = $rules['name'].','.$request->manufacturer;
+            $rules['name'] .= ','.$request->manufacturer->id;
         }
 
         if ($request->method === Request::METHOD_POST) {

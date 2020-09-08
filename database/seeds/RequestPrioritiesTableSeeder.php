@@ -1,6 +1,8 @@
-<?php declare(strict_types=1);
+<?php
 
-use App\RequestPriority;
+declare(strict_types=1);
+
+use App\Models\RequestPriority;
 use Illuminate\Database\Seeder;
 
 class RequestPrioritiesTableSeeder extends Seeder

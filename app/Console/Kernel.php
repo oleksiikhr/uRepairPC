@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Console;
 
@@ -8,14 +10,14 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 class Kernel extends ConsoleKernel
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $commands = [
         //
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function schedule(Schedule $schedule): void
     {
@@ -23,7 +25,7 @@ class Kernel extends ConsoleKernel
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function commands(): void
     {

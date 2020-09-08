@@ -23,7 +23,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist')
   },
   /** @see https://webpack.js.org/configuration/devtool/ */
-  devtool: 'eval',
+  devtool: 'inline-source-map',
   devServer: {
     contentBase: './dist',
     host: '0.0.0.0',

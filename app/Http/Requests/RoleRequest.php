@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\Role;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -35,7 +37,7 @@ class RoleRequest extends FormRequest
                 'sortColumn' => 'string|in:'.implode(',', Role::ALLOW_COLUMNS_SORT),
                 'sortOrder' => 'string|in:ascending,descending',
                 'permissions' => 'boolean',
-                'count' => 'int',
+                'count' => 'nullable|int',
             ];
         }
 

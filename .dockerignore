@@ -1,0 +1,7 @@
+.git
+.docker
+*Dockerfile*
+*docker-compose*
+vendor
+web
+websocket

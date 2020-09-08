@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http;
 
@@ -7,7 +9,7 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 class Kernel extends HttpKernel
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $middleware = [
         \App\Http\Middleware\TrustProxies::class,
@@ -18,17 +20,17 @@ class Kernel extends HttpKernel
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $middlewareGroups = [
         'api' => [
-            'throttle:60,1',
+            'throttle:100,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,

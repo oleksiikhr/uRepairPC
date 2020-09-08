@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Requests;
 
 use Illuminate\Http\Request;
-use App\Request as RequestModel;
+use App\Models\Request as RequestModel;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RequestRequest extends FormRequest

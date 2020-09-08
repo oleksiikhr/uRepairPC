@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Json;
 
@@ -35,7 +37,7 @@ abstract class Json implements IJson
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getData()
     {
@@ -62,11 +64,11 @@ abstract class Json implements IJson
         foreach ($attributes as $key => $type) {
             if (array_key_exists($key, $data)) {
                 switch ($type) {
-                    case 'bool': {
+                    case 'bool':
                         $data[$key] = (bool) $data[$key];
                         break;
-                    }
-                    case 'file': {
+
+                    case 'file':
                         // Delete old file
                         if (array_key_exists($key, $json)) {
                             FileHelper::delete($json[$key], $this->disk);
@@ -80,10 +82,10 @@ abstract class Json implements IJson
                             $data[$key] = null;
                         }
                         break;
-                    }
-                    default: {
+
+                    default:
                         $data[$key] = $data[$key] ?? '';
-                    }
+
                 }
             }
         }
@@ -92,7 +94,7 @@ abstract class Json implements IJson
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function mergeAndSaveToFile($arr): void
     {

@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Realtime\Common;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
 use App\Contracts\IBroadcastWebsocket;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -13,12 +15,15 @@ abstract class EBroadcast implements ShouldQueue, IBroadcastWebsocket
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    const TYPE_JOIN = 'join';
-    const TYPE_SYNC = 'sync';
-    const TYPE_CREATE = 'create';
-    const TYPE_UPDATE = 'update';
-    const TYPE_DELETE = 'delete';
+    public const TYPE_JOIN = 'join';
+    public const TYPE_SYNC = 'sync';
+    public const TYPE_CREATE = 'create';
+    public const TYPE_UPDATE = 'update';
+    public const TYPE_DELETE = 'delete';
 
+    /**
+     * @return void
+     */
     public function handle(): void
     {
         \Amqp::publish('', json_encode([

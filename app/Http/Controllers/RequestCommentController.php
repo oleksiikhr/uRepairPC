@@ -1,58 +1,27 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Enums\Perm;
-use App\RequestComment;
-use Illuminate\Http\Request;
-use App\Request as RequestModel;
+use App\Models\RequestComment;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Gate;
+use App\Models\Request as RequestModel;
 use App\Realtime\RequestComments\EJoin;
 use App\Realtime\RequestComments\ECreate;
 use App\Realtime\RequestComments\EDelete;
 use App\Realtime\RequestComments\EUpdate;
 use App\Http\Requests\RequestCommentRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class RequestCommentController extends Controller
 {
     /**
-     * @var RequestModel
+     * {@inheritdoc}
      */
-    private $request;
-
-    /**
-     * @var User
-     */
-    private $user;
-
-    /**
-     * Add middleware depends on user permissions.
-     *
-     * @param Request $request
-     * @return array
-     */
-    public function permissions(Request $request): array
+    public function permissions(): array
     {
-        $this->user = auth()->user();
-
-        if (! $this->user) {
-            $this->middleware('jwt.auth');
-
-            return [];
-        }
-
-        $requestId = (int) $request->route('request');
-        $this->request = RequestModel::findOrFail($requestId);
-
-        // Permissions on request before get a comments
-        if (! RequestModel::hasAccessByPerm($this->request, $this->user)) {
-            $this->middleware('permission:disable');
-
-            return [];
-        }
-
         return [
             'index' => Perm::REQUESTS_COMMENTS_VIEW_ALL,
             'show' => Perm::REQUESTS_COMMENTS_VIEW_ALL,
@@ -65,17 +34,20 @@ class RequestCommentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  int  $requestId
+     * @param  RequestModel  $requestModel
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function index(int $requestId): JsonResponse
+    public function index(RequestModel $requestModel): JsonResponse
     {
-        $requestComments = $this->request->comments()->get();
-        EJoin::dispatchAfterResponse($requestId, ...$requestComments);
+        $this->authorize('show', $requestModel);
+
+        $comments = $requestModel->comments()->get();
+        EJoin::dispatchAfterResponse($requestModel->id, ...$comments);
 
         return response()->json([
             'message' => __('app.request_comments.index'),
-            'request_comments' => $requestComments,
+            'request_comments' => $comments,
         ]);
     }
 
@@ -83,45 +55,46 @@ class RequestCommentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  RequestCommentRequest  $request
-     * @param  int  $requestId
+     * @param  RequestModel  $requestModel
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function store(RequestCommentRequest $request, int $requestId): JsonResponse
+    public function store(RequestCommentRequest $request, RequestModel $requestModel): JsonResponse
     {
-        $requestComment = new RequestComment;
-        $requestComment->fill($request->all());
-        $requestComment->request_id = $requestId;
-        $requestComment->user_id = $this->user->id;
+        $this->authorize('show', $requestModel);
 
-        if (! $requestComment->save()) {
-            return $this->responseDatabaseSaveError();
-        }
+        $comment = new RequestComment($request->validated());
+        $comment->request_id = $requestModel->id;
+        $comment->user_id = auth()->id();
+        $comment->save();
 
-        $requestComment = $this->request->comments()->findOrFail($requestComment->id);
-        ECreate::dispatchAfterResponse($requestId, $requestComment);
+        $comment = $requestModel->comments()->findOrFail($comment->id);
+        ECreate::dispatchAfterResponse($requestModel->id, $comment);
 
         return response()->json([
             'message' => __('app.request_comments.store'),
-            'request_comment' => $requestComment,
+            'request_comment' => $comment,
         ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $requestId
-     * @param  int  $commentId
+     * @param  RequestModel  $requestModel
+     * @param  int  $id
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function show(int $requestId, int $commentId): JsonResponse
+    public function show(RequestModel $requestModel, int $id): JsonResponse
     {
-        $requestComment = $this->request->comments()->findOrFail($commentId);
+        $this->authorize('show', $requestModel);
 
-        EJoin::dispatchAfterResponse($requestId, $requestComment);
+        $comment = $requestModel->comments()->findOrFail($id);
+        EJoin::dispatchAfterResponse($requestModel->id, $comment);
 
         return response()->json([
             'message' => __('app.request_comments.show'),
-            'request_comment' => $requestComment,
+            'request_comment' => $comment,
         ]);
     }
 
@@ -129,60 +102,50 @@ class RequestCommentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  RequestCommentRequest  $request
-     * @param  int  $requestId
-     * @param  int  $commentId
+     * @param  RequestModel  $requestModel
+     * @param  int  $id
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function update(RequestCommentRequest $request, int $requestId, int $commentId): JsonResponse
+    public function update(RequestCommentRequest $request, RequestModel $requestModel, int $id): JsonResponse
     {
-        $requestComment = $this->request->comments()->findOrFail($commentId);
+        $this->authorize('show', $requestModel);
 
-        // Show only own comment
-        if (! $this->user->perm(Perm::REQUESTS_COMMENTS_EDIT_ALL) &&
-            Gate::denies('owner', $requestComment)
-        ) {
-            return $this->responseNoPermission();
-        }
+        $comment = $requestModel->comments()->findOrFail($id);
 
-        $requestComment->fill($request->all());
+        $this->authorize('update', $comment);
 
-        if (! $requestComment->save()) {
-            return $this->responseDatabaseSaveError();
-        }
+        $comment->fill($request->validated());
+        $comment->save();
 
-        $requestComment = $this->request->comments()->findOrFail($requestComment->id);
-        EUpdate::dispatchAfterResponse($requestId, $commentId, $requestComment);
+        $comment = $requestModel->comments()->findOrFail($comment->id);
+        EUpdate::dispatchAfterResponse($requestModel->id, $id, $comment);
 
         return response()->json([
             'message' => __('app.request_comments.update'),
-            'request_comment' => $requestComment,
+            'request_comment' => $comment,
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $requestId
-     * @param  int  $commentId
+     * @param  RequestModel  $requestModel
+     * @param  int  $id
      * @return JsonResponse
      * @throws \Exception
      */
-    public function destroy(int $requestId, int $commentId): JsonResponse
+    public function destroy(RequestModel $requestModel, int $id): JsonResponse
     {
-        $requestComment = $this->request->comments()->findOrFail($commentId);
+        $this->authorize('show', $requestModel);
 
-        // Delete only own file
-        if (! $this->user->perm(Perm::REQUESTS_COMMENTS_DELETE_ALL) &&
-            Gate::denies('owner', $requestComment)
-        ) {
-            return $this->responseNoPermission();
-        }
+        $comment = $requestModel->comments()->findOrFail($id);
 
-        if (! $requestComment->delete()) {
-            return $this->responseDatabaseDestroyError();
-        }
+        $this->authorize('delete', $comment);
 
-        EDelete::dispatchAfterResponse($requestId, $requestComment);
+        $comment->delete();
+
+        EDelete::dispatchAfterResponse($requestModel->id, $comment);
 
         return response()->json([
             'message' => __('app.request_comments.destroy'),
