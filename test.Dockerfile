@@ -1,4 +1,4 @@
-FROM php:7.4-fpm-alpine
+FROM php:7.4-alpine
 
 RUN apk add shadow && usermod -u 1000 www-data && groupmod -g 1000 www-data
 
@@ -16,18 +16,12 @@ RUN docker-php-ext-install mysqli && \
 RUN curl -sSL https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer
 
-ARG MODE=development
-ENV MODE $MODE
-
-RUN mv "$PHP_INI_DIR/php.ini-$MODE" "$PHP_INI_DIR/php.ini"
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 WORKDIR /var/www
 
-COPY composer.* ./
+COPY . .
 
-CMD if ["$MODE" = "production"]; \
-  then composer install --no-dev && php-fpm; \
-  else composer install && php-fpm; \
-fi
+RUN composer install
 
-EXPOSE 9000
+RUN php artisan test

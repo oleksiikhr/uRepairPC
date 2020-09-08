@@ -4,11 +4,11 @@ services:
   web:
     build:
       context: ./web
-      dockerfile: Dockerfile.prod
+      dockerfile: prod.Dockerfile
     volumes:
       - ./web/.docker/nginx.conf:/etc/nginx/nginx.conf
 
   websocket:
     build:
       context: ./websocket
-      dockerfile: Dockerfile.prod
+      dockerfile: prod.Dockerfile
