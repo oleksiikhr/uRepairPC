@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: test.Dockerfile
+
+  web:
+    build:
+      context: ./web
+      dockerfile: test.Dockerfile
+
+  websocket:
+    build:
+      context: ./websocket
+      dockerfile: test.Dockerfile

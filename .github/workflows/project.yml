@@ -1,0 +1,40 @@
+name: Build uRepairPC
+
+on: [push]
+
+jobs:
+  server:
+    name: Server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Copy .env.testing to .env
+        run: cp .env.testing .env
+      - name: Init core containers
+        run: docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d traefik mysql redis rabbitmq
+      - name: Run container
+        run: docker-compose -f docker-compose.yml -f docker-compose.test.yml up --abort-on-container-exit --exit-code-from server --build server
+
+  web:
+    name: Web
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Copy .env.testing to .env
+        run: cp .env.testing .env
+      - name: Init core containers
+        run: docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d traefik
+      - name: Run container
+        run: docker-compose -f docker-compose.yml -f docker-compose.test.yml up --abort-on-container-exit --exit-code-from web --build web
+
+  websocket:
+    name: Websocket
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Copy .env.testing to .env
+        run: cp .env.testing .env
+      - name: Init core containers
+        run: docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d traefik rabbitmq
+      - name: Run container
+        run: docker-compose -f docker-compose.yml -f docker-compose.test.yml up --abort-on-container-exit --exit-code-from websocket --build websocket
