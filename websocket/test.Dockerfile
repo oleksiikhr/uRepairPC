@@ -1,4 +1,4 @@
-FROM node:14.4-alpine
+FROM node:14.10-alpine
 
 WORKDIR /usr/app
 
@@ -10,4 +10,4 @@ RUN yarn
 
 COPY . .
 
-CMD yarn test
+CMD yarn lint && yarn test

@@ -18,26 +18,26 @@
   },
   "homepage": "https://github.com/uRepairPC/uRepairPC#readme",
   "dependencies": {
-    "amqplib": "^0.5.5",
+    "amqplib": "^0.6.0",
     "dotenv": "^8.2.0",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
     "@types/amqplib": "^0.5.13",
     "@types/dotenv": "^8.2.0",
-    "@types/jest": "^26.0.3",
-    "@types/node": "^13.13.0",
-    "@types/socket.io": "^2.1.4",
-    "@types/socket.io-client": "^1.4.32",
-    "@typescript-eslint/eslint-plugin": "^2.29.0",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-typescript": "^7.2.1",
+    "@types/jest": "^26.0.13",
+    "@types/node": "^14.10.1",
+    "@types/socket.io": "^2.1.11",
+    "@types/socket.io-client": "^1.4.33",
+    "@typescript-eslint/eslint-plugin": "^4.1.0",
+    "eslint": "^7.9.0",
+    "eslint-config-airbnb-typescript": "^10.0.0",
     "eslint-plugin-import": "^2.20.2",
-    "jest": "^25.3.0",
-    "nodemon": "^2.0.3",
+    "jest": "^26.4.2",
+    "nodemon": "^2.0.4",
     "socket.io-client": "^2.3.0",
-    "ts-jest": "^25.4.0",
-    "ts-node": "^8.8.2",
-    "typescript": "^3.8.3"
+    "ts-jest": "^26.3.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
   }
 }

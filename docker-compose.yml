@@ -18,22 +18,18 @@ services:
       - 8080:8080
 
   server:
-    build: .
     container_name: u_server
-    restart: always
     volumes:
       - ./:${DOCKER_CONTAINER_PATH}
 
   web:
     container_name: u_web
-    restart: always
     labels:
       - traefik.http.routers.web.rule=Host(`${DOCKER_DOMAIN}`)
       - traefik.http.routers.web.entrypoints=web
 
   websocket:
     container_name: u_websocket
-    restart: always
     depends_on:
       - rabbitmq
     labels:
@@ -44,6 +40,8 @@ services:
     build: .docker/php-worker
     container_name: u_php_worker
     restart: always
+    depends_on:
+      - server
     volumes:
       - ./:${DOCKER_CONTAINER_PATH}
       - ./.docker/php-worker/supervisord.d:/etc/supervisord.d
