@@ -130,12 +130,3 @@ services:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
     labels:
       - traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.localhost`)
-
-  netdata:
-    image: netdata/netdata:v1.23.0
-    container_name: u_netdata
-    restart: always
-    cap_add:
-      - SYS_PTRACE
-    labels:
-      - traefik.http.routers.netdata.rule=Host(`netdata.localhost`)

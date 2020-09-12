@@ -23,6 +23,8 @@ RUN mv "$PHP_INI_DIR/php.ini-$MODE" "$PHP_INI_DIR/php.ini"
 
 WORKDIR /var/www
 
+USER www-data
+
 COPY composer.* ./
 
 CMD if ["$MODE" = "production"]; \

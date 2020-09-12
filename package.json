@@ -1,5 +1,5 @@
 {
-  "name": "@urepairpc/server",
+  "name": "urepairpc",
   "version": "3.0.0",
   "scripts": {
     "release": "standard-version"

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers as File;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,9 +19,9 @@ use Illuminate\Support\Facades\Route;
 /*
  * Section: Settings
  */
-Route::group(['prefix' => 'settings', 'namespace' => 'Stat'], static function () {
-    Route::get('global', 'GlobalController@index');
-    Route::get('manifest', 'ManifestController@index');
+Route::group(['prefix' => 'settings'], static function () {
+    Route::get('global', [File\Stat\GlobalController::class, 'index']);
+    Route::get('manifest', [File\Stat\ManifestController::class, 'index']);
 });
 
 /*
@@ -28,75 +29,75 @@ Route::group(['prefix' => 'settings', 'namespace' => 'Stat'], static function ()
  */
 Route::group(['prefix' => 'auth'], static function () {
     Route::group(['middleware' => 'guest'], static function () {
-        Route::post('login', 'AuthController@login');
-        Route::post('refresh', 'AuthController@refresh');
+        Route::post('login', [File\AuthController::class, 'login']);
+        Route::post('refresh', [File\AuthController::class, 'refresh']);
     });
 
     Route::group(['middleware' => ['jwt.auth']], static function () {
-        Route::get('profile', 'AuthController@profile');
-        Route::post('logout', 'AuthController@logout');
+        Route::get('profile', [File\AuthController::class, 'profile']);
+        Route::post('logout', [File\AuthController::class, 'logout']);
     });
 });
 
 Route::group(['middleware' => ['jwt.auth']], static function () {
     Route::group(['prefix' => 'listeners'], static function () {
-        Route::post('sync', 'ListenerController@sync');
+        Route::post('sync', [File\ListenerController::class, 'sync']);
     });
 
     /*
      * Section: Settings
      */
     Route::group(['prefix' => 'settings', 'namespace' => 'Stat'], static function () {
-        Route::post('global', 'GlobalController@store');
-        Route::post('manifest', 'ManifestController@store');
+        Route::post('global', [File\Stat\GlobalController::class, 'store']);
+        Route::post('manifest', [File\Stat\ManifestController::class, 'store']);
     });
 
     /*
      * Section: Users
      */
-    Route::apiResource('users', 'UserController');
+    Route::apiResource('users', File\UserController::class);
     Route::group(['prefix' => 'users'], static function () {
-        Route::put('{user}/email', 'UserController@updateEmail');
-        Route::put('{user}/password', 'UserController@updatePassword');
-        Route::put('{user}/roles', 'UserController@updateRoles');
-        Route::get('{user}/image', 'UserController@showImage');
-        Route::post('{user}/image', 'UserController@updateImage');
-        Route::delete('{user}/image', 'UserController@destroyImage');
+        Route::put('{user}/email', [File\UserController::class, 'updateEmail']);
+        Route::put('{user}/password', [File\UserController::class, 'updatePassword']);
+        Route::put('{user}/roles', [File\UserController::class, 'updateRoles']);
+        Route::get('{user}/image', [File\UserController::class, 'showImage']);
+        Route::post('{user}/image', [File\UserController::class, 'updateImage']);
+        Route::delete('{user}/image', [File\UserController::class, 'destroyImage']);
     });
 
     /*
      * Section: Equipments
      */
-    Route::apiResource('equipments', 'EquipmentController');
+    Route::apiResource('equipments', File\EquipmentController::class);
     Route::group(['prefix' => 'equipments'], static function () {
-        Route::apiResource('manufacturers', 'EquipmentManufacturerController')->parameter('manufacturers', 'equipmentManufacturer');
-        Route::apiResource('models', 'EquipmentModelController')->parameter('models', 'equipmentModel');
-        Route::apiResource('types', 'EquipmentTypeController')->parameter('types', 'equipmentType');
-        Route::apiResource('{equipment}/files', 'EquipmentFileController')->parameter('files', 'id');
+        Route::apiResource('manufacturers', File\EquipmentManufacturerController::class)->parameter('manufacturers', 'equipmentManufacturer');
+        Route::apiResource('models', File\EquipmentModelController::class)->parameter('models', 'equipmentModel');
+        Route::apiResource('types', File\EquipmentTypeController::class)->parameter('types', 'equipmentType');
+        Route::apiResource('{equipment}/files', File\EquipmentFileController::class)->parameter('files', 'id');
     });
 
     /*
      * Section: Roles
      */
-    Route::apiResource('roles', 'RoleController');
+    Route::apiResource('roles', File\RoleController::class);
     Route::group(['prefix' => 'roles'], static function () {
-        Route::put('{role}/permissions', 'RoleController@updatePermissions');
+        Route::put('{role}/permissions', [File\RoleController::class, 'updatePermissions']);
     });
 
     /*
      * Section: Permissions
      */
-    Route::get('permissions', 'PermissionController@index');
+    Route::get('permissions', [File\PermissionController::class, 'index']);
 
     /*
      * Section: Requests
      */
-    Route::apiResource('requests', 'RequestController');
+    Route::apiResource('requests', File\RequestController::class);
     Route::group(['prefix' => 'requests'], static function () {
-        Route::apiResource('statuses', 'RequestStatusController')->parameter('statuses', 'requestStatus');
-        Route::apiResource('priorities', 'RequestPriorityController')->parameter('priorities', 'requestPriority');
-        Route::apiResource('types', 'RequestTypeController')->parameter('types', 'requestType');
-        Route::apiResource('{request}/comments', 'RequestCommentController')->parameter('comments', 'id');
-        Route::apiResource('{request}/files', 'RequestFileController')->parameter('files', 'id');
+        Route::apiResource('statuses', File\RequestStatusController::class)->parameter('statuses', 'requestStatus');
+        Route::apiResource('priorities', File\RequestPriorityController::class)->parameter('priorities', 'requestPriority');
+        Route::apiResource('types', File\RequestTypeController::class)->parameter('types', 'requestType');
+        Route::apiResource('{request}/comments', File\RequestCommentController::class)->parameter('comments', 'id');
+        Route::apiResource('{request}/files', File\RequestFileController::class)->parameter('files', 'id');
     });
 });
