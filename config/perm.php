@@ -89,6 +89,11 @@ return [
             'delete_own' => 'requests.config.delete_own',
         ],
     ],
+    'jobs' => [
+        'view_all' => 'jobs.view_all',
+        'delete_all_queue' => 'jobs.delete_all_queue',
+        'delete_failed_queue' => 'jobs.delete_failed_queue',
+    ],
     'global' => [
         'settings' => [
             'edit' => 'global.settings.edit',
