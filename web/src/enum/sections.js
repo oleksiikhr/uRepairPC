@@ -18,6 +18,7 @@ export default {
   equipmentsTypes: 'equipments-types',
   roles: 'roles',
   jobs: 'jobs',
+  failedJobs: 'failed-jobs',
   settings: 'settings',
   settingsGlobal: 'settings-global',
   settingsManifest: 'settings-manifest'

@@ -44,8 +44,8 @@ const getters = {
       { prop: 'color', label: 'Колір', 'min-width': 100, disableSearch: true, customType: columnTypes.TYPE_COLOR },
       { prop: 'name', label: 'Ім\'я', 'min-width': 200, sortable: 'custom' },
       { prop: 'default', label: 'За замовчуванням', 'min-width': 150, sortable: 'custom', customType: columnTypes.TYPE_BOOL },
-      { prop: 'updated_at', label: 'Оновлено', 'min-width': 150, sortable: 'custom', customType: columnTypes.TYPE_TIMESTAMP },
-      { prop: 'created_at', label: 'Створений', 'min-width': 150, sortable: 'custom', customType: columnTypes.TYPE_TIMESTAMP }
+      { prop: 'updated_at', label: 'Оновлено', 'min-width': 150, sortable: 'custom', customType: columnTypes.TYPE_DATETIME },
+      { prop: 'created_at', label: 'Створений', 'min-width': 150, sortable: 'custom', customType: columnTypes.TYPE_DATETIME }
     ]
 
     const data = StorageData.columnRoles.length ? StorageData.columnRoles : defaultActive

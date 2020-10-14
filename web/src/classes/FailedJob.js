@@ -3,17 +3,17 @@
 import ApiHasHistory from '@/common/classes/ApiHasHistory'
 import sections from '@/enum/sections'
 
-export default class Job extends ApiHasHistory {
+export default class FailedJob extends ApiHasHistory {
 
   static get __API_POINT() {
-    return 'jobs'
+    return 'jobs/failed'
   }
 
   static get __SECTION() {
-    return sections.jobs
+    return sections.failedJobs
   }
 
   static get __JSON_ATTR() {
-    return 'job'
+    return 'failed_job'
   }
 }

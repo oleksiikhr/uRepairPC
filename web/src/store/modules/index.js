@@ -16,6 +16,10 @@ import requestStatuses from '@/store/modules/requestStatuses'
 import requestTypes from '@/store/modules/requestTypes'
 import requests from '@/store/modules/requests'
 
+// Jobs
+import failedJobs from '@/store/modules/failedJobs'
+import jobs from '@/store/modules/jobs'
+
 // Other
 import permissions from '@/store/modules/permissions'
 import settings from '@/store/modules/settings'
@@ -23,7 +27,6 @@ import template from '@/store/modules/template'
 import profile from '@/store/modules/profile'
 import users from '@/store/modules/users'
 import roles from '@/store/modules/roles'
-import jobs from '@/store/modules/jobs'
 
 export default {
   equipmentManufacturers,
@@ -36,11 +39,13 @@ export default {
   requestTypes,
   requests,
 
+  failedJobs,
+  jobs,
+
   permissions,
   settings,
   template,
   profile,
   users,
   roles,
-  jobs
 }

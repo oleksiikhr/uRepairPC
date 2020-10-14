@@ -166,6 +166,14 @@ const authorizedRoutes = {
         check: () => hasPerm(perm.JOBS_VIEW_SECTION) && hasPerm(perm.JOBS_VIEW_ALL)
       }
     },
+    {
+      path: `/${sections.jobs}/failed`,
+      name: sections.failedJobs,
+      component: () => import('@/pages/jobs/failed/Index'),
+      meta: {
+        check: () => hasPerm(perm.JOBS_VIEW_SECTION) && hasPerm(perm.JOBS_VIEW_ALL)
+      }
+    },
     // -------------------------------------------------------------------------------------- Settings
     {
       path: `/${sections.settings}`,

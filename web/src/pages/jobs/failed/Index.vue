@@ -14,7 +14,7 @@
     <filter-core slot="right-column">
       <filter-table-buttons
         ref="buttons"
-        :section="sections.jobs"
+        :section="sections.failedJobs"
         @update="() => fetchList(+list.current_page || 1)"
       />
       <filter-search
@@ -45,9 +45,9 @@ import { mapGetters } from 'vuex'
 import menu from '@/data/menu'
 
 export default {
-  name: 'Jobs',
+  name: 'FailedJobs',
   breadcrumbs: [
-    { title: menu[sections.jobs].title }
+    { title: menu[sections.jobs].children[sections.failedJobs].title }
   ],
   components: {
     FilterTableButtons: () => import('@/components/filters/TableButtons'),
@@ -73,10 +73,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      jobColumns: 'jobs/columns'
+      jobColumns: 'failedJobs/columns'
     }),
     list() {
-      return this.$store.state.jobs.list
+      return this.$store.state.failedJobs.list
     },
     filterColumns() {
       const columns = []
@@ -90,7 +90,7 @@ export default {
       return columns
     },
     loading() {
-      return this.$store.state.jobs.loading
+      return this.$store.state.failedJobs.loading
     },
     activeColumnProps() {
       return this.filterColumns
@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     fetchList(page = 1) {
-      this.$store.dispatch('jobs/fetchList', {
+      this.$store.dispatch('failedJobs/fetchList', {
         page,
         sortColumn: this.sort.column,
         sortOrder: this.sort.order,
@@ -121,10 +121,10 @@ export default {
       })
     },
     onChangeColumn() {
-      StorageData.columnJobs = this.filterColumns.map(i => i.prop)
+      StorageData.columnFailedJobs = this.filterColumns.map(i => i.prop)
     },
     onRowClick(job) {
-      this.$router.push({ name: `${sections.jobs}-id`, params: { id: job.id } })
+      this.$router.push({ name: `${sections.failedJobs}-id`, params: { id: job.id } })
     },
     onSortChange({ prop: column, order }) {
       this.sort = { column, order }

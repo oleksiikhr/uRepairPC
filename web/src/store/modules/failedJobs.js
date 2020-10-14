@@ -3,7 +3,7 @@
 import { TYPE_TIMESTAMP } from '@/enum/columnTypes'
 import commonStore from '@/common/store/section'
 import StorageData from '@/classes/StorageData'
-import Job from '@/classes/Job'
+import FailedJob from '@/classes/FailedJob'
 
 const state = {
   //
@@ -17,7 +17,7 @@ const actions = {
   fetchList({ commit }, params = {}) {
     commit('SET_LOADING', true)
 
-    return Job.fetchAll({ params })
+    return FailedJob.fetchAll({ params })
       .then(({ data }) => {
         commit('SET_LIST', data)
       })
@@ -37,19 +37,19 @@ const getters = {
    * @returns {(*|{model: boolean})[]}
    */
   columns() {
-    const defaultActive = ['queue', 'attempts', 'reserved_at', 'available_at', 'created_at']
+    const defaultActive = ['uuid', 'connection', 'queue', 'failed_at']
 
     const columns = [
       { prop: 'id', label: 'ID', 'min-width': 70, sortable: 'custom' },
+      { prop: 'uuid', label: 'UUID', 'min-width': 150, sortable: 'custom' },
+      { prop: 'connection', label: 'З\'єднання', 'min-width': 150, sortable: 'custom' },
       { prop: 'queue', label: 'Черга', 'min-width': 150, sortable: 'custom' },
       { prop: 'payload', label: 'Payload', 'min-width': 200, disableSearch: true },
-      { prop: 'attempts', label: 'Спроб', 'min-width': 100, disableSearch: true },
-      { prop: 'reserved_at', label: 'Зарезервовано', 'min-width': 150, sortable: 'custom', customType: TYPE_TIMESTAMP },
-      { prop: 'available_at', label: 'Доступний', 'min-width': 150, sortable: 'custom', customType: TYPE_TIMESTAMP },
-      { prop: 'created_at', label: 'Створений', 'min-width': 150, sortable: 'custom', customType: TYPE_TIMESTAMP }
+      { prop: 'exception', label: 'Спроб', 'min-width': 200, disableSearch: true },
+      { prop: 'reserved_at', label: 'Зарезервовано', 'min-width': 150, sortable: 'custom', customType: TYPE_TIMESTAMP }
     ]
 
-    const data = StorageData.columnJobs.length ? StorageData.columnJobs : defaultActive
+    const data = StorageData.columnFailedJobs.length ? StorageData.columnFailedJobs : defaultActive
 
     return columns
       .map((column) => {

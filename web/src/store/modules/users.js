@@ -1,6 +1,6 @@
 'use strict'
 
-import { TYPE_TIMESTAMP } from '@/enum/columnTypes'
+import { TYPE_DATETIME } from '@/enum/columnTypes'
 import commonStore from '@/common/store/section'
 import StorageData from '@/classes/StorageData'
 import { hasPerm } from '@/scripts/utils'
@@ -50,8 +50,8 @@ const getters = {
       { prop: 'email', label: 'E-mail', 'min-width': 250, sortable: 'custom' },
       { prop: 'phone', label: 'Телефон', 'min-width': 150, sortable: 'custom' },
       { prop: 'description', label: 'Опис', 'min-width': 250, disableSearch: true, hideList: true },
-      { prop: 'updated_at', label: 'Оновлено', 'min-width': 150, sortable: 'custom', customType: TYPE_TIMESTAMP },
-      { prop: 'created_at', label: 'Створений', 'min-width': 150, sortable: 'custom', customType: TYPE_TIMESTAMP }
+      { prop: 'updated_at', label: 'Оновлено', 'min-width': 150, sortable: 'custom', customType: TYPE_DATETIME },
+      { prop: 'created_at', label: 'Створений', 'min-width': 150, sortable: 'custom', customType: TYPE_DATETIME }
     ]
 
     const data = StorageData.columnUsers.length ? StorageData.columnUsers : defaultActive

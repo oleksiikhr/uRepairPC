@@ -1,6 +1,6 @@
 <template>
-  <div v-if="isTimestamp">
-    {{ timestamp }}
+  <div v-if="isTimestamp || isDatetime">
+    {{ date }}
   </div>
   <div v-else-if="isBool">
     {{ value ? 'Так' : 'Ні' }}
@@ -42,8 +42,11 @@ export default {
     isTimestamp() {
       return this.column.customType === columnTypes.TYPE_TIMESTAMP
     },
-    timestamp() {
-      return getDate(this.value)
+    isDatetime() {
+      return this.column.customType === columnTypes.TYPE_DATETIME
+    },
+    date() {
+      return getDate(this.isTimestamp ? this.value * 1000 : this.value)
     }
   }
 }

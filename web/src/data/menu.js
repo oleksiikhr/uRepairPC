@@ -101,6 +101,15 @@ export default {
     history: {
       show: true,
       callback: (obj) => obj.id
+    },
+    children: {
+      [sections.failedJobs]: {
+        title: 'Невдалі задачі',
+        icon: 'memory',
+        type: types.PRIMARY,
+        permissions: perm.JOBS_VIEW_SECTION,
+        action: () => router.push({ name: sections.failedJobs })
+      }
     }
   },
   [sections.settings]: {
