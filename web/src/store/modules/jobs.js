@@ -37,14 +37,14 @@ const getters = {
    * @returns {(*|{model: boolean})[]}
    */
   columns() {
-    const defaultActive = ['uuid', 'queue', 'attempts', 'reserved_at', 'updated_at', 'created_at']
+    const defaultActive = ['queue', 'attempts', 'reserved_at', 'updated_at', 'created_at']
 
     const columns = [
       { prop: 'id', label: 'ID', 'min-width': 70, sortable: 'custom' },
-      { prop: 'uuid', label: 'UUID', 'min-width': 200 },
       { prop: 'queue', label: 'Черга', 'min-width': 150, sortable: 'custom' },
-      { prop: 'attempts', label: 'Спроби', 'min-width': 100 },
-      { prop: 'reserved_at', label: 'Зарезервовано', 'min-width': 150 },
+      { prop: 'payload', label: 'Payload', 'min-width': 200, disableSearch: true },
+      { prop: 'attempts', label: 'Спроб', 'min-width': 100, disableSearch: true },
+      { prop: 'reserved_at', label: 'Зарезервовано', 'min-width': 150, sortable: 'custom' },
       { prop: 'updated_at', label: 'Оновлено', 'min-width': 150, sortable: 'custom', customType: TYPE_TIMESTAMP },
       { prop: 'created_at', label: 'Створений', 'min-width': 150, sortable: 'custom', customType: TYPE_TIMESTAMP }
     ]

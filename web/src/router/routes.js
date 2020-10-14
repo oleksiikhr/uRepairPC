@@ -163,7 +163,7 @@ const authorizedRoutes = {
       name: sections.jobs,
       component: () => import('@/pages/jobs/Index'),
       meta: {
-        check: () => hasPerm(perm.JOBS_VIEW_SECTION) && hasPerm(perm.EQUIPMENTS_VIEW_ALL)
+        check: () => hasPerm(perm.JOBS_VIEW_SECTION) && hasPerm(perm.JOBS_VIEW_ALL)
       }
     },
     // -------------------------------------------------------------------------------------- Settings

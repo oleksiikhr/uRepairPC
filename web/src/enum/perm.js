@@ -89,6 +89,7 @@ export const REQUESTS_CONFIG_DELETE_OWN = 'requests.config.delete_own'
 // Jobs
 export const JOBS_VIEW_SECTION = 'jobs.view_section'
 export const JOBS_VIEW_ALL = 'jobs.view_all'
+export const JOBS_RETRY = 'jobs.retry'
 export const JOBS_DELETE_ALL_QUEUE = 'jobs.delete_all_queue'
 export const JOBS_DELETE_FAILED_QUEUE = 'jobs.delete_failed_queue'
 
