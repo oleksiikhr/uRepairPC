@@ -173,6 +173,15 @@ return [
     ],
 
     /*
+     * Jobs
+     */
+    'jobs' => [
+        'show' => 'Задача отримана',
+        'retry' => 'Черга додана на повторну обробку',
+        'destroy' => 'Задача видалена',
+    ],
+
+    /*
      * Database operations
      */
     'database' => [
