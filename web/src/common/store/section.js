@@ -5,7 +5,7 @@ import Vue from 'vue'
 const state = {
   init: true,
   loading: false,
-  // Paginate from server (Laravel)
+  // Paginate from server
   list: {}
 }
 

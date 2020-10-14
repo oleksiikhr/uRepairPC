@@ -131,9 +131,6 @@ export default {
     list() {
       return this.$store.state.requests.list
     },
-    requests() {
-      return this.list.data || []
-    },
     filterColumns() {
       const columns = []
 

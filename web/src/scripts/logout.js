@@ -36,7 +36,7 @@ export default function () {
 
     // Clear data from store (vuex)
     const names = [
-      'roles', 'users', 'permissions',
+      'roles', 'users', 'jobs', 'permissions',
       // Equipments
       'equipments', 'equipmentTypes', 'equipmentManufacturers', 'equipmentModels',
       // Requests

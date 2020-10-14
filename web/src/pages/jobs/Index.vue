@@ -9,22 +9,12 @@
         @fetch="fetchList"
         @row-click="onRowClick"
         @sort-change="onSortChange"
-      >
-        <template slot-scope="{ column, data }">
-          <template v-if="column.prop === 'roles'">
-            <role-tag
-              v-for="(role, index) in data"
-              :key="index"
-              :role="role"
-            />
-          </template>
-        </template>
-      </table-component>
+      />
     </template>
     <filter-core slot="right-column">
       <filter-table-buttons
         ref="buttons"
-        :section="sections.users"
+        :section="sections.jobs"
         @update="() => fetchList(+list.current_page || 1)"
       />
       <filter-action
@@ -54,14 +44,13 @@ import scrollTableMixin from '@/mixins/scrollTable'
 import StorageData from '@/classes/StorageData'
 import breadcrumbs from '@/mixins/breadcrumbs'
 import sections from '@/enum/sections'
-import User from '@/classes/User'
 import { mapGetters } from 'vuex'
 import menu from '@/data/menu'
 
 export default {
-  name: 'Users',
+  name: 'Jobs',
   breadcrumbs: [
-    { title: menu[sections.users].title }
+    { title: menu[sections.jobs].title }
   ],
   components: {
     FilterTableButtons: () => import('@/components/filters/TableButtons'),
@@ -72,8 +61,7 @@ export default {
     TemplateList: () => import('@/components/template/List'),
     FilterFixed: () => import('@/components/filters/Fixed'),
     FilterCore: () => import('@/components/filters/Core'),
-    TableComponent: () => import('@/components/Table'),
-    RoleTag: () => import('@/components/roles/Tag')
+    TableComponent: () => import('@/components/Table')
   },
   mixins: [
     scrollTableMixin, breadcrumbs
@@ -81,7 +69,7 @@ export default {
   data() {
     return {
       sections,
-      sectionName: sections.users,
+      sectionName: sections.jobs,
       columns: [],
       fixed: null,
       search: '',
@@ -90,10 +78,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      'userColumns': 'users/columns'
+      jobColumns: 'jobs/columns'
     }),
     list() {
-      return this.$store.state.users.list
+      return this.$store.state.jobs.list
     },
     filterColumns() {
       const columns = []
@@ -107,7 +95,7 @@ export default {
       return columns
     },
     loading() {
-      return this.$store.state.users.loading
+      return this.$store.state.jobs.loading
     },
     activeColumnProps() {
       return this.filterColumns
@@ -116,7 +104,7 @@ export default {
     }
   },
   watch: {
-    userColumns: {
+    jobColumns: {
       handler(arr) {
         this.columns = arr
           .filter(obj => !obj.hideList)
@@ -129,7 +117,7 @@ export default {
   },
   methods: {
     fetchList(page = 1) {
-      this.$store.dispatch('users/fetchList', {
+      this.$store.dispatch('jobs/fetchList', {
         page,
         sortColumn: this.sort.column,
         sortOrder: this.sort.order,
@@ -138,11 +126,10 @@ export default {
       })
     },
     onChangeColumn() {
-      StorageData.columnUsers = this.filterColumns.map(i => i.prop)
+      StorageData.columnJobs = this.filterColumns.map(i => i.prop)
     },
-    onRowClick(user) {
-      User.sidebar().add(user)
-      this.$router.push({ name: `${sections.users}-id`, params: { id: user.id } })
+    onRowClick(job) {
+      this.$router.push({ name: `${sections.jobs}-id`, params: { id: job.id } })
     },
     onSortChange({ prop: column, order }) {
       this.sort = { column, order }

@@ -105,7 +105,7 @@ module.exports = {
         // Output build
         /^\/web/, /sw\.js$/, /index\.html/,
         // Pages
-        /^\/auth/, /^\/requests/, /^\/users/, /^\/equipments/, /^\/roles/, /^\/settings/
+        /^\/auth/, /^\/requests/, /^\/users/, /^\/equipments/, /^\/roles/, /^\/jobs/, /^\/settings/
       ],
       runtimeCaching: [{
         urlPattern: /\.json$|api\/settings/,

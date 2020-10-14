@@ -79,13 +79,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      'userColumns': 'equipments/columns'
+      equipmentColumns: 'equipments/columns'
     }),
     list() {
       return this.$store.state.equipments.list
-    },
-    equipments() {
-      return this.list.data || []
     },
     filterColumns() {
       const columns = []
@@ -108,7 +105,7 @@ export default {
     }
   },
   watch: {
-    userColumns: {
+    equipmentColumns: {
       handler(arr) {
         this.columns = arr
           .filter(obj => !obj.hideList)

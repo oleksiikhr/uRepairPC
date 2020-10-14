@@ -157,6 +157,15 @@ const authorizedRoutes = {
         failRouteName: sections.equipments
       }
     },
+    // -------------------------------------------------------------------------------------- Jobs
+    {
+      path: `/${sections.jobs}`,
+      name: sections.jobs,
+      component: () => import('@/pages/jobs/Index'),
+      meta: {
+        check: () => hasPerm(perm.JOBS_VIEW_SECTION) && hasPerm(perm.EQUIPMENTS_VIEW_ALL)
+      }
+    },
     // -------------------------------------------------------------------------------------- Settings
     {
       path: `/${sections.settings}`,

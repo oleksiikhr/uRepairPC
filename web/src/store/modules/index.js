@@ -23,6 +23,7 @@ import template from '@/store/modules/template'
 import profile from '@/store/modules/profile'
 import users from '@/store/modules/users'
 import roles from '@/store/modules/roles'
+import jobs from '@/store/modules/jobs'
 
 export default {
   equipmentManufacturers,
@@ -40,5 +41,6 @@ export default {
   template,
   profile,
   users,
-  roles
+  roles,
+  jobs
 }
