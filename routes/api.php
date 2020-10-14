@@ -104,8 +104,11 @@ Route::group(['middleware' => ['jwt.auth']], static function () {
     /*
      * Section: Jobs
      */
-    Route::apiResource('jobs', Controller\JobController::class);
+    Route::apiResource('jobs', Controller\JobController::class)->only(['index', 'show', 'destroy']);
     Route::group(['prefix' => 'jobs'], static function () {
-        Route::get('retry', [Controller\JobController::class, 'retry']);
+        Route::delete('destroy-all', [Controller\JobController::class, 'destroyAll']);
+        Route::apiResource('failed', Controller\FailedJobController::class);
+        Route::post('failed/retry', [Controller\FailedJobController::class, 'retry']);
+        Route::post('failed/delete-all', [Controller\FailedJobController::class, 'destroyAll']);
     });
 });

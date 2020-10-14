@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Enums\Perm;
-use App\Models\Job;
-use App\Http\Requests\JobRequest;
+use App\Models\FailedJob;
 use Illuminate\Http\JsonResponse;
+use App\Http\Requests\FailedJobRequest;
+use Illuminate\Support\Facades\Artisan;
 
-class JobController extends Controller
+class FailedJobController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -19,20 +20,21 @@ class JobController extends Controller
         return [
             'index' => Perm::JOBS_VIEW_ALL,
             'show' => Perm::JOBS_VIEW_ALL,
-            'destroy' => Perm::JOBS_DELETE_ALL_QUEUE,
-            'destroyAll' => Perm::JOBS_DELETE_ALL_QUEUE,
+            'retry' => Perm::JOBS_RETRY,
+            'destroy' => Perm::JOBS_DELETE_FAILED_QUEUE,
+            'destroyAll' => Perm::JOBS_DELETE_FAILED_QUEUE,
         ];
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @param  JobRequest  $request
+     * @param  FailedJobRequest  $request
      * @return JsonResponse
      */
-    public function index(JobRequest $request): JsonResponse
+    public function index(FailedJobRequest $request): JsonResponse
     {
-        $query = Job::query();
+        $query = FailedJob::query();
 
         // Search
         if ($request->has('search') && $request->exists('columns')) {
@@ -54,27 +56,41 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Job  $job
+     * @param  FailedJob  $job
      * @return JsonResponse
      */
-    public function show(Job $job): JsonResponse
+    public function show(FailedJob $job): JsonResponse
     {
-        $job = Job::findOrFail($job->id);
+        $job = FailedJob::findOrFail($job->id);
 
         return response()->json([
             'message' => __('app.jobs.show'),
-            'job' => $job,
+            'failed_job' => $job,
+        ]);
+    }
+
+    /**
+     * Restart the failed queue.
+     *
+     * @return JsonResponse
+     */
+    public function retry(): JsonResponse
+    {
+        $result = Artisan::call('queue:retry');
+
+        return response()->json([
+            'message' => __('app.jobs.retry').': '.$result,
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Job  $job
+     * @param  FailedJob  $job
      * @return JsonResponse
      * @throws \Exception
      */
-    public function destroy(Job $job): JsonResponse
+    public function destroy(FailedJob $job): JsonResponse
     {
         $job->delete();
 
@@ -91,7 +107,7 @@ class JobController extends Controller
      */
     public function destroyAll(): JsonResponse
     {
-        $count = Job::query()->delete();
+        $count = FailedJob::query()->delete();
 
         return response()->json([
             'message' => __('app.jobs.destroy_all').': '.$count,
