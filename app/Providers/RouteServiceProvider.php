@@ -46,6 +46,11 @@ class RouteServiceProvider extends ServiceProvider
         Route::pattern('equipmentType', '[0-9]+');
         Route::model('equipmentType', \App\Models\EquipmentType::class);
 
+        Route::pattern('job', '[0-9]+');
+        Route::model('job', \App\Models\Job::class);
+        Route::pattern('failedJob', '[0-9]+');
+        Route::model('failedJob', \App\Models\FailedJob::class);
+
         Route::pattern('request', '[0-9]+');
         Route::bind('request', static fn (int $id) => \App\Models\Request::querySelectJoins()->findOrFail($id));
         Route::pattern('requestPriority', '[0-9]+');
