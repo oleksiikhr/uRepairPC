@@ -43,7 +43,7 @@ const getters = {
       { prop: 'id', label: 'ID', 'min-width': 70, sortable: 'custom' },
       { prop: 'queue', label: 'Черга', 'min-width': 150, sortable: 'custom' },
       { prop: 'payload', label: 'Payload', 'min-width': 200, disableSearch: true },
-      { prop: 'attempts', label: 'Спроб', 'min-width': 100, disableSearch: true },
+      { prop: 'attempts', label: 'Спроби', 'min-width': 100, disableSearch: true },
       { prop: 'reserved_at', label: 'Зарезервовано', 'min-width': 150, sortable: 'custom', customType: TYPE_TIMESTAMP },
       { prop: 'available_at', label: 'Доступний', 'min-width': 150, sortable: 'custom', customType: TYPE_TIMESTAMP },
       { prop: 'created_at', label: 'Створений', 'min-width': 150, sortable: 'custom', customType: TYPE_TIMESTAMP }
