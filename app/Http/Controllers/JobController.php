@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Enums\Perm;
 use App\Models\Job;
-use App\Realtime\Job\EJoin;
 use App\Http\Requests\JobRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Artisan;
@@ -50,7 +49,6 @@ class JobController extends Controller
         }
 
         $list = $query->paginate();
-        EJoin::dispatchAfterResponse(...$list->items());
 
         return response()->json($list);
     }
@@ -64,8 +62,6 @@ class JobController extends Controller
     public function show(Job $job): JsonResponse
     {
         $job = Job::findOrFail($job->id);
-
-        EJoin::dispatchAfterResponse($job);
 
         return response()->json([
             'message' => __('app.jobs.show'),
