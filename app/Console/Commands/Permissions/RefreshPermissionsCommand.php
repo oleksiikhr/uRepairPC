@@ -6,7 +6,6 @@ namespace App\Console\Commands\Permissions;
 
 use App\Enums\Perm;
 use App\Models\Role;
-use App\Models\RolePermission;
 use Illuminate\Console\Command;
 
 class RefreshPermissionsCommand extends Command
