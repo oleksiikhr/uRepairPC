@@ -32,14 +32,10 @@ class RefreshPermissionsCommand extends Command
      */
     public function handle(): int
     {
+        $role = Role::query()->firstOrFail();
         $permissions = Perm::getAll();
 
-        foreach ($permissions as $permission) {
-            RolePermission::updateOrCreate(
-                ['role_id' => 1, 'name' => $permission],
-                ['name' => $permission]
-            );
-        }
+        $role->syncPermissions($permissions);
 
         return 0;
     }

@@ -86,7 +86,7 @@ export const REQUESTS_CONFIG_CREATE = 'requests.config.create'
 export const REQUESTS_CONFIG_DELETE_ALL = 'requests.config.delete_all'
 export const REQUESTS_CONFIG_DELETE_OWN = 'requests.config.delete_own'
 
-// Tasks
+// Jobs
 export const JOBS_VIEW_SECTION = 'jobs.view_section'
 export const JOBS_VIEW_ALL = 'jobs.view_all'
 export const JOBS_DELETE_ALL_QUEUE = 'jobs.delete_all_queue'
