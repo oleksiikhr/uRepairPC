@@ -39,7 +39,7 @@ const getters = {
    * @returns {(*|{model: boolean})[]}
    */
   columns() {
-    const defaultActive = ['first_name', 'last_name', 'email', 'phone']
+    const defaultActive = ['first_name', 'last_name', 'email', 'phone', 'created_at']
 
     const columns = [
       { prop: 'id', label: 'ID', 'min-width': 70, sortable: 'custom' },

@@ -16,6 +16,7 @@
               v-for="(role, index) in data"
               :key="index"
               :role="role"
+              disabled
             />
           </template>
         </template>
