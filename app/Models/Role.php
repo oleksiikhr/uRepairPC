@@ -16,6 +16,11 @@ class Role extends BaseModel
     /**
      * @var array
      */
+    public const PERMISSION_TAGS = ['permission'];
+
+    /**
+     * @var array
+     */
     public const ALLOW_COLUMNS_SEARCH = [
         'id',
         'name',

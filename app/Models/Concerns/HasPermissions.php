@@ -13,6 +13,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 trait HasPermissions
 {
     /**
+     * @var array|string[]
+     */
+    protected array $permissionTags = ['permissions'];
+
+    /**
      * @var int seconds
      */
     protected int $permissionCacheTime = 60 * 60 * 24 * 3; // 3 days
@@ -63,15 +68,15 @@ trait HasPermissions
      */
     public function getAllPerm(): Collection
     {
-        // FIXME Recreate logic. After change permission in role - destroy cache on all users
-        return Cache::remember($this->getPermCacheKey(), $this->permissionCacheTime, function () {
-            $this->loadMissing(['roles', 'roles.permissions']);
+        return Cache::tags(Role::PERMISSION_TAGS)
+            ->remember($this->getPermCacheKey(), $this->permissionCacheTime, function () {
+                $this->loadMissing(['roles', 'roles.permissions']);
 
-            return $this->roles
-                ->flatMap(static fn (Role $role) => $role->permissions)
-                ->sort()
-                ->values();
-        });
+                return $this->roles
+                    ->flatMap(static fn (Role $role) => $role->permissions)
+                    ->sort()
+                    ->values();
+            });
     }
 
     /**

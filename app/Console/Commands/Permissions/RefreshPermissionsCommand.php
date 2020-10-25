@@ -7,6 +7,7 @@ namespace App\Console\Commands\Permissions;
 use App\Enums\Perm;
 use App\Models\Role;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 
 class RefreshPermissionsCommand extends Command
 {
@@ -35,6 +36,8 @@ class RefreshPermissionsCommand extends Command
         $permissions = Perm::getAll();
 
         $role->syncPermissions($permissions);
+
+        Cache::tags(Role::PERMISSION_TAGS)->flush();
 
         return 0;
     }
