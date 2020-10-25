@@ -16,7 +16,22 @@
         ref="buttons"
         :section="sections.failedJobs"
         @update="() => fetchList(+list.current_page || 1)"
-      />
+      >
+        <el-button
+          size="small"
+          icon="el-icon-refresh-right"
+          type="primary"
+          circle
+          @click="refreshFailedJobs"
+        />
+        <el-button
+          size="small"
+          icon="el-icon-finished"
+          type="danger"
+          circle
+          @click="goSuccessJobsPage"
+        />
+      </filter-table-buttons>
       <filter-search
         v-model="search"
         @submit="fetchList"
@@ -57,7 +72,8 @@ export default {
     TemplateList: () => import('@/components/template/List'),
     FilterFixed: () => import('@/components/filters/Fixed'),
     FilterCore: () => import('@/components/filters/Core'),
-    TableComponent: () => import('@/components/Table')
+    TableComponent: () => import('@/components/Table'),
+    ElButton: () => import('element-ui/lib/button')
   },
   mixins: [
     scrollTableMixin, breadcrumbs
@@ -129,6 +145,12 @@ export default {
     onSortChange({ prop: column, order }) {
       this.sort = { column, order }
       this.fetchList()
+    },
+    refreshFailedJobs() {
+      // TODO
+    },
+    goSuccessJobsPage() {
+      this.$router.push({ name: 'jobs' })
     }
   }
 }
