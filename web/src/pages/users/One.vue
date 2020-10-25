@@ -22,7 +22,10 @@
       <span v-else-if="row.prop === 'email'">
         <a :href="`mailto:${row.value}`">{{ row.value }}</a>
       </span>
-      <span v-else>{{ row.value }}</span>
+      <pre
+        v-else
+        class="default"
+      >{{ row.value }}</pre>
     </div>
   </template-one>
 </template>

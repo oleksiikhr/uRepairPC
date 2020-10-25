@@ -24,7 +24,10 @@
         :value="row.value"
         :color="model.status_color"
       />
-      <span v-else>{{ row.value }}</span>
+      <pre
+        v-else
+        class="default"
+      >{{ row.value }}</pre>
     </template>
     <div
       v-if="model.files && (model.files.length || loadingFiles)"
