@@ -98,7 +98,7 @@ abstract class Perm
     public const JOBS_VIEW_SECTION = 'jobs.view_section';
     public const JOBS_VIEW_ALL = 'jobs.view_all';
     public const JOBS_RETRY = 'jobs.retry';
-    public const JOBS_DELETE_ALL_QUEUE = 'jobs.delete_all_queue';
+    public const JOBS_DELETE_QUEUE = 'jobs.delete_queue';
     public const JOBS_DELETE_FAILED_QUEUE = 'jobs.delete_failed_queue';
 
     // Global
@@ -215,7 +215,7 @@ abstract class Perm
                 self::JOBS_VIEW_SECTION => __('perm.actions.view_section'),
                 self::JOBS_VIEW_ALL => __('perm.actions.view_all'),
                 self::JOBS_RETRY => __('perm.actions.retry'),
-                self::JOBS_DELETE_ALL_QUEUE => __('perm.actions.delete_all_queue'),
+                self::JOBS_DELETE_QUEUE => __('perm.actions.delete_queue'),
                 self::JOBS_DELETE_FAILED_QUEUE => __('perm.actions.delete_failed_queue'),
             ],
             __('perm.sections.global') => [

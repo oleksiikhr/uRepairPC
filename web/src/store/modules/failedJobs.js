@@ -1,6 +1,6 @@
 'use strict'
 
-import { TYPE_TIMESTAMP } from '@/enum/columnTypes'
+import { TYPE_DATETIME } from '@/enum/columnTypes'
 import commonStore from '@/common/store/section'
 import StorageData from '@/classes/StorageData'
 import FailedJob from '@/classes/FailedJob'
@@ -46,7 +46,7 @@ const getters = {
       { prop: 'queue', label: 'Черга', 'min-width': 150, sortable: 'custom' },
       { prop: 'payload', label: 'Payload', 'min-width': 200, disableSearch: true },
       { prop: 'exception', label: 'Помилка', 'min-width': 200, disableSearch: true },
-      { prop: 'reserved_at', label: 'Зарезервовано', 'min-width': 150, sortable: 'custom', customType: TYPE_TIMESTAMP }
+      { prop: 'failed_at', label: 'Дата помилки', 'min-width': 150, sortable: 'custom', customType: TYPE_DATETIME }
     ]
 
     const data = StorageData.columnFailedJobs.length ? StorageData.columnFailedJobs : defaultActive

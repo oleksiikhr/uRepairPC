@@ -50,7 +50,7 @@ return [
 
         // Jobs
         'retry' => 'Повторити спробу',
-        'delete_all_queue' => 'Видалити всю чергу',
+        'delete_queue' => 'Видалити чергу',
         'delete_failed_queue' => 'Видалити невдалу чергу',
     ],
 

@@ -19,8 +19,8 @@ class JobController extends Controller
         return [
             'index' => Perm::JOBS_VIEW_ALL,
             'show' => Perm::JOBS_VIEW_ALL,
-            'destroy' => Perm::JOBS_DELETE_ALL_QUEUE,
-            'destroyAll' => Perm::JOBS_DELETE_ALL_QUEUE,
+            'destroy' => Perm::JOBS_DELETE_QUEUE,
+            'destroyAll' => Perm::JOBS_DELETE_QUEUE,
         ];
     }
 

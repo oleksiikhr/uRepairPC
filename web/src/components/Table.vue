@@ -23,7 +23,7 @@
               :row="row"
               :data="row[column.prop]"
             >
-              {{ isEmpty(row[column.prop]) ? null : row[column.prop] }}
+              {{ row[column.prop] }}
             </slot>
           </column-data>
         </template>
@@ -41,8 +41,6 @@
 </template>
 
 <script>
-import { isEmpty } from '@/scripts/helpers'
-
 export default {
   components: {
     ElTableColumn: () => import('element-ui/lib/table-column'),
@@ -75,7 +73,6 @@ export default {
     }
   },
   methods: {
-    isEmpty,
     onCurrentChange(page) {
       this.$emit('fetch', page)
     },

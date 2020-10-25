@@ -26,8 +26,8 @@
         />
         <el-button
           size="small"
-          icon="el-icon-finished"
-          type="danger"
+          icon="el-icon-d-arrow-left"
+          type="info"
           circle
           @click="goSuccessJobsPage"
         />

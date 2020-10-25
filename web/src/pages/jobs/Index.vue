@@ -18,9 +18,18 @@
         @update="() => fetchList(+list.current_page || 1)"
       >
         <el-button
+          :loading="loadingDestroy"
+          :disabled="loadingDestroy"
           size="small"
-          icon="el-icon-finished"
+          icon="el-icon-delete"
           type="danger"
+          circle
+          @click="onDeleteAllJobs"
+        />
+        <el-button
+          size="small"
+          icon="el-icon-d-arrow-right"
+          type="info"
           circle
           @click="goFailedJobsPage"
         />
@@ -50,6 +59,7 @@ import StorageData from '@/classes/StorageData'
 import breadcrumbs from '@/mixins/breadcrumbs'
 import sections from '@/enum/sections'
 import { mapGetters } from 'vuex'
+import Job from '@/classes/Job'
 import menu from '@/data/menu'
 
 export default {
@@ -74,6 +84,7 @@ export default {
   data() {
     return {
       sections,
+      loadingDestroy: false,
       columns: [],
       fixed: null,
       search: '',
@@ -129,11 +140,37 @@ export default {
         search: this.search || null
       })
     },
+    fetchDelete() {
+      this.loadingDestroy = true
+
+      Job.fetchDeleteAll()
+        .then(() => {
+          this.fetchList()
+        })
+        .finally(() => {
+          this.loadingDestroy = false
+        })
+    },
     onChangeColumn() {
       StorageData.columnJobs = this.filterColumns.map(i => i.prop)
     },
     onRowClick(job) {
-      this.$router.push({ name: `${sections.jobs}-id`, params: { id: job.id } })
+      this.$store.commit('template/OPEN_DIALOG', {
+        component: () => import('@/components/jobs/dialogs/JobView'),
+        attrs: {
+          job
+        },
+        events: {
+          delete: () => {
+            this.fetchList(this.list.current_page || 1)
+          }
+        }
+      })
+    },
+    onDeleteAllJobs() {
+      if (confirm('Ви дійсно хочете видалити всі дані?')) {
+        this.fetchDelete()
+      }
     },
     onSortChange({ prop: column, order }) {
       this.sort = { column, order }
