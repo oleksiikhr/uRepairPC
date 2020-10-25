@@ -18,6 +18,7 @@
         @update="() => fetchList(+list.current_page || 1)"
       >
         <el-button
+          v-if="hasPerm(perm.JOBS_RETRY)"
           :loading="loadingRefresh"
           :disabled="loadingRefresh"
           size="small"
@@ -27,6 +28,7 @@
           @click="onRefreshFailedJobs"
         />
         <el-button
+          v-if="hasPerm(perm.JOBS_DELETE_FAILED_QUEUE)"
           :loading="loadingDestroy"
           :disabled="loadingDestroy"
           size="small"
@@ -67,7 +69,9 @@ import scrollTableMixin from '@/mixins/scrollTable'
 import StorageData from '@/classes/StorageData'
 import breadcrumbs from '@/mixins/breadcrumbs'
 import FailedJob from '@/classes/FailedJob'
+import { hasPerm } from '@/scripts/utils'
 import sections from '@/enum/sections'
+import * as perm from '@/enum/perm'
 import { mapGetters } from 'vuex'
 import menu from '@/data/menu'
 
@@ -93,6 +97,7 @@ export default {
   data() {
     return {
       sections,
+      perm,
       loadingRefresh: false,
       loadingDestroy: false,
       columns: [],
@@ -141,6 +146,7 @@ export default {
     this.fetchList()
   },
   methods: {
+    hasPerm,
     fetchList(page = 1) {
       this.$store.dispatch('failedJobs/fetchList', {
         page,
@@ -176,7 +182,17 @@ export default {
       StorageData.columnFailedJobs = this.filterColumns.map(i => i.prop)
     },
     onRowClick(job) {
-      this.$router.push({ name: `${sections.failedJobs}-id`, params: { id: job.id } })
+      this.$store.commit('template/OPEN_DIALOG', {
+        component: () => import('@/components/jobs/dialogs/FailedJobView'),
+        attrs: {
+          job
+        },
+        events: {
+          delete: () => {
+            this.fetchList(this.list.current_page || 1)
+          }
+        }
+      })
     },
     onSortChange({ prop: column, order }) {
       this.sort = { column, order }

@@ -18,7 +18,7 @@
             :key="`sub-${subKey}`"
             class="ml-15 mt-5"
           >
-            <strong class="content--key">{{ subKey }}</strong>: {{ subVal }}
+            <strong class="content--key">{{ subKey }}</strong>: <pre>{{ subVal }}</pre>
           </div>
         </template>
         <pre v-else>{{ val }}</pre>
@@ -26,7 +26,7 @@
     </div>
     <span slot="footer">
       <el-button
-        v-if="hasPerm(perm.JOBS_DELETE_QUEUE)"
+        v-if="hasPerm(perm.JOBS_DELETE_FAILED_QUEUE)"
         :loading="loading"
         :disabled="loading"
         type="danger"
@@ -40,9 +40,9 @@
 </template>
 
 <script>
+import FailedJob from '@/classes/FailedJob'
 import { hasPerm } from '@/scripts/utils'
 import * as perm from '@/enum/perm'
-import Job from '@/classes/Job'
 
 export default {
   components: {
@@ -67,7 +67,7 @@ export default {
       return JSON.parse(this.job.payload || {})
     },
     uuid() {
-      return this.payload.uuid
+      return this.job.uuid
     }
   },
   methods: {
@@ -75,7 +75,7 @@ export default {
     fetchDelete() {
       this.loading = true
 
-      Job.fetchDelete(this.job.id)
+      FailedJob.fetchDelete(this.job.id)
         .then(() => {
           this.$emit('delete')
           this.$emit('close')

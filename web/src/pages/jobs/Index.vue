@@ -18,6 +18,7 @@
         @update="() => fetchList(+list.current_page || 1)"
       >
         <el-button
+          v-if="hasPerm(perm.JOBS_DELETE_QUEUE)"
           :loading="loadingDestroy"
           :disabled="loadingDestroy"
           size="small"
@@ -31,7 +32,7 @@
           icon="el-icon-folder-remove"
           type="info"
           circle
-          @click="goFailedJobsPage"
+          @click="routeFailedJobsPage"
         />
       </filter-table-buttons>
       <filter-search
@@ -57,7 +58,9 @@
 import scrollTableMixin from '@/mixins/scrollTable'
 import StorageData from '@/classes/StorageData'
 import breadcrumbs from '@/mixins/breadcrumbs'
+import { hasPerm } from '@/scripts/utils'
 import sections from '@/enum/sections'
+import * as perm from '@/enum/perm'
 import { mapGetters } from 'vuex'
 import Job from '@/classes/Job'
 import menu from '@/data/menu'
@@ -84,6 +87,7 @@ export default {
   data() {
     return {
       sections,
+      perm,
       loadingDestroy: false,
       columns: [],
       fixed: null,
@@ -131,6 +135,7 @@ export default {
     this.fetchList()
   },
   methods: {
+    hasPerm,
     fetchList(page = 1) {
       this.$store.dispatch('jobs/fetchList', {
         page,
@@ -176,7 +181,7 @@ export default {
       this.sort = { column, order }
       this.fetchList()
     },
-    goFailedJobsPage() {
+    routeFailedJobsPage() {
       this.$router.push({ name: 'failed-jobs' })
     }
   }
