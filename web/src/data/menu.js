@@ -93,6 +93,25 @@ export default {
       }
     }
   },
+  [sections.jobs]: {
+    icon: 'memory',
+    title: 'Задачі',
+    route: { name: sections.jobs },
+    permissions: perm.JOBS_VIEW_SECTION,
+    history: {
+      show: true,
+      callback: (obj) => obj.id
+    },
+    children: {
+      [sections.failedJobs]: {
+        title: 'Невдалі задачі',
+        icon: 'memory',
+        type: types.PRIMARY,
+        permissions: perm.JOBS_VIEW_SECTION,
+        action: () => router.push({ name: sections.failedJobs })
+      }
+    }
+  },
   [sections.settings]: {
     icon: 'settings',
     title: 'Конфігурація',

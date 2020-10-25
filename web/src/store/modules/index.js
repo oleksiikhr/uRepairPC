@@ -16,6 +16,10 @@ import requestStatuses from '@/store/modules/requestStatuses'
 import requestTypes from '@/store/modules/requestTypes'
 import requests from '@/store/modules/requests'
 
+// Jobs
+import failedJobs from '@/store/modules/failedJobs'
+import jobs from '@/store/modules/jobs'
+
 // Other
 import permissions from '@/store/modules/permissions'
 import settings from '@/store/modules/settings'
@@ -35,10 +39,13 @@ export default {
   requestTypes,
   requests,
 
+  failedJobs,
+  jobs,
+
   permissions,
   settings,
   template,
   profile,
   users,
-  roles
+  roles,
 }

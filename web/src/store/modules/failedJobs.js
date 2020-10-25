@@ -1,9 +1,9 @@
 'use strict'
 
+import { TYPE_DATETIME } from '@/enum/columnTypes'
 import commonStore from '@/common/store/section'
 import StorageData from '@/classes/StorageData'
-import columnTypes from '@/enum/columnTypes'
-import Role from '@/classes/Role'
+import FailedJob from '@/classes/FailedJob'
 
 const state = {
   //
@@ -17,7 +17,7 @@ const actions = {
   fetchList({ commit }, params = {}) {
     commit('SET_LOADING', true)
 
-    return Role.fetchAll({ params })
+    return FailedJob.fetchAll({ params })
       .then(({ data }) => {
         commit('SET_LIST', data)
       })
@@ -37,18 +37,19 @@ const getters = {
    * @returns {(*|{model: boolean})[]}
    */
   columns() {
-    const defaultActive = ['color', 'name']
+    const defaultActive = ['uuid', 'connection', 'queue', 'failed_at']
 
     const columns = [
       { prop: 'id', label: 'ID', 'min-width': 70, sortable: 'custom' },
-      { prop: 'color', label: 'Колір', 'min-width': 100, disableSearch: true, customType: columnTypes.TYPE_COLOR },
-      { prop: 'name', label: 'Ім\'я', 'min-width': 200, sortable: 'custom' },
-      { prop: 'default', label: 'За замовчуванням', 'min-width': 150, sortable: 'custom', customType: columnTypes.TYPE_BOOL },
-      { prop: 'updated_at', label: 'Оновлено', 'min-width': 150, sortable: 'custom', customType: columnTypes.TYPE_DATETIME },
-      { prop: 'created_at', label: 'Створений', 'min-width': 150, sortable: 'custom', customType: columnTypes.TYPE_DATETIME }
+      { prop: 'uuid', label: 'UUID', 'min-width': 150, sortable: 'custom' },
+      { prop: 'connection', label: 'З\'єднання', 'min-width': 150, sortable: 'custom' },
+      { prop: 'queue', label: 'Черга', 'min-width': 150, sortable: 'custom' },
+      { prop: 'payload', label: 'Payload', 'min-width': 200, disableSearch: true },
+      { prop: 'exception', label: 'Помилка', 'min-width': 200, disableSearch: true },
+      { prop: 'failed_at', label: 'Дата помилки', 'min-width': 150, sortable: 'custom', customType: TYPE_DATETIME }
     ]
 
-    const data = StorageData.columnRoles.length ? StorageData.columnRoles : defaultActive
+    const data = StorageData.columnFailedJobs.length ? StorageData.columnFailedJobs : defaultActive
 
     return columns
       .map((column) => {

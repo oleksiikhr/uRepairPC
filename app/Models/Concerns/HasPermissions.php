@@ -36,7 +36,7 @@ trait HasPermissions
 
         $roles = $query->get();
 
-        Cache::forget($this->getCacheKey());
+        Cache::forget($this->getPermCacheKey());
 
         return $this->roles()->sync($roles->pluck('id')->toArray());
     }
@@ -51,7 +51,7 @@ trait HasPermissions
             $ids = $ids->toArray();
         }
 
-        Cache::forget($this->getCacheKey());
+        Cache::forget($this->getPermCacheKey());
 
         return $this->roles()->sync(Arr::wrap($ids));
     }
@@ -63,7 +63,8 @@ trait HasPermissions
      */
     public function getAllPerm(): Collection
     {
-        return Cache::remember($this->getCacheKey(), $this->permissionCacheTime, function () {
+        // FIXME Recreate logic. After change permission in role - destroy cache on all users
+        return Cache::remember($this->getPermCacheKey(), $this->permissionCacheTime, function () {
             $this->loadMissing(['roles', 'roles.permissions']);
 
             return $this->roles
@@ -120,7 +121,7 @@ trait HasPermissions
      *
      * @return string
      */
-    protected function getCacheKey(): string
+    protected function getPermCacheKey(): string
     {
         return $this->permissionCacheKey.'.'.$this->getTable().'.'.$this->id;
     }

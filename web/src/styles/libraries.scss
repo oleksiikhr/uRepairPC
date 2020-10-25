@@ -25,6 +25,9 @@
     margin-top: 5vh !important;
     width: 100%;
   }
+  .el-dialog__body {
+    overflow: auto;
+  }
   &.delete {
     .content {
       > div {

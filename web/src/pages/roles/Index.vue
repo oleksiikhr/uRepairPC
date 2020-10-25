@@ -84,9 +84,6 @@ export default {
     list() {
       return this.$store.state.roles.list
     },
-    roles() {
-      return this.list.data || []
-    },
     filterColumns() {
       const columns = []
 

@@ -14,12 +14,37 @@
     <filter-core slot="right-column">
       <filter-table-buttons
         ref="buttons"
-        :section="sections.equipments"
+        :section="sections.failedJobs"
         @update="() => fetchList(+list.current_page || 1)"
-      />
-      <filter-action
-        :section="sectionName"
-      />
+      >
+        <el-button
+          v-if="hasPerm(perm.JOBS_RETRY)"
+          :loading="loadingRefresh"
+          :disabled="loadingRefresh"
+          size="small"
+          icon="el-icon-refresh-right"
+          type="primary"
+          circle
+          @click="onRefreshFailedJobs"
+        />
+        <el-button
+          v-if="hasPerm(perm.JOBS_DELETE_FAILED_QUEUE)"
+          :loading="loadingDestroy"
+          :disabled="loadingDestroy"
+          size="small"
+          icon="el-icon-delete"
+          type="danger"
+          circle
+          @click="onDeleteFailedJobs"
+        />
+        <el-button
+          size="small"
+          icon="el-icon-folder-opened"
+          type="info"
+          circle
+          @click="routeJobsPage"
+        />
+      </filter-table-buttons>
       <filter-search
         v-model="search"
         @submit="fetchList"
@@ -43,26 +68,28 @@
 import scrollTableMixin from '@/mixins/scrollTable'
 import StorageData from '@/classes/StorageData'
 import breadcrumbs from '@/mixins/breadcrumbs'
-import Equipment from '@/classes/Equipment'
+import FailedJob from '@/classes/FailedJob'
+import { hasPerm } from '@/scripts/utils'
 import sections from '@/enum/sections'
+import * as perm from '@/enum/perm'
 import { mapGetters } from 'vuex'
 import menu from '@/data/menu'
 
 export default {
-  name: 'Requests',
+  name: 'FailedJobs',
   breadcrumbs: [
-    { title: menu[sections.equipments].title }
+    { title: menu[sections.jobs].children[sections.failedJobs].title }
   ],
   components: {
     FilterTableButtons: () => import('@/components/filters/TableButtons'),
     FilterPagination: () => import('@/components/filters/Pagination'),
     FilterColumns: () => import('@/components/filters/Columns'),
-    FilterAction: () => import('@/components/filters/Action'),
     FilterSearch: () => import('@/components/filters/Search'),
     TemplateList: () => import('@/components/template/List'),
     FilterFixed: () => import('@/components/filters/Fixed'),
     FilterCore: () => import('@/components/filters/Core'),
-    TableComponent: () => import('@/components/Table')
+    TableComponent: () => import('@/components/Table'),
+    ElButton: () => import('element-ui/lib/button')
   },
   mixins: [
     scrollTableMixin, breadcrumbs
@@ -70,7 +97,9 @@ export default {
   data() {
     return {
       sections,
-      sectionName: sections.equipments,
+      perm,
+      loadingRefresh: false,
+      loadingDestroy: false,
       columns: [],
       fixed: null,
       search: '',
@@ -79,10 +108,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      equipmentColumns: 'equipments/columns'
+      jobColumns: 'failedJobs/columns'
     }),
     list() {
-      return this.$store.state.equipments.list
+      return this.$store.state.failedJobs.list
     },
     filterColumns() {
       const columns = []
@@ -96,7 +125,7 @@ export default {
       return columns
     },
     loading() {
-      return this.$store.state.equipments.loading
+      return this.$store.state.failedJobs.loading
     },
     activeColumnProps() {
       return this.filterColumns
@@ -105,7 +134,7 @@ export default {
     }
   },
   watch: {
-    equipmentColumns: {
+    jobColumns: {
       handler(arr) {
         this.columns = arr
           .filter(obj => !obj.hideList)
@@ -117,8 +146,9 @@ export default {
     this.fetchList()
   },
   methods: {
+    hasPerm,
     fetchList(page = 1) {
-      this.$store.dispatch('equipments/fetchList', {
+      this.$store.dispatch('failedJobs/fetchList', {
         page,
         sortColumn: this.sort.column,
         sortOrder: this.sort.order,
@@ -126,16 +156,60 @@ export default {
         search: this.search || null
       })
     },
-    onChangeColumn() {
-      StorageData.columnEquipments = this.filterColumns.map(i => i.prop)
+    fetchRefresh() {
+      this.loadingRefresh = true
+
+      FailedJob.fetchRefresh()
+        .then(() => {
+          this.fetchList()
+        })
+        .finally(() => {
+          this.loadingRefresh = false
+        })
     },
-    onRowClick(equipment) {
-      Equipment.sidebar().add(equipment)
-      this.$router.push({ name: `${sections.equipments}-id`, params: { id: equipment.id } })
+    fetchDelete() {
+      this.loadingDestroy = true
+
+      FailedJob.fetchDeleteAll()
+        .then(() => {
+          this.fetchList()
+        })
+        .finally(() => {
+          this.loadingDestroy = true
+        })
+    },
+    onChangeColumn() {
+      StorageData.columnFailedJobs = this.filterColumns.map(i => i.prop)
+    },
+    onRowClick(job) {
+      this.$store.commit('template/OPEN_DIALOG', {
+        component: () => import('@/components/jobs/dialogs/FailedJobView'),
+        attrs: {
+          job
+        },
+        events: {
+          delete: () => {
+            this.fetchList(this.list.current_page || 1)
+          }
+        }
+      })
     },
     onSortChange({ prop: column, order }) {
       this.sort = { column, order }
       this.fetchList()
+    },
+    onRefreshFailedJobs() {
+      if (confirm('Ви дійсно хочете обробити невдалі задачі заново?')) {
+        this.fetchRefresh()
+      }
+    },
+    onDeleteFailedJobs() {
+      if (confirm('Ви дійсно хочете видалити всі дані?')) {
+        this.fetchDelete()
+      }
+    },
+    routeJobsPage() {
+      this.$router.push({ name: 'jobs' })
     }
   }
 }

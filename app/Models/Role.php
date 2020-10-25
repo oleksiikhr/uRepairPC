@@ -100,6 +100,7 @@ class Role extends BaseModel
 
         // Filter
         foreach ($permissions as $permission) {
+            // TODO Optimization
             $searchKey = array_search($permission->name, $changePermissionNames, true);
             if ($searchKey === false) {
                 $deleteIds[] = $permission->id;
