@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader/lib/index')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { GenerateSW } = require('workbox-webpack-plugin')
+// const { GenerateSW } = require('workbox-webpack-plugin')
 const path = require('path')
 
 module.exports = {
@@ -94,43 +94,43 @@ module.exports = {
       filename: 'web/[name].[hash].css',
       chunkFilename: 'web/css/[name].[hash].css'
     }),
-    new GenerateSW({
-      swDest: 'sw.js',
-      clientsClaim: true,
-      skipWaiting: true,
-      cleanupOutdatedCaches: true,
-      // TODO
-      navigateFallback: '/index.html',
-      navigateFallbackAllowlist: [
-        // Output build
-        /^\/web/, /sw\.js$/, /index\.html/,
-        // Pages
-        /^\/auth/, /^\/requests/, /^\/users/, /^\/equipments/, /^\/roles/, /^\/jobs/, /^\/settings/
-      ],
-      runtimeCaching: [{
-        urlPattern: /\.json$|api\/settings/,
-        handler: 'StaleWhileRevalidate',
-        options: {
-          cacheName: 'settings'
-        }
-      }, {
-        urlPattern: /storage/,
-        handler: 'StaleWhileRevalidate',
-        options: {
-          cacheName: 'storage'
-        }
-      }, {
-        // Disable cache images
-        urlPattern: /api\/users\/images/,
-        handler: 'NetworkOnly'
-      }, {
-        urlPattern: /api/,
-        handler: 'NetworkFirst',
-        options: {
-          cacheName: 'api'
-        }
-      }]
-    }),
+    // new GenerateSW({
+    //   swDest: 'sw.js',
+    //   clientsClaim: true,
+    //   skipWaiting: true,
+    //   cleanupOutdatedCaches: true,
+    //   // TODO
+    //   navigateFallback: '/index.html',
+    //   navigateFallbackAllowlist: [
+    //     // Output build
+    //     /^\/web/, /sw\.js$/, /index\.html/,
+    //     // Pages
+    //     /^\/auth/, /^\/requests/, /^\/users/, /^\/equipments/, /^\/roles/, /^\/jobs/, /^\/settings/
+    //   ],
+    //   runtimeCaching: [{
+    //     urlPattern: /\.json$|api\/settings/,
+    //     handler: 'StaleWhileRevalidate',
+    //     options: {
+    //       cacheName: 'settings'
+    //     }
+    //   }, {
+    //     urlPattern: /storage/,
+    //     handler: 'StaleWhileRevalidate',
+    //     options: {
+    //       cacheName: 'storage'
+    //     }
+    //   }, {
+    //     // Disable cache images
+    //     urlPattern: /api\/users\/images/,
+    //     handler: 'NetworkOnly'
+    //   }, {
+    //     urlPattern: /api/,
+    //     handler: 'NetworkFirst',
+    //     options: {
+    //       cacheName: 'api'
+    //     }
+    //   }]
+    // }),
     // new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)()
   ],
   resolve: {
