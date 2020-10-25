@@ -11,17 +11,20 @@
         :key="key"
         class="mb-5"
       >
-        <strong class="content--key">{{ key }}</strong>:
+        <strong>{{ key }}</strong>:
         <template v-if="key === 'payload'">
           <div
             v-for="(subVal, subKey) in payload"
             :key="`sub-${subKey}`"
             class="ml-15 mt-5"
           >
-            <strong class="content--key">{{ subKey }}</strong>: {{ subVal }}
+            <strong>{{ subKey }}</strong>: <pre class="default">{{ subVal }}</pre>
           </div>
         </template>
-        <pre v-else>{{ val }}</pre>
+        <pre
+          v-else
+          class="default"
+        >{{ val }}</pre>
       </div>
     </div>
     <span slot="footer">
@@ -103,10 +106,5 @@ export default {
 
 pre {
   display: inline-block;
-  margin: 0;
-}
-
-.content--key {
-  font-size: 1rem;
 }
 </style>
