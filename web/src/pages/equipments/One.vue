@@ -143,9 +143,9 @@ export default {
         'permission-download': (file) => hasPerm(perm.EQUIPMENTS_FILES_DOWNLOAD_ALL) ||
           (hasPerm(perm.EQUIPMENTS_FILES_DOWNLOAD_OWN) && file.user_id === this.profile.id),
         'permission-edit': (file) => hasPerm(perm.EQUIPMENTS_FILES_EDIT_ALL) ||
-          (hasPerm(perm.EQUIPMENTS_EDIT_OWN) && file.user_id === this.profile.id),
+          (hasPerm(perm.EQUIPMENTS_FILES_EDIT_OWN) && file.user_id === this.profile.id),
         'permission-delete': (file) => hasPerm(perm.EQUIPMENTS_FILES_DELETE_ALL) ||
-          (hasPerm(perm.EQUIPMENTS_DELETE_OWN) && file.user_id === this.profile.id)
+          (hasPerm(perm.EQUIPMENTS_FILES_DELETE_OWN) && file.user_id === this.profile.id)
       }
     },
     canSeeFiles() {
