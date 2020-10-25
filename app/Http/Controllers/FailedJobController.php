@@ -76,10 +76,10 @@ class FailedJobController extends Controller
      */
     public function retry(): JsonResponse
     {
-        $result = Artisan::call('queue:retry');
+        Artisan::call('queue:retry all');
 
         return response()->json([
-            'message' => __('app.jobs.retry').': '.$result,
+            'message' => __('app.jobs.retry'),
         ]);
     }
 

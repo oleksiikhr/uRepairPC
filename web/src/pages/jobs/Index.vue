@@ -28,7 +28,7 @@
         />
         <el-button
           size="small"
-          icon="el-icon-d-arrow-right"
+          icon="el-icon-folder-remove"
           type="info"
           circle
           @click="goFailedJobsPage"

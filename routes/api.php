@@ -109,6 +109,6 @@ Route::group(['middleware' => ['jwt.auth']], static function () {
         Route::delete('destroy-all', [Controller\JobController::class, 'destroyAll']);
         Route::apiResource('failed', Controller\FailedJobController::class)->parameter('failed', 'failedJob')->only(['index', 'show', 'destroy']);
         Route::post('failed/retry', [Controller\FailedJobController::class, 'retry']);
-        Route::delete('failed/delete-all', [Controller\FailedJobController::class, 'destroyAll']);
+        Route::delete('failed/destroy-all', [Controller\FailedJobController::class, 'destroyAll']);
     });
 });

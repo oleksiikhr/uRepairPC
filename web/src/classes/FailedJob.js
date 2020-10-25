@@ -2,6 +2,7 @@
 
 import ApiHasHistory from '@/common/classes/ApiHasHistory'
 import sections from '@/enum/sections'
+import axios from 'axios'
 
 export default class FailedJob extends ApiHasHistory {
 
@@ -15,5 +16,13 @@ export default class FailedJob extends ApiHasHistory {
 
   static get __JSON_ATTR() {
     return 'failed_job'
+  }
+
+  static fetchDeleteAll(config = {}) {
+    return axios.delete(`${this.__API_POINT}/destroy-all`, config)
+  }
+
+  static fetchRefresh(config = {}) {
+    return axios.post(`${this.__API_POINT}/retry`, config)
   }
 }

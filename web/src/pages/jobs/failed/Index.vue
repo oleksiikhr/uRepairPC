@@ -18,18 +18,29 @@
         @update="() => fetchList(+list.current_page || 1)"
       >
         <el-button
+          :loading="loadingRefresh"
+          :disabled="loadingRefresh"
           size="small"
           icon="el-icon-refresh-right"
           type="primary"
           circle
-          @click="refreshFailedJobs"
+          @click="onRefreshFailedJobs"
+        />
+        <el-button
+          :loading="loadingDestroy"
+          :disabled="loadingDestroy"
+          size="small"
+          icon="el-icon-delete"
+          type="danger"
+          circle
+          @click="onDeleteFailedJobs"
         />
         <el-button
           size="small"
-          icon="el-icon-d-arrow-left"
+          icon="el-icon-folder-opened"
           type="info"
           circle
-          @click="goSuccessJobsPage"
+          @click="routeJobsPage"
         />
       </filter-table-buttons>
       <filter-search
@@ -55,6 +66,7 @@
 import scrollTableMixin from '@/mixins/scrollTable'
 import StorageData from '@/classes/StorageData'
 import breadcrumbs from '@/mixins/breadcrumbs'
+import FailedJob from '@/classes/FailedJob'
 import sections from '@/enum/sections'
 import { mapGetters } from 'vuex'
 import menu from '@/data/menu'
@@ -81,6 +93,8 @@ export default {
   data() {
     return {
       sections,
+      loadingRefresh: false,
+      loadingDestroy: false,
       columns: [],
       fixed: null,
       search: '',
@@ -136,6 +150,28 @@ export default {
         search: this.search || null
       })
     },
+    fetchRefresh() {
+      this.loadingRefresh = true
+
+      FailedJob.fetchRefresh()
+        .then(() => {
+          this.fetchList()
+        })
+        .finally(() => {
+          this.loadingRefresh = false
+        })
+    },
+    fetchDelete() {
+      this.loadingDestroy = true
+
+      FailedJob.fetchDeleteAll()
+        .then(() => {
+          this.fetchList()
+        })
+        .finally(() => {
+          this.loadingDestroy = true
+        })
+    },
     onChangeColumn() {
       StorageData.columnFailedJobs = this.filterColumns.map(i => i.prop)
     },
@@ -146,10 +182,17 @@ export default {
       this.sort = { column, order }
       this.fetchList()
     },
-    refreshFailedJobs() {
-      // TODO
+    onRefreshFailedJobs() {
+      if (confirm('Ви дійсно хочете обробити невдалі задачі заново?')) {
+        this.fetchRefresh()
+      }
     },
-    goSuccessJobsPage() {
+    onDeleteFailedJobs() {
+      if (confirm('Ви дійсно хочете видалити всі дані?')) {
+        this.fetchDelete()
+      }
+    },
+    routeJobsPage() {
       this.$router.push({ name: 'jobs' })
     }
   }
