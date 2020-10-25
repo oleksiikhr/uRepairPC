@@ -1,6 +1,6 @@
 {
   "version": "3.0.0",
-  "name": "urepairpc",
+  "name": "urepairpc/urepairpc",
   "type": "project",
   "description": "System for requests for repair of technical equipment",
   "keywords": [
