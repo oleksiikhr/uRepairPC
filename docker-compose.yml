@@ -73,8 +73,6 @@ services:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
     volumes:
       - ${DOCKER_DATA_PATH}/mysql:/var/lib/mysql
-    ports:
-      - ${DB_PORT}:3306
 
   redis:
     build: ./.docker/redis
@@ -82,8 +80,6 @@ services:
     restart: always
     volumes:
       - ${DOCKER_DATA_PATH}/redis:/data
-    ports:
-      - ${REDIS_PORT}:6379
 
   rabbitmq:
     build: ./.docker/rabbitmq
@@ -94,8 +90,6 @@ services:
     labels:
       - traefik.http.routers.rabbitmq.rule=Host(`rabbitmq.localhost`)
       - traefik.http.services.rabbitmq.loadbalancer.server.port=15672
-    ports:
-      - ${RABBITMQ_PORT}:5672
 
   prometheus:
     image: prom/prometheus
