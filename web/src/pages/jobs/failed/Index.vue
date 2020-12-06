@@ -175,7 +175,7 @@ export default {
           this.fetchList()
         })
         .finally(() => {
-          this.loadingDestroy = true
+          this.loadingDestroy = false
         })
     },
     onChangeColumn() {
