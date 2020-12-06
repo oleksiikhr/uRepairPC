@@ -41,7 +41,7 @@ trait HasPermissions
 
         $roles = $query->get();
 
-        Cache::forget($this->getPermCacheKey());
+        Cache::tags(Role::PERMISSION_TAGS)->forget($this->getPermCacheKey());
 
         return $this->roles()->sync($roles->pluck('id')->toArray());
     }
@@ -56,7 +56,7 @@ trait HasPermissions
             $ids = $ids->toArray();
         }
 
-        Cache::forget($this->getPermCacheKey());
+        Cache::tags(Role::PERMISSION_TAGS)->forget($this->getPermCacheKey());
 
         return $this->roles()->sync(Arr::wrap($ids));
     }
