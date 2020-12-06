@@ -7,7 +7,9 @@ namespace App\Observers;
 use App\Enums\Perm;
 use App\Models\User;
 use App\Models\Request;
+use App\Mail\RequestAssign;
 use App\Mail\RequestCreated;
+use App\Mail\RequestUnassign;
 use App\Realtime\Requests\EDelete;
 use Illuminate\Support\Facades\Mail;
 
@@ -29,6 +31,27 @@ class RequestObserver
                     Mail::to($user)->queue(new RequestCreated($request));
                 }
             });
+    }
+
+    /**
+     * Handle the user "updated" event.
+     *
+     * @param  Request  $request
+     * @return void
+     */
+    public function updated(Request $request): void
+    {
+        if ($assignId = $request->getChanges()['assign_id'] ?? null) {
+            if ($user = User::find($assignId)) {
+                Mail::to($user)->queue(new RequestAssign($request));
+            }
+        }
+
+        if ($assignId = $request->getOriginal('assign_id')) {
+            if ($user = User::find($assignId)) {
+                Mail::to($user)->queue(new RequestUnassign($request));
+            }
+        }
     }
 
     /**

@@ -185,9 +185,8 @@ class User extends BaseModel implements
      */
     public function scopeFilterRoles(Builder $query, array $permissions): Builder
     {
-        return $query->select('users.*')
-            ->join('role_user', 'role_user.user_id', '=', 'users.id')
-            ->join('role_permissions', 'role_permissions.role_id', '=', 'role_user.role_id')
-            ->whereIn('role_permissions.name', $permissions);
+        return $query->whereHas('roles.permissions', static function (Builder $query) use ($permissions) {
+            $query->whereIn('name', $permissions);
+        });
     }
 }

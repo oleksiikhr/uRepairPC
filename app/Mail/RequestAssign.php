@@ -9,7 +9,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class RequestCreated extends Mailable
+class RequestAssign extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -38,8 +38,8 @@ class RequestCreated extends Mailable
     public function build(): self
     {
         // TODO Translate
-        return $this->markdown('emails.requests.created')
-            ->subject(config('app.name').' - Нове замовлення (#'.$this->request->id.')')
+        return $this->markdown('emails.requests.assign')
+            ->subject(config('app.name').' - Замовлення закріплено (#'.$this->request->id.')')
             ->with([
                 'request' => $this->request,
             ]);
