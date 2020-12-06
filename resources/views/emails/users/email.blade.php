@@ -5,7 +5,7 @@
     {{ $email }}
 @endcomponent
 
-@component('mail::button', ['url' => config('app.url')])
+@component('mail::button', ['url' => url('/')])
     Перейти на сайт
 @endcomponent
 @endcomponent

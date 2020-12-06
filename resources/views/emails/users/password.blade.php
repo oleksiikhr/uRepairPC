@@ -7,7 +7,7 @@
 
 Змінити його можна в своєму профілі.
 
-@component('mail::button', ['url' => config('app.url')])
+@component('mail::button', ['url' => url('/')])
     Перейти на сайт
 @endcomponent
 @endcomponent

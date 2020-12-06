@@ -25,7 +25,7 @@ class UserObserver
 
         $user->password = bcrypt($password);
 
-        Mail::to($user)->queue(new UserCreated($password));
+        $user->setPlainPassword($password);
     }
 
     /**
@@ -36,6 +36,8 @@ class UserObserver
      */
     public function created(User $user): void
     {
+        Mail::to($user)->queue(new UserCreated($user->getPlainPassword()));
+
         ECreate::dispatchAfterResponse($user);
     }
 

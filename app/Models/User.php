@@ -10,6 +10,7 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
 use App\Models\Concerns\HasPermissions;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -93,6 +94,11 @@ class User extends BaseModel implements
     ];
 
     /**
+     * @var string|null
+     */
+    protected ?string $plainPassword;
+
+    /**
      * {@inheritdoc}
      */
     public function getJWTIdentifier()
@@ -121,6 +127,23 @@ class User extends BaseModel implements
         }
 
         return parent::toArray();
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param  string  $password
+     * @return void
+     */
+    public function setPlainPassword(string $password): void
+    {
+        $this->plainPassword = $password;
     }
 
     /**
@@ -153,5 +176,18 @@ class User extends BaseModel implements
     public function image(): HasOne
     {
         return $this->hasOne(File::class);
+    }
+
+    /**
+     * @param  Builder  $query
+     * @param  array  $permissions
+     * @return Builder
+     */
+    public function scopeFilterRoles(Builder $query, array $permissions): Builder
+    {
+        return $query->select('users.*')
+            ->join('role_user', 'role_user.user_id', '=', 'users.id')
+            ->join('role_permissions', 'role_permissions.role_id', '=', 'role_user.role_id')
+            ->whereIn('role_permissions.name', $permissions);
     }
 }
