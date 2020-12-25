@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * {@inheritdoc}
      */
     protected $commands = [
-        //
+        \App\Console\Commands\Permissions\RefreshPermissionsCommand::class,
     ];
 
     /**

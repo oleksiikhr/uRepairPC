@@ -18,22 +18,18 @@ services:
       - 8080:8080
 
   server:
-    build: .
     container_name: u_server
-    restart: always
     volumes:
       - ./:${DOCKER_CONTAINER_PATH}
 
   web:
     container_name: u_web
-    restart: always
     labels:
       - traefik.http.routers.web.rule=Host(`${DOCKER_DOMAIN}`)
       - traefik.http.routers.web.entrypoints=web
 
   websocket:
     container_name: u_websocket
-    restart: always
     depends_on:
       - rabbitmq
     labels:
@@ -44,6 +40,8 @@ services:
     build: .docker/php-worker
     container_name: u_php_worker
     restart: always
+    depends_on:
+      - server
     volumes:
       - ./:${DOCKER_CONTAINER_PATH}
       - ./.docker/php-worker/supervisord.d:/etc/supervisord.d
@@ -75,8 +73,6 @@ services:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
     volumes:
       - ${DOCKER_DATA_PATH}/mysql:/var/lib/mysql
-    ports:
-      - ${DB_PORT}:3306
 
   redis:
     build: ./.docker/redis
@@ -84,8 +80,6 @@ services:
     restart: always
     volumes:
       - ${DOCKER_DATA_PATH}/redis:/data
-    ports:
-      - ${REDIS_PORT}:6379
 
   rabbitmq:
     build: ./.docker/rabbitmq
@@ -96,8 +90,6 @@ services:
     labels:
       - traefik.http.routers.rabbitmq.rule=Host(`rabbitmq.localhost`)
       - traefik.http.services.rabbitmq.loadbalancer.server.port=15672
-    ports:
-      - ${RABBITMQ_PORT}:5672
 
   prometheus:
     image: prom/prometheus
@@ -130,12 +122,3 @@ services:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
     labels:
       - traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.localhost`)
-
-  netdata:
-    image: netdata/netdata:v1.23.0
-    container_name: u_netdata
-    restart: always
-    cap_add:
-      - SYS_PTRACE
-    labels:
-      - traefik.http.routers.netdata.rule=Host(`netdata.localhost`)

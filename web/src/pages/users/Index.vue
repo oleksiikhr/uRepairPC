@@ -16,6 +16,7 @@
               v-for="(role, index) in data"
               :key="index"
               :role="role"
+              disabled
             />
           </template>
         </template>
@@ -94,9 +95,6 @@ export default {
     }),
     list() {
       return this.$store.state.users.list
-    },
-    users() {
-      return this.list.data || []
     },
     filterColumns() {
       const columns = []

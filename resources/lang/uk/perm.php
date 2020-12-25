@@ -22,6 +22,7 @@ return [
         'requests_comments' => 'Заявки - Коментарі',
         'requests_files' => 'Заявки - Файли',
         'requests_config' => 'Заявки - Конфігурація',
+        'jobs' => 'Задачі',
         'global' => 'Глобальні',
     ],
 
@@ -46,6 +47,11 @@ return [
         'view_assign' => 'Бачити присвоєні',
         'edit_assign' => 'Редагувати присвоєні',
         'delete_assign' => 'Видаляти присвоєні',
+
+        // Jobs
+        'retry' => 'Повторити спробу',
+        'delete_queue' => 'Видалити чергу',
+        'delete_failed_queue' => 'Видалити невдалу чергу',
     ],
 
 ];

@@ -15,6 +15,12 @@ const COLUMN_EQUIPMENTS = 'column_equipments'
 const COLUMN_ROLES = 'column_roles'
 
 /** @type {string} */
+const COLUMN_JOBS = 'column_jobs'
+
+/** @type {string} */
+const COLUMN_FAILED_JOBS = 'column_failed_jobs'
+
+/** @type {string} */
 const TOKEN = 'token'
 
 /** @type {string} */
@@ -100,6 +106,28 @@ export default class StorageData {
 
   static set columnRoles(value) {
     this.setArray(COLUMN_ROLES, value)
+  }
+
+  /* Column Jobs -------------------------------------------------------------------------- */
+
+  /** @return {Array} */
+  static get columnJobs() {
+    return this.getArray(COLUMN_JOBS)
+  }
+
+  static set columnJobs(value) {
+    this.setArray(COLUMN_JOBS, value)
+  }
+
+  /* Column Failed Jobs ------------------------------------------------------------------- */
+
+  /** @return {Array} */
+  static get columnFailedJobs() {
+    return this.getArray(COLUMN_FAILED_JOBS)
+  }
+
+  static set columnFailedJobs(value) {
+    this.setArray(COLUMN_FAILED_JOBS, value)
   }
 
   /* Token -------------------------------------------------------------------------------- */

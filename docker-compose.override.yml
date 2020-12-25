@@ -1,6 +1,9 @@
 version: '3'
 
 services:
+  server:
+    build: .
+
   web:
     build: ./web
     volumes:
@@ -15,8 +18,6 @@ services:
     image: djfarrelly/maildev
     container_name: u_maildev
     restart: always
-    ports:
-      - ${MAIL_PORT}:25
     labels:
       - traefik.http.routers.maildev.rule=Host(`maildev.localhost`)
       - traefik.http.services.maildev.loadbalancer.server.port=80

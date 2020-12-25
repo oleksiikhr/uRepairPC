@@ -1,6 +1,6 @@
 'use strict'
 
-import { TYPE_TIMESTAMP } from '@/enum/columnTypes'
+import { TYPE_DATETIME } from '@/enum/columnTypes'
 import commonStore from '@/common/store/section'
 import StorageData from '@/classes/StorageData'
 import Equipment from '@/classes/Equipment'
@@ -48,8 +48,8 @@ const getters = {
       { prop: 'manufacturer_name', label: 'Виробник', 'min-width': 150, sortable: 'custom' },
       { prop: 'model_name', label: 'Модель', 'min-width': 150, sortable: 'custom' },
       { prop: 'description', label: 'Опис', 'min-width': 250, disableSearch: true, hideList: true },
-      { prop: 'updated_at', label: 'Оновлено', 'min-width': 150, sortable: 'custom', customType: TYPE_TIMESTAMP },
-      { prop: 'created_at', label: 'Створений', 'min-width': 150, sortable: 'custom', customType: TYPE_TIMESTAMP }
+      { prop: 'updated_at', label: 'Оновлено', 'min-width': 150, sortable: 'custom', customType: TYPE_DATETIME },
+      { prop: 'created_at', label: 'Створений', 'min-width': 150, sortable: 'custom', customType: TYPE_DATETIME }
     ]
 
     const data = StorageData.columnEquipments.length ? StorageData.columnEquipments : defaultActive

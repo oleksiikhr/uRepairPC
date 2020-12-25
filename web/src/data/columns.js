@@ -17,8 +17,8 @@ export const equipmentTypes = [
   { prop: 'id', label: 'ID', 'min-width': 70, sortable: true },
   { prop: 'name', label: 'Назва', 'min-width': 150, sortable: true },
   { prop: 'description', label: 'Опис', 'min-width': 150 },
-  { prop: 'updated_at', label: 'Оновлено', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_TIMESTAMP },
-  { prop: 'created_at', label: 'Створений', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_TIMESTAMP }
+  { prop: 'updated_at', label: 'Оновлено', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_DATETIME },
+  { prop: 'created_at', label: 'Створений', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_DATETIME }
 ]
 
 /** @return {array} */
@@ -26,8 +26,8 @@ export const equipmentManufacturers = [
   { prop: 'id', label: 'ID', 'min-width': 70, sortable: true },
   { prop: 'name', label: 'Назва', 'min-width': 150, sortable: true },
   { prop: 'description', label: 'Опис', 'min-width': 150 },
-  { prop: 'updated_at', label: 'Оновлено', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_TIMESTAMP },
-  { prop: 'created_at', label: 'Створений', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_TIMESTAMP }
+  { prop: 'updated_at', label: 'Оновлено', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_DATETIME },
+  { prop: 'created_at', label: 'Створений', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_DATETIME }
 ]
 
 /** @return {array} */
@@ -37,8 +37,8 @@ export const equipmentModels = [
   { prop: 'manufacturer_name', label: 'Виробник', 'min-width': 150, sortable: true },
   { prop: 'type_name', label: 'Тип', 'min-width': 150, sortable: true },
   { prop: 'description', label: 'Опис', 'min-width': 150 },
-  { prop: 'updated_at', label: 'Оновлено', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_TIMESTAMP },
-  { prop: 'created_at', label: 'Створений', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_TIMESTAMP }
+  { prop: 'updated_at', label: 'Оновлено', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_DATETIME },
+  { prop: 'created_at', label: 'Створений', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_DATETIME }
 ]
 
 /** @return {array} */
@@ -48,8 +48,8 @@ export const requestStatuses = [
   { prop: 'color', label: 'Колір', 'min-width': 100, customType: columnTypes.TYPE_COLOR },
   { prop: 'description', label: 'Опис', 'min-width': 150 },
   { prop: 'default', label: 'За замовчуванням', 'min-width': 150, sortable: true, customType: columnTypes.TYPE_BOOL },
-  { prop: 'updated_at', label: 'Оновлено', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_TIMESTAMP },
-  { prop: 'created_at', label: 'Створений', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_TIMESTAMP }
+  { prop: 'updated_at', label: 'Оновлено', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_DATETIME },
+  { prop: 'created_at', label: 'Створений', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_DATETIME }
 ]
 
 /** @return {array} */
@@ -60,8 +60,8 @@ export const requestPriorities = [
   { prop: 'color', label: 'Колір', 'min-width': 100, customType: columnTypes.TYPE_COLOR },
   { prop: 'description', label: 'Опис', 'min-width': 150 },
   { prop: 'default', label: 'За замовчуванням', 'min-width': 150, sortable: true, customType: columnTypes.TYPE_BOOL },
-  { prop: 'updated_at', label: 'Оновлено', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_TIMESTAMP },
-  { prop: 'created_at', label: 'Створений', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_TIMESTAMP }
+  { prop: 'updated_at', label: 'Оновлено', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_DATETIME },
+  { prop: 'created_at', label: 'Створений', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_DATETIME }
 ]
 
 /** @return {array} */
@@ -70,6 +70,6 @@ export const requestTypes = [
   { prop: 'name', label: 'Назва', 'min-width': 150, sortable: true },
   { prop: 'description', label: 'Опис', 'min-width': 150 },
   { prop: 'default', label: 'За замовчуванням', 'min-width': 150, sortable: true, customType: columnTypes.TYPE_BOOL },
-  { prop: 'updated_at', label: 'Оновлено', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_TIMESTAMP },
-  { prop: 'created_at', label: 'Створений', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_TIMESTAMP }
+  { prop: 'updated_at', label: 'Оновлено', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_DATETIME },
+  { prop: 'created_at', label: 'Створений', 'min-width': 200, sortable: true, customType: columnTypes.TYPE_DATETIME }
 ]

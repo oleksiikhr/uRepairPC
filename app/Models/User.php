@@ -10,11 +10,13 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
 use App\Models\Concerns\HasPermissions;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
@@ -25,7 +27,7 @@ class User extends BaseModel implements
     CanResetPasswordContract,
     JWTSubject
 {
-    use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail, SoftDeletes, HasPermissions;
+    use Authenticatable, Authorizable, HasFactory, CanResetPassword, MustVerifyEmail, SoftDeletes, HasPermissions;
 
     /**
      * @var int
@@ -92,6 +94,11 @@ class User extends BaseModel implements
     ];
 
     /**
+     * @var string|null
+     */
+    protected ?string $plainPassword;
+
+    /**
      * {@inheritdoc}
      */
     public function getJWTIdentifier()
@@ -120,6 +127,23 @@ class User extends BaseModel implements
         }
 
         return parent::toArray();
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param  string  $password
+     * @return void
+     */
+    public function setPlainPassword(string $password): void
+    {
+        $this->plainPassword = $password;
     }
 
     /**
@@ -152,5 +176,17 @@ class User extends BaseModel implements
     public function image(): HasOne
     {
         return $this->hasOne(File::class);
+    }
+
+    /**
+     * @param  Builder  $query
+     * @param  array  $permissions
+     * @return Builder
+     */
+    public function scopeFilterRoles(Builder $query, array $permissions): Builder
+    {
+        return $query->whereHas('roles.permissions', static function (Builder $query) use ($permissions) {
+            $query->whereIn('name', $permissions);
+        });
     }
 }

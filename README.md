@@ -6,7 +6,7 @@
   </a>
 </p>
 <p align="center">
-  Accounting system for orders for the repair of technical means.
+  System for requests for repair of technical equipment
 </p>
 
 <p align="center">

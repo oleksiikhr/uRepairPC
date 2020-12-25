@@ -5,6 +5,7 @@
   >
     <el-collapse-item
       v-for="(obj, section) in historyMenu"
+      v-show="activeSections[obj.route.name]"
       :key="section"
       :name="section"
     >
@@ -48,10 +49,18 @@ export default {
     }),
     sidebar() {
       return this.$store.state.template.sidebar
+    },
+    activeSections() {
+      const sections = {}
+
+      Object.entries(this.sidebar).forEach(([key, val]) => {
+        if (Object.keys(val).length) {
+          sections[key] = true
+        }
+      })
+
+      return sections
     }
-  },
-  mounted() {
-    this.activeNames = Object.keys(this.historyMenu)
   },
   methods: {
     removeHistoryItem(section, historyItem) {
@@ -84,6 +93,10 @@ export default {
 <style lang="scss" scoped>
 @import "~scss/_variables";
 @import "~scss/_colors";
+
+.history-collapse {
+  border: 0;
+}
 
 .history-collapse-item {
   display: flex;

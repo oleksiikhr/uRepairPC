@@ -13,6 +13,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 trait HasPermissions
 {
     /**
+     * @var array|string[]
+     */
+    protected array $permissionTags = ['permissions'];
+
+    /**
      * @var int seconds
      */
     protected int $permissionCacheTime = 60 * 60 * 24 * 3; // 3 days
@@ -36,7 +41,7 @@ trait HasPermissions
 
         $roles = $query->get();
 
-        Cache::forget($this->getCacheKey());
+        Cache::tags(Role::PERMISSION_TAGS)->forget($this->getPermCacheKey());
 
         return $this->roles()->sync($roles->pluck('id')->toArray());
     }
@@ -51,7 +56,7 @@ trait HasPermissions
             $ids = $ids->toArray();
         }
 
-        Cache::forget($this->getCacheKey());
+        Cache::tags(Role::PERMISSION_TAGS)->forget($this->getPermCacheKey());
 
         return $this->roles()->sync(Arr::wrap($ids));
     }
@@ -63,14 +68,15 @@ trait HasPermissions
      */
     public function getAllPerm(): Collection
     {
-        return Cache::remember($this->getCacheKey(), $this->permissionCacheTime, function () {
-            $this->loadMissing(['roles', 'roles.permissions']);
+        return Cache::tags(Role::PERMISSION_TAGS)
+            ->remember($this->getPermCacheKey(), $this->permissionCacheTime, function () {
+                $this->loadMissing(['roles', 'roles.permissions']);
 
-            return $this->roles
-                ->flatMap(static fn (Role $role) => $role->permissions)
-                ->sort()
-                ->values();
-        });
+                return $this->roles
+                    ->flatMap(static fn (Role $role) => $role->permissions)
+                    ->sort()
+                    ->values();
+            });
     }
 
     /**
@@ -120,7 +126,7 @@ trait HasPermissions
      *
      * @return string
      */
-    protected function getCacheKey(): string
+    protected function getPermCacheKey(): string
     {
         return $this->permissionCacheKey.'.'.$this->getTable().'.'.$this->id;
     }

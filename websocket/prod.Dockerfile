@@ -1,4 +1,4 @@
-FROM node:14.4-alpine
+FROM node:14.10-alpine
 
 WORKDIR /usr/app
 
@@ -13,6 +13,7 @@ RUN yarn
 COPY . .
 
 RUN yarn build
+
 CMD ["pm2-runtime", "dist/app.js"]
 
 EXPOSE 3000

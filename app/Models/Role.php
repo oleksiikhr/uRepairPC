@@ -16,6 +16,11 @@ class Role extends BaseModel
     /**
      * @var array
      */
+    public const PERMISSION_TAGS = ['permission'];
+
+    /**
+     * @var array
+     */
     public const ALLOW_COLUMNS_SEARCH = [
         'id',
         'name',
@@ -100,6 +105,7 @@ class Role extends BaseModel
 
         // Filter
         foreach ($permissions as $permission) {
+            // TODO Optimization
             $searchKey = array_search($permission->name, $changePermissionNames, true);
             if ($searchKey === false) {
                 $deleteIds[] = $permission->id;

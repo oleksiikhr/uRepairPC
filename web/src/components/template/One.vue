@@ -45,7 +45,7 @@
                     name="table"
                     :row="row"
                   >
-                    {{ row.value }}
+                    <pre class="default">{{ row.value }}</pre>
                   </slot>
                 </column-data>
               </template>
@@ -94,6 +94,11 @@ export default {
 <style lang="scss" scoped>
 @import "~scss/_variables";
 @import "~scss/_colors";
+
+pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
 
 .template__wrap {
   margin: 0 20px 50px;

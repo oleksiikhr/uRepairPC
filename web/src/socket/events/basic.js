@@ -22,6 +22,10 @@ io.on('connect', () => {
   Notification({ title: 'RT: Підключен', position: 'bottom-left', type: types.SUCCESS })
 })
 
+io.on('connect_error', () => {
+  Notification({ title: 'RT: Помилка в з\'єднанні', position: 'bottom-left', type: types.ERROR })
+})
+
 io.on('reconnect', () => {
   Notification({ title: 'RT: Перепідключення..', position: 'bottom-left', type: types.WARNING })
 });

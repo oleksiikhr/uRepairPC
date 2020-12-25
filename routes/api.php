@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers as Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +19,9 @@ use Illuminate\Support\Facades\Route;
 /*
  * Section: Settings
  */
-Route::group(['prefix' => 'settings', 'namespace' => 'Stat'], static function () {
-    Route::get('global', 'GlobalController@index');
-    Route::get('manifest', 'ManifestController@index');
+Route::group(['prefix' => 'settings'], static function () {
+    Route::get('global', [Controller\Stat\GlobalController::class, 'index']);
+    Route::get('manifest', [Controller\Stat\ManifestController::class, 'index']);
 });
 
 /*
@@ -28,75 +29,86 @@ Route::group(['prefix' => 'settings', 'namespace' => 'Stat'], static function ()
  */
 Route::group(['prefix' => 'auth'], static function () {
     Route::group(['middleware' => 'guest'], static function () {
-        Route::post('login', 'AuthController@login');
-        Route::post('refresh', 'AuthController@refresh');
+        Route::post('login', [Controller\AuthController::class, 'login']);
+        Route::post('refresh', [Controller\AuthController::class, 'refresh']);
     });
 
     Route::group(['middleware' => ['jwt.auth']], static function () {
-        Route::get('profile', 'AuthController@profile');
-        Route::post('logout', 'AuthController@logout');
+        Route::get('profile', [Controller\AuthController::class, 'profile']);
+        Route::post('logout', [Controller\AuthController::class, 'logout']);
     });
 });
 
 Route::group(['middleware' => ['jwt.auth']], static function () {
     Route::group(['prefix' => 'listeners'], static function () {
-        Route::post('sync', 'ListenerController@sync');
+        Route::post('sync', [Controller\ListenerController::class, 'sync']);
     });
 
     /*
      * Section: Settings
      */
     Route::group(['prefix' => 'settings', 'namespace' => 'Stat'], static function () {
-        Route::post('global', 'GlobalController@store');
-        Route::post('manifest', 'ManifestController@store');
+        Route::post('global', [Controller\Stat\GlobalController::class, 'store']);
+        Route::post('manifest', [Controller\Stat\ManifestController::class, 'store']);
     });
 
     /*
      * Section: Users
      */
-    Route::apiResource('users', 'UserController');
+    Route::apiResource('users', Controller\UserController::class);
     Route::group(['prefix' => 'users'], static function () {
-        Route::put('{user}/email', 'UserController@updateEmail');
-        Route::put('{user}/password', 'UserController@updatePassword');
-        Route::put('{user}/roles', 'UserController@updateRoles');
-        Route::get('{user}/image', 'UserController@showImage');
-        Route::post('{user}/image', 'UserController@updateImage');
-        Route::delete('{user}/image', 'UserController@destroyImage');
+        Route::put('{user}/email', [Controller\UserController::class, 'updateEmail']);
+        Route::put('{user}/password', [Controller\UserController::class, 'updatePassword']);
+        Route::put('{user}/roles', [Controller\UserController::class, 'updateRoles']);
+        Route::get('{user}/image', [Controller\UserController::class, 'showImage']);
+        Route::post('{user}/image', [Controller\UserController::class, 'updateImage']);
+        Route::delete('{user}/image', [Controller\UserController::class, 'destroyImage']);
     });
 
     /*
      * Section: Equipments
      */
-    Route::apiResource('equipments', 'EquipmentController');
+    Route::apiResource('equipments', Controller\EquipmentController::class);
     Route::group(['prefix' => 'equipments'], static function () {
-        Route::apiResource('manufacturers', 'EquipmentManufacturerController')->parameter('manufacturers', 'equipmentManufacturer');
-        Route::apiResource('models', 'EquipmentModelController')->parameter('models', 'equipmentModel');
-        Route::apiResource('types', 'EquipmentTypeController')->parameter('types', 'equipmentType');
-        Route::apiResource('{equipment}/files', 'EquipmentFileController')->parameter('files', 'id');
+        Route::apiResource('manufacturers', Controller\EquipmentManufacturerController::class)->parameter('manufacturers', 'equipmentManufacturer');
+        Route::apiResource('models', Controller\EquipmentModelController::class)->parameter('models', 'equipmentModel');
+        Route::apiResource('types', Controller\EquipmentTypeController::class)->parameter('types', 'equipmentType');
+        Route::apiResource('{equipment}/files', Controller\EquipmentFileController::class)->parameter('files', 'id');
     });
 
     /*
      * Section: Roles
      */
-    Route::apiResource('roles', 'RoleController');
+    Route::apiResource('roles', Controller\RoleController::class);
     Route::group(['prefix' => 'roles'], static function () {
-        Route::put('{role}/permissions', 'RoleController@updatePermissions');
+        Route::put('{role}/permissions', [Controller\RoleController::class, 'updatePermissions']);
     });
 
     /*
      * Section: Permissions
      */
-    Route::get('permissions', 'PermissionController@index');
+    Route::get('permissions', [Controller\PermissionController::class, 'index']);
 
     /*
      * Section: Requests
      */
-    Route::apiResource('requests', 'RequestController');
+    Route::apiResource('requests', Controller\RequestController::class);
     Route::group(['prefix' => 'requests'], static function () {
-        Route::apiResource('statuses', 'RequestStatusController')->parameter('statuses', 'requestStatus');
-        Route::apiResource('priorities', 'RequestPriorityController')->parameter('priorities', 'requestPriority');
-        Route::apiResource('types', 'RequestTypeController')->parameter('types', 'requestType');
-        Route::apiResource('{request}/comments', 'RequestCommentController')->parameter('comments', 'id');
-        Route::apiResource('{request}/files', 'RequestFileController')->parameter('files', 'id');
+        Route::apiResource('statuses', Controller\RequestStatusController::class)->parameter('statuses', 'requestStatus');
+        Route::apiResource('priorities', Controller\RequestPriorityController::class)->parameter('priorities', 'requestPriority');
+        Route::apiResource('types', Controller\RequestTypeController::class)->parameter('types', 'requestType');
+        Route::apiResource('{request}/comments', Controller\RequestCommentController::class)->parameter('comments', 'id');
+        Route::apiResource('{request}/files', Controller\RequestFileController::class)->parameter('files', 'id');
+    });
+
+    /*
+     * Section: Jobs
+     */
+    Route::apiResource('jobs', Controller\JobController::class)->only(['index', 'show', 'destroy']);
+    Route::group(['prefix' => 'jobs'], static function () {
+        Route::delete('destroy-all', [Controller\JobController::class, 'destroyAll']);
+        Route::apiResource('failed', Controller\FailedJobController::class)->parameter('failed', 'failedJob')->only(['index', 'show', 'destroy']);
+        Route::post('failed/retry', [Controller\FailedJobController::class, 'retry']);
+        Route::delete('failed/destroy-all', [Controller\FailedJobController::class, 'destroyAll']);
     });
 });

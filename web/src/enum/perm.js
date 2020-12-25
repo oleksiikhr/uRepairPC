@@ -86,6 +86,13 @@ export const REQUESTS_CONFIG_CREATE = 'requests.config.create'
 export const REQUESTS_CONFIG_DELETE_ALL = 'requests.config.delete_all'
 export const REQUESTS_CONFIG_DELETE_OWN = 'requests.config.delete_own'
 
+// Jobs
+export const JOBS_VIEW_SECTION = 'jobs.view_section'
+export const JOBS_VIEW_ALL = 'jobs.view_all'
+export const JOBS_RETRY = 'jobs.retry'
+export const JOBS_DELETE_QUEUE = 'jobs.delete_queue'
+export const JOBS_DELETE_FAILED_QUEUE = 'jobs.delete_failed_queue'
+
 // Global
 export const GLOBAL_SETTINGS_EDIT = 'global.settings.edit'
 export const GLOBAL_MANIFEST_EDIT = 'global.manifest.edit'

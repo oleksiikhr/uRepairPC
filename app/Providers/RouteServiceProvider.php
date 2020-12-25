@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected $namespace = 'App\Http\Controllers';
-
     /**
      * The path to the "home" route for your application.
      *
@@ -26,6 +24,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->configureRateLimiting();
+
         Route::pattern('id', '[0-9]+');
 
         Route::pattern('user', '[0-9]+');
@@ -38,16 +38,21 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('file', \App\Models\File::class);
 
         Route::pattern('equipment', '[0-9]+');
-        Route::bind('equipment', static fn ($id) => \App\Models\Equipment::querySelectJoins()->firstOrFail($id));
+        Route::bind('equipment', static fn (int $id) => \App\Models\Equipment::querySelectJoins()->findOrFail($id));
         Route::pattern('equipmentManufacturer', '[0-9]+');
         Route::model('equipmentManufacturer', \App\Models\EquipmentManufacturer::class);
         Route::pattern('equipmentModel', '[0-9]+');
-        Route::bind('equipmentModel', static fn ($id) => \App\Models\EquipmentModel::querySelectJoins()->firstOrFail($id));
+        Route::bind('equipmentModel', static fn (int $id) => \App\Models\EquipmentModel::querySelectJoins()->findOrFail($id));
         Route::pattern('equipmentType', '[0-9]+');
         Route::model('equipmentType', \App\Models\EquipmentType::class);
 
+        Route::pattern('job', '[0-9]+');
+        Route::model('job', \App\Models\Job::class);
+        Route::pattern('failedJob', '[0-9]+');
+        Route::model('failedJob', \App\Models\FailedJob::class);
+
         Route::pattern('request', '[0-9]+');
-        Route::bind('request', static fn ($id) => \App\Models\Request::querySelectJoins()->firstOrFail($id));
+        Route::bind('request', static fn (int $id) => \App\Models\Request::querySelectJoins()->findOrFail($id));
         Route::pattern('requestPriority', '[0-9]+');
         Route::model('requestPriority', \App\Models\RequestPriority::class);
         Route::pattern('requestStatus', '[0-9]+');
@@ -100,5 +105,17 @@ class RouteServiceProvider extends ServiceProvider
             ->middleware('api')
             ->namespace($this->namespace)
             ->group(base_path('routes/api.php'));
+    }
+
+    /**
+     * Configure the rate limiters for the application.
+     *
+     * @return void
+     */
+    protected function configureRateLimiting(): void
+    {
+        RateLimiter::for('api', static function (Request $request) {
+            return Limit::perMinute(100);
+        });
     }
 }

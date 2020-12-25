@@ -24,7 +24,10 @@
         :value="row.value"
         :color="model.status_color"
       />
-      <span v-else>{{ row.value }}</span>
+      <pre
+        v-else
+        class="default"
+      >{{ row.value }}</pre>
     </template>
     <div
       v-if="model.files && (model.files.length || loadingFiles)"
@@ -166,9 +169,9 @@ export default {
         'permission-download': (file) => hasPerm(perm.REQUESTS_FILES_DOWNLOAD_ALL) ||
           (hasPerm(perm.REQUESTS_FILES_DOWNLOAD_OWN) && file.user_id === this.profile.id),
         'permission-edit': (file) => hasPerm(perm.REQUESTS_FILES_EDIT_ALL) ||
-          (hasPerm(perm.REQUESTS_EDIT_OWN) && file.user_id === this.profile.id),
+          (hasPerm(perm.REQUESTS_FILES_EDIT_OWN) && file.user_id === this.profile.id),
         'permission-delete': (file) => hasPerm(perm.REQUESTS_FILES_DELETE_ALL) ||
-          (hasPerm(perm.REQUESTS_DELETE_OWN) && file.user_id === this.profile.id)
+          (hasPerm(perm.REQUESTS_FILES_DELETE_OWN) && file.user_id === this.profile.id)
       }
     },
     commentsPermissions() {
@@ -181,6 +184,9 @@ export default {
     },
     canCreateComment() {
       return hasPerm(perm.REQUESTS_COMMENTS_CREATE)
+    },
+    canSeeFiles() {
+      return hasPerm([perm.REQUESTS_FILES_VIEW_ALL, perm.REQUESTS_FILES_VIEW_OWN])
     }
   },
   methods: {
@@ -207,6 +213,10 @@ export default {
         })
     },
     fetchRequestFiles() {
+      if (!this.canSeeFiles) {
+        return
+      }
+
       this.loadingFiles = true
       this.updateData({ files: [] })
 
